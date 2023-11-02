@@ -11,3 +11,88 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+main {
+  display: flex;
+  margin: 8%;
+  box-sizing: border-box;
+  gap: 10%;
+}
+
+header {
+  background-color: rgb(1, 1, 65);
+  color: white;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+
+  padding: 20px 30px 20px 30px;
+}
+
+footer {
+  width: 100%;
+  background-color: rgb(1, 1, 65);
+  color: white;
+  padding: 20px 30px 20px 30px;
+  display: flex;
+  align-items: center;
+  bottom: 0px;
+  box-sizing: border-box;
+}
+
+header a,
+footer a {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: x-large;
+}
+
+header a:hover,
+footer a:hover {
+  color: rgb(195, 195, 255);
+}
+
+.details-section {
+  width: 70%;
+}
+
+.title-about {
+  margin-top: 0;
+}
+
+.inline-div {
+  display: inline-block;
+  padding-right: 10px;
+}
+
+.image-container {
+  overflow: hidden;
+}
+
+.picture-section {
+  width: 30%;
+  height: auto;
+  background-color: rgb(213, 213, 236);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3%;
+  box-sizing: border-box;
+}
+
+.picture-section img {
+  max-width: 250px;
+  max-height: 250px;
+}
+
+#details {
+  margin-top: 50px;
+}
+
+#name {
+  margin-top: 50px;
+}
+
+#job-title {
+  margin-top: 0px;
+}
