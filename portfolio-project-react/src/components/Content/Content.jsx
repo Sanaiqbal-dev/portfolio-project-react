@@ -1,6 +1,8 @@
-import Details from "./Details";
-import Picture from "./Picture";
-import logo from "../assets/ic-profile.png";
+import Details from "../Details/Details";
+import Picture from "../Picture/Picture";
+import styles from "./Content.module.css"
+import logo from "../Picture/assets/ic-profile.png";
+
 
 const Content = ({ isEdit }) => {
   return (
@@ -10,5 +12,4 @@ const Content = ({ isEdit }) => {
     </main>
   );
 };
-
 export default Content;

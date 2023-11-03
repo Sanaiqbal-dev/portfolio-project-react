@@ -1,5 +1,6 @@
-const Header = ({isEdit,changeEditState}) => {
-
+import { LOGIN } from "./constants";
+import styles from "./Header.module.css";
+const Header = ({ isEdit, changeEditState }) => {
   return (
     <header>
       <a>Login</a>
@@ -9,7 +10,7 @@ const Header = ({isEdit,changeEditState}) => {
             changeEditState(false);
           }}
         >
-          Save
+          {LOGIN}
         </a>
       ) : (
         <a

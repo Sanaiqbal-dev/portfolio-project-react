@@ -1,20 +1,28 @@
-import { useState } from "react";
+import {
+  ABOUT,
+  ABOUT_HEADING,
+  CONTACT,
+  CONTACT_HEADING,
+  EMAIL,
+  EMAIL_HEADING,
+  EXP_HEADING,
+} from "./constants";
+import styles from "./Details.module.css";
+const Details = () => {
 
-const Details = ({ isEdit }) => {
-  const [aboutContent, setAboutContent] = useState(
-    " I am a highly experienced Full Stack Web Developer with a proven track record of developing, designing, and integrating robust Web Applications using the latest technologies like React JS, Express JS, Node, MongoDB, etc. I have in-depth knowledge in this area and can provide responsive web application development services. I am also familiar with common framework APIs, dedicated to creating user-centric and innovative web-based solutions to drive business growth."
-  );
+   const [aboutContent, setAboutContent] = useState(ABOUT);
 
-  const [phone, setPhone] = useState("+92 333 1234567");
-  const [email, setEmail] = useState("sana.iqbal@gmail.com");
-  const [showExperienceForm, setShowExperienceForm] = useState(false);
+   const [phone, setPhone] = useState(CONTACT);
+   const [email, setEmail] = useState(EMAIL);
+   const [showExperienceForm, setShowExperienceForm] = useState(false);
 
-  const SubmitWorkExpForm = (e) => {
-    console.log(e.target.value);
-  }
+   const SubmitWorkExpForm = (e) => {
+     console.log(e.target.value);
+   };
+
   return (
-    <div className="details-section">
-      <h1 class="title-about">About</h1>
+    <div className={styles.detailsSection}>
+      <h1 className={styles.titleAbout}>{ABOUT_HEADING}</h1>
       {isEdit ? (
         <textarea
           onChange={(e) => {
@@ -26,8 +34,7 @@ const Details = ({ isEdit }) => {
       ) : (
         <p id="intro-data">{aboutContent}</p>
       )}
-
-      <h3 class="inline-div">Contact:</h3>
+      <h3 className={styles.inlineDiv}>{CONTACT_HEADING}</h3>
       {isEdit ? (
         <input
           placeholder="Enter contact number:"
@@ -39,8 +46,7 @@ const Details = ({ isEdit }) => {
       )}
 
       <br />
-
-      <h3 class="inline-div">Email:</h3>
+      <h3 className={styles.inlineDiv}>{EMAIL_HEADING}</h3>
       {isEdit ? (
         <input
           placeholder="Enter email address"
@@ -50,11 +56,9 @@ const Details = ({ isEdit }) => {
       ) : (
         <p class="inline-div">{email}</p>
       )}
-
-      <div id="details">
+      <div className={styles.details}>
         <div>
-          <h1>Work Experience</h1>
-
+          <h1>{EXP_HEADING}</h1>
           <div className="experience-container">
             {!showExperienceForm && (
               <button
@@ -70,7 +74,10 @@ const Details = ({ isEdit }) => {
 
           {showExperienceForm && (
             <div className="show-experience-form">
-              <form class="work-exp-form" onSubmit={(e) => SubmitWorkExpForm(e)}>
+              <form
+                class="work-exp-form"
+                onSubmit={(e) => SubmitWorkExpForm(e)}
+              >
                 <div class="close-btn">
                   <button
                     onClick={(e) => {
