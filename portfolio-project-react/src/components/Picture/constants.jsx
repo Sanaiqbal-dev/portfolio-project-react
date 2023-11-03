@@ -1,2 +1,2 @@
 export const NAME = "Sana Iqbal";
-export const JOBTITLE = "Software Engineer";
+export const JOB_TITLE = "Software Engineer";

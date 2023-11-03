@@ -4,7 +4,6 @@ header {
   display: flex;
   flex-direction: row-reverse;
   align-items: center;
-
   padding: 20px 30px 20px 30px;
 }
 

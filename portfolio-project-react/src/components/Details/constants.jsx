@@ -2,7 +2,7 @@ export const ABOUT = "I am a highly experienced Full Stack Web Developer with a 
 export const CONTACT = "+92 333 1234567";
 export const EMAIL = "sana.iqbal@gmail.com"
 
-export const ABOUTHEADING = "About";
-export const CONTACTHEADING = "Contact:";
-export const EMAILHEADING = "Email:";
-export const EXPHEADING = "Work Experience";
+export const ABOUT_HEADING = "About";
+export const CONTACT_HEADING = "Contact:";
+export const EMAIL_HEADING = "Email:";
+export const EXP_HEADING = "Work Experience";
