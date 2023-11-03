@@ -1,0 +1,18 @@
+header {
+  background-color: rgb(1, 1, 65);
+  color: white;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  padding: 20px 30px 20px 30px;
+}
+
+header a {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: x-large;
+}
+
+header a:hover {
+  color: rgb(195, 195, 255);
+}
