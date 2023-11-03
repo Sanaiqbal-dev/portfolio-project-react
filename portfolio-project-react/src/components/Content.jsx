@@ -1,13 +1,12 @@
-import Details from './Details';
-import Picture from './Picture';
-import logo from '../assets/ic-profile.png'
+import Details from "./Details";
+import Picture from "./Picture";
+import logo from "../assets/ic-profile.png";
 
-
-const Content = () => {
+const Content = ({ isEdit }) => {
   return (
     <main>
-      <Details />
-      <Picture url={logo} size={'250px'}/>
+      <Details isEdit={isEdit} />
+      <Picture isEdit={isEdit} url={logo} size={"250px"} />
     </main>
   );
 };
