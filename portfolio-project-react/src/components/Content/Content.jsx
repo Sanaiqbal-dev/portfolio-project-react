@@ -1,7 +1,7 @@
 import Details from "../Details/Details";
 import Picture from "../Picture/Picture";
-import logo from "../Picture/assets/ic-profile.png"
 import styles from "./Content.module.css"
+import logo from "../Picture/assets/ic-profile.png";
 
 const Content = () => {
   return (

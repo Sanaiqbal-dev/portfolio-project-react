@@ -1,7 +1,7 @@
-import styles from "./Picture.module.css"
 import { JOBTITLE, NAME } from "./constants";
-const Picture = ({ url, size }) => {
+import styles from "./Picture.module.css";
 
+const Picture = ({ url, size }) => {
   return (
     <div className={styles.pictureSection}>
       <div className={styles.imageContainer}>

@@ -1,11 +1,12 @@
-import styles from "./Header.module.css"
+import { LOGIN } from "./constants";
+import styles from "./Header.module.css";
 
 const Header = () => {
   return (
     <header>
-        <a>Login</a>
-      </header>
-  )
-}
+      <a>{LOGIN}</a>
+    </header>
+  );
+};
 
-export default Header
+export default Header;
