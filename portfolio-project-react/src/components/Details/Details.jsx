@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   ABOUT,
   ABOUT_HEADING,
@@ -8,7 +9,7 @@ import {
   EXP_HEADING,
 } from "./constants";
 import styles from "./Details.module.css";
-const Details = () => {
+const Details = ({ isEdit }) => {
 
    const [aboutContent, setAboutContent] = useState(ABOUT);
 
@@ -62,7 +63,7 @@ const Details = () => {
           <div className="experience-container">
             {!showExperienceForm && (
               <button
-                className="add-experience"
+                className="addExperience"
                 onClick={(e) => {
                   setShowExperienceForm(true);
                 }}
@@ -75,7 +76,7 @@ const Details = () => {
           {showExperienceForm && (
             <div className="show-experience-form">
               <form
-                class="work-exp-form"
+                class="workExpForm"
                 onSubmit={(e) => SubmitWorkExpForm(e)}
               >
                 <div class="close-btn">
@@ -91,17 +92,17 @@ const Details = () => {
                 <input
                   type="text"
                   pattern=".*\S+.*"
-                  id="company-name"
+                  id="companyName"
                   required
                   placeholder="Enter your company name:"
                 />
-                <div class="date-section">
-                  <div class="date-section-labels">
+                <div class="dateSection">
+                  <div class="dateSectionLabels">
                     <label>Start Date:</label>
                     <label>End Date:</label>
                     <label></label>
                   </div>
-                  <div class="date-section-values">
+                  <div class="dateSectionValues">
                     <input type="date" id="start-date" required />
                     <input type="date" id="end-date" required />
                     <div class="checkbox-section">

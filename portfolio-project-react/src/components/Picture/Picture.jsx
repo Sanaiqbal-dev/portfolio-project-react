@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { JOB_TITLE, NAME } from "./constants";
 import styles from "./Picture.module.css";
 
