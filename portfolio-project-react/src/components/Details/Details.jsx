@@ -79,7 +79,7 @@ const Details = ({ isEdit }) => {
                 class="workExpForm"
                 onSubmit={(e) => SubmitWorkExpForm(e)}
               >
-                <div class="close-btn">
+                <div class="closeBtn">
                   <button
                     onClick={(e) => {
                       setShowExperienceForm(false);
