@@ -1,0 +1,26 @@
+.headerEvents {
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 10px;
+}
+
+.headerEvents img {
+  width: 18px;
+  height: 18px;
+}
+
+.editBtn,
+.deleteBtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    height: 30px;
+    border: none;
+    background-color: rgb(47, 47, 163);
+    cursor: pointer;
+}
+.expItemContainer{
+    padding: 50px 50px 0px 50px;
+    color: darkgray;
+}

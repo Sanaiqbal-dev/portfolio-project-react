@@ -1,16 +1,16 @@
-import { LOGIN } from "./constants";
+import { EDIT, LOGIN, SAVE } from "./constants";
 import styles from "./Header.module.css";
 const Header = ({ isEdit, changeEditState }) => {
   return (
     <header>
-      <a>Login</a>
+      <a>{LOGIN}</a>
       {isEdit ? (
         <a
           onClick={() => {
             changeEditState(false);
           }}
         >
-          {LOGIN}
+          {SAVE}
         </a>
       ) : (
         <a
@@ -18,7 +18,7 @@ const Header = ({ isEdit, changeEditState }) => {
             changeEditState(true);
           }}
         >
-          Edit
+          {EDIT}
         </a>
       )}
     </header>

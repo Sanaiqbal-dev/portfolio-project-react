@@ -19,11 +19,11 @@ const Picture = (props) => {
   return (
     <div className={styles.pictureSection}>
       <div className={styles.imageContainer}>
-        <img src={url} style={{ width: size, height: size }} />
+        <img src={imageUrl} style={{ width: size, height: size }} />
       </div>
       {isEdit && (
         <input
-          className="change-image"
+          className={styles.changeImage}
           type="file"
           accept="image/*"
           onChange={(e) => {
@@ -33,7 +33,7 @@ const Picture = (props) => {
       )}
       {isEdit ? (
         <input
-          className="change-name"
+          className={styles.changeName}
           placeholder="Enter name:"
           value={name}
           onChange={(e) => setName(e.target.value)}
@@ -43,7 +43,7 @@ const Picture = (props) => {
       )}
       {isEdit ? (
         <input
-          className="change-designation"
+          className={styles.changeDesignation}
           placeholder="Enter designation"
           value={designation}
           onChange={(e) => setDesignation(e.target.value)}

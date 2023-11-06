@@ -12,7 +12,7 @@
   margin-top: 50px;
 }
 .detailsSection textarea {
-  width: 100%;
+  width: 80%;
   height: 25%;
   resize: none;
   padding: 10px;
@@ -21,10 +21,6 @@
 .detailsSection input {
   padding: 5px;
 }
-
-
-
-
 
 
 .addExperience {
@@ -66,8 +62,8 @@
   margin-top: 50px;
 }
 
-#companyName,
-#description {
+.companyName,
+.description {
   display: block;
   width: 85%;
   height: 30px;
@@ -95,7 +91,8 @@
 }
 
 .dateSectionLabels,
-.dateSectionValues {
+.dateSectionValues,
+.dateSectionValues-editable {
   width: 100%;
   display: flex;
   align-items: center;
@@ -103,20 +100,21 @@
   gap: 10px;
 }
 
-.dateSectionValues>* {
+.dateSectionValues>*,
+.dateSection-Values-Editable>* {
   width: 100%;
 }
 
-.checkbox-section {
+.checkboxSection {
   display: flex;
   align-items: center;
 }
 
-.label-employer {
+.labelEmployer {
   font-size: smaller;
 }
 
-.date-section-labels>label {
+.dateSectionLabels>label {
   width: 50%;
   font-size: small;
   font-weight: 600;
@@ -126,4 +124,58 @@ textarea {
   width: 100%;
   min-height: 100px;
   padding: 10px;
+}
+.showExperienceForm {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+
+}
+
+
+.saveBtn {
+  margin: 35px auto;
+  padding: 10px 50px;
+  border: none;
+  background-color: orange;
+  color: white;
+  font-size: large;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  box-shadow: 3px 3px 10px lightgrey;
+}
+
+.saveBtn p {
+  margin: 0px auto;
+}
+
+.saveBtn:hover {
+  background-color: rgb(222, 146, 5);
+}
+
+.closeBtn {
+  width: 100%;
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.alertText {
+  color: red;
+  display: none;
+
+  margin: 0px 25px;
+}
+
+.experienceontainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.experienceContainer{
+  background-color: #f4f3f1;
+  max-height: 400px;
+  overflow-y:scroll;
+
 }
