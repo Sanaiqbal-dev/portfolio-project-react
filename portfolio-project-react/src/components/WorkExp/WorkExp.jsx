@@ -21,7 +21,7 @@ import WorkExpItem from "../WorkExpItem/WorkExpItem";
 import styles from "./WorkExp.module.css";
 import moment from "moment";
 
-const WorkExp = ({ isEdit }) => {
+const WorkExp = ({ isEdit, totalExp, onUpdateTotalExp }) => {
   const [showExperienceForm, setShowExperienceForm] = useState(false);
   const [expList, setExpList] = useState([]);
   const [compName, setCompName] = useState("");
@@ -29,6 +29,8 @@ const WorkExp = ({ isEdit }) => {
   const [endDate, setEndDate] = useState("");
   const [isCurrentEmp, setIsCurrentEmp] = useState(false);
   const [jobDescription, setJobDescription] = useState("");
+
+  const [totalExpValue, setTotalExpValue] = useState(totalExp);
 
   const SubmitWorkExpForm = (e) => {
     e.preventDefault();
@@ -87,8 +89,39 @@ const WorkExp = ({ isEdit }) => {
     setExpList([...updatedList]);
   };
 
+  const calculateTotalExp = () => {
+    const daysArray = expList.map((item) => {
+      return calculateNoOfdays(item.startDate, item.endDate);
+    });
+
+    const totalExpInDays = daysArray.reduce(
+      (previousValue, currentValue, index) => previousValue + currentValue,
+      0
+    );
+
+    console.log("total days are : ", totalExpInDays)
+
+    const years = Math.floor(totalExpInDays / 365);
+
+    const remDays = totalExpInDays % 365;
+
+    const months = Math.floor(remDays/30);
+
+    
+    console.log("years: ",years,"  months:",months);
+
+    onUpdateTotalExp([years, months]);
+
+  };
+  const calculateNoOfdays = (date1, date2) => {
+    return (
+      (new Date(date2).getTime() - new Date(date1).getTime()) /
+      (1000 * 3600 * 24)
+    );
+  };
   useEffect(() => {
     setShowExperienceForm(false);
+    calculateTotalExp();
   }, [isEdit]);
 
   return (

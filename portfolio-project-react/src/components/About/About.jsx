@@ -3,14 +3,17 @@ import React, { useState } from "react";
 import {ABOUT, ABOUT_HEADING, CONTACT, CONTACT_HEADING, EMAIL, EMAIL_HEADING, LABEL_CONTACT, LABEL_EMAIL} from "./constants"
 import styles from "./About.module.css";
 
-const About = ({isEdit}) => {
+const About = ({ isEdit, totalExp }) => {
   const [aboutContent, setAboutContent] = useState(ABOUT);
   const [phone, setPhone] = useState(CONTACT);
   const [email, setEmail] = useState(EMAIL);
 
   return (
     <div>
-      <h1 className={styles.titleAbout}>{ABOUT_HEADING}</h1>
+      <div className={styles.aboutHeader}>
+        <h1 className={styles.titleAbout}>{ABOUT_HEADING}</h1>
+        <label>Total Experience: {totalExp[0]} years {totalExp[1] >0 && totalExp[1] } months</label>
+      </div>
       {isEdit ? (
         <textarea
           className={styles.aboutTextArea}
@@ -20,7 +23,7 @@ const About = ({isEdit}) => {
           }}
         />
       ) : (
-        <p>{aboutContent}</p>
+        <p className={styles.aboutContent}>{aboutContent}</p>
       )}
 
       <br />
