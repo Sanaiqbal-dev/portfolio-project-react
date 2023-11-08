@@ -1,18 +1,18 @@
 import { useState } from "react";
-import { JOB_TITLE, NAME } from "./constants";
+import { JOB_TITLE, NAME, PLACEHOLDER_JOB_DESCRIPTION, PLACEHOLDER_NAME } from "./constants";
 import styles from "./Picture.module.css";
+import Skills from "../Skills/Skills";
 
 const Picture = (props) => {
 
   const { isEdit, url, size } = props;
 
   const [imageUrl, setImageUrl] = useState(url);
-  const [name, setName] = useState("Sana Iqbal");
-  const [designation, setDesignation] = useState("Software Engineer");
+  const [name, setName] = useState(NAME);
+  const [designation, setDesignation] = useState(JOB_TITLE);
   const onImageChange = (e) => {
     if (e.target.files[0]) {
       setImageUrl(URL.createObjectURL(e.target.files[0]));
-      // setImageUrl(e.target.value);
     }
   };
 
@@ -34,7 +34,7 @@ const Picture = (props) => {
       {isEdit ? (
         <input
           className={styles.changeName}
-          placeholder="Enter name:"
+          placeholder={PLACEHOLDER_NAME}
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
@@ -44,13 +44,15 @@ const Picture = (props) => {
       {isEdit ? (
         <input
           className={styles.changeDesignation}
-          placeholder="Enter designation"
+          placeholder={PLACEHOLDER_JOB_DESCRIPTION}
           value={designation}
           onChange={(e) => setDesignation(e.target.value)}
         />
       ) : (
         <h3>{designation}</h3>
       )}
+
+      <Skills isEdit={isEdit} />
     </div>
   );
 };

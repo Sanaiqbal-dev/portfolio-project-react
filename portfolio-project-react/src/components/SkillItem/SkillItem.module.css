@@ -1,0 +1,33 @@
+.skillItem {
+  background-color: #64892d;
+  color: white;
+  box-sizing: border-box;
+  padding: 5px 12px;
+  margin: 5px;
+  font-size: small;
+  font-weight: 600;
+  border-radius: 20px;
+  border-color: transparent;
+  display: flex;
+  align-items: center;
+}
+.skillItem:hover {
+  scale: 1.1;
+}
+.deleteIcon {
+  cursor: pointer;
+  color: rgb(191, 191, 2);
+  font-size: medium;
+}
+.deleteIcon:hover {
+  color: yellow;
+}
+.addNewItem {
+  background-color: transparent;
+  border: none;
+  color: white;
+  outline: none;
+}
+.addNewItem::placeholder {
+  color: white;
+}
