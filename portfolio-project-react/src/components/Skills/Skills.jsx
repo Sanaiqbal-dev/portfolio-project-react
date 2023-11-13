@@ -1,9 +1,13 @@
-import React, { useEffect, useState } from "react";
-import styles from "./Skills.module.css";
+import React, { useEffect, useState, useContext } from "react";
 import SkillItem from "../SkillItem/SkillItem";
+import { IsEditMode } from "../../IsEditMode";
 import { SKILLS_DATA } from "./constants";
-const Skills = ({ isEdit }) => {
+import styles from "./Skills.module.css";
+
+const Skills = () => {
+
   const [skillsList, setSkillsList] = useState(SKILLS_DATA);
+  const isEditMode = useContext(IsEditMode);
 
   const AddNewSkill = (newSkill) => {
     setSkillsList([...skillsList, newSkill]);
@@ -25,7 +29,6 @@ const Skills = ({ isEdit }) => {
         skillsList.map((item, index) => (
           <SkillItem
             key={index}
-            isEdit={isEdit}
             data={item}
             index={index}
             isAddNewItem={false}
@@ -34,7 +37,7 @@ const Skills = ({ isEdit }) => {
           />
         ))}
 
-      {isEdit && <SkillItem
+      {isEditMode && <SkillItem
         isAddNewItem={true}
         onAdd={AddNewSkill}
       />}

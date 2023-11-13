@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import {
   CLOSE,
@@ -18,10 +18,12 @@ import {
 } from "../../constants";
 
 import WorkExpItem from "../WorkExpItem/WorkExpItem";
+import { IsEditMode } from "../../IsEditMode";
 import styles from "./WorkExp.module.css";
 import moment from "moment";
 
-const WorkExp = ({ isEdit, onUpdateTotalExp }) => {
+const WorkExp = ({ onUpdateTotalExp }) => {
+  const isEditMode = useContext(IsEditMode);
   const [showExperienceForm, setShowExperienceForm] = useState(false);
   const [expList, setExpList] = useState([]);
   const [compName, setCompName] = useState("");
@@ -29,7 +31,6 @@ const WorkExp = ({ isEdit, onUpdateTotalExp }) => {
   const [endDate, setEndDate] = useState("");
   const [isCurrentEmp, setIsCurrentEmp] = useState(false);
   const [jobDescription, setJobDescription] = useState("");
-
 
   const SubmitWorkExpForm = (e) => {
     e.preventDefault();
@@ -121,7 +122,7 @@ const WorkExp = ({ isEdit, onUpdateTotalExp }) => {
   };
   useEffect(() => {
     setShowExperienceForm(false);
-  }, [isEdit]);
+  }, [isEditMode]);
 
   useEffect(() => {
     calculateTotalExp();
@@ -136,7 +137,6 @@ const WorkExp = ({ isEdit, onUpdateTotalExp }) => {
               {expList.map((item, index) => (
                 <WorkExpItem
                   key={index}
-                  isEdit={isEdit}
                   data={item}
                   index={index}
                   onDelete={deleteExperienceItem}
@@ -148,7 +148,7 @@ const WorkExp = ({ isEdit, onUpdateTotalExp }) => {
             <label>No Work Experience available</label>
           )}
 
-          {isEdit && !showExperienceForm && (
+          {isEditMode && !showExperienceForm && (
             <button
               className={styles.addExperience}
               onClick={(e) => {
@@ -160,7 +160,7 @@ const WorkExp = ({ isEdit, onUpdateTotalExp }) => {
           )}
         </div>
 
-        {isEdit && showExperienceForm && (
+        {isEditMode && showExperienceForm && (
           <div className={styles.showExperienceForm}>
             <form
               className={styles.workExpForm}

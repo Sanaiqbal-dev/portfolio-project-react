@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from "react";
-import styles from "./SkillItem.module.css";
+import React, { useEffect, useState, useContext } from "react";
+import { IsEditMode } from "../../IsEditMode";
 import { CHAR_UNIT, DELETE, PLACEHOLDER_ADD } from "./constants";
+import styles from "./SkillItem.module.css";
 
-const SkillItem = ({ isEdit, data, index, isAddNewItem, onAdd, onDelete }) => {
+const SkillItem = ({ data, index, isAddNewItem, onAdd, onDelete }) => {
+  
+  const isEditMode = useContext(IsEditMode);
   const [skill, setSkill] = useState(data);
   const [newSkill, setNewSkill] = useState("");
   const handleEvent = (e) => {
@@ -42,13 +45,13 @@ const SkillItem = ({ isEdit, data, index, isAddNewItem, onAdd, onDelete }) => {
             className={styles.addNewItem}
             value={skill}
             style={{ width: width }}
-            disabled={isEdit ? false : true}
+            disabled={isEditMode ? false : true}
             onChange={(e) => {
               setSkill(e.target.value);
               setWidth(skill.length + 1);
             }}
           />
-          {isEdit && (
+          {isEditMode && (
             <label
               className={styles.deleteIcon}
               onClick={(e) => onDelete(index)}

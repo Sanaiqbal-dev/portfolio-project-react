@@ -1,10 +1,10 @@
-import styles from "./Details.module.css";
+import { useState } from "react";
 import About from "../About/About";
 import WorkExp from "../WorkExp/WorkExp";
-import { useState } from "react";
+import styles from "./Details.module.css";
 
-const Details = ({ isEdit }) => {
-  const [totalExp, setTotalExp] = useState([0,0]);
+const Details = () => {
+  const [totalExp, setTotalExp] = useState([0, 0]);
 
   const UpdateTotalExperience = (totalExpRcvd) => {
     setTotalExp(totalExpRcvd);
@@ -12,13 +12,8 @@ const Details = ({ isEdit }) => {
   
   return (
     <div className={styles.detailsSection}>
-      <About isEdit={isEdit} totalExp={totalExp} />
-
-      <WorkExp
-        isEdit={isEdit}
-        totalExp={totalExp}
-        onUpdateTotalExp={UpdateTotalExperience}
-      />
+      <About totalExp={totalExp} />
+      <WorkExp totalExp={totalExp} onUpdateTotalExp={UpdateTotalExperience} />
     </div>
   );
 };

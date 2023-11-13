@@ -1,14 +1,14 @@
 import Details from "../Details/Details";
 import Picture from "../Picture/Picture";
-import styles from "./Content.module.css"
+import styles from "./Content.module.css";
 import logo from "../Picture/assets/ic-profile.png";
 
+const Content = () => {
 
-const Content = ({ isEdit }) => {
   return (
     <main>
-      <Details isEdit={isEdit} />
-      <Picture isEdit={isEdit} url={logo} size={"250px"} />
+      <Details/>
+      <Picture url={logo} size={"250px"} />
     </main>
   );
 };

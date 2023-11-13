@@ -1,12 +1,16 @@
-import { useState } from "react";
-import { JOB_TITLE, NAME, PLACEHOLDER_JOB_DESCRIPTION, PLACEHOLDER_NAME } from "./constants";
+import { useState, useContext } from "react";
+import { IsEditMode } from "../../IsEditMode";
+import {
+  JOB_TITLE,
+  NAME,
+  PLACEHOLDER_JOB_DESCRIPTION,
+  PLACEHOLDER_NAME,
+} from "./constants";
 import styles from "./Picture.module.css";
 import Skills from "../Skills/Skills";
 
-const Picture = (props) => {
-
-  const { isEdit, url, size } = props;
-
+const Picture = ({ url, size }) => {
+  const isEditMode = useContext(IsEditMode);
   const [imageUrl, setImageUrl] = useState(url);
   const [name, setName] = useState(NAME);
   const [designation, setDesignation] = useState(JOB_TITLE);
@@ -21,7 +25,7 @@ const Picture = (props) => {
       <div className={styles.imageContainer}>
         <img src={imageUrl} style={{ width: size, height: size }} />
       </div>
-      {isEdit && (
+      {isEditMode && (
         <input
           className={styles.changeImage}
           type="file"
@@ -31,7 +35,7 @@ const Picture = (props) => {
           }}
         />
       )}
-      {isEdit ? (
+      {isEditMode ? (
         <input
           className={styles.changeName}
           placeholder={PLACEHOLDER_NAME}
@@ -41,7 +45,7 @@ const Picture = (props) => {
       ) : (
         <h2>{name}</h2>
       )}
-      {isEdit ? (
+      {isEditMode ? (
         <input
           className={styles.changeDesignation}
           placeholder={PLACEHOLDER_JOB_DESCRIPTION}
@@ -52,7 +56,7 @@ const Picture = (props) => {
         <h3>{designation}</h3>
       )}
 
-      <Skills isEdit={isEdit} />
+      <Skills/>
     </div>
   );
 };

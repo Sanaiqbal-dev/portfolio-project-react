@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styles from "./WorkExpItem.module.css";
 import deleteIcon from "./assets/ic_delete.png";
 import editIcon from "./assets/ic_edit.png";
@@ -7,9 +7,13 @@ import {
   LABEL_END_DATE,
   LABEL_START_DATE,
 } from "../../constants";
+import { IsEditMode } from "../../IsEditMode";
+
 import moment from "moment";
 
-const WorkExpItem = ({ isEdit, data, index, onDelete, onUpdate }) => {
+const WorkExpItem = ({ data, index, onDelete, onUpdate }) => {
+  const isEditMode = useContext(IsEditMode);
+
   const [editExp, setEditExp] = useState(false);
 
   const [compNameInput, setCompNameInput] = useState(data.compName);
@@ -44,7 +48,7 @@ const WorkExpItem = ({ isEdit, data, index, onDelete, onUpdate }) => {
     setEndDateInput(data.endDate);
     setIsCurrentEmpInput(data.isCurrentEmp);
     setJobDescriptionInput(data.jobDescription);
-  }, [isEdit]);
+  }, [isEditMode]);
   return (
     <div className={styles.expItemContainer}>
       <div className={styles.topSection}>
@@ -65,7 +69,7 @@ const WorkExpItem = ({ isEdit, data, index, onDelete, onUpdate }) => {
           </h4>
         )}
 
-        {isEdit && !editExp && (
+        {isEditMode && !editExp && (
           <div className={styles.headerEvents}>
             <button
               className={styles.deleteBtn}
