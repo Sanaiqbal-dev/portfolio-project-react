@@ -1,135 +1,132 @@
 import { useEffect, useState } from "react";
-
 import {
-  CLOSE,
-  ERROR_JOB_DESC,
-  EXP_HEADING,
-  HEADING_FILL_DETAILS,
-  LABEL_ADD_EXP,
-  PLACEHOLDER_COMP_NAME,
-  PLACEHOLDER_JOB_dESC,
-  SAVE,
+  JOB_DESCRIPTION_ERROR,
+  WORK_EXPERIENCE_HEADING,
+  FILL_DETAILS_HEADING,
+  ADD_EXPERIENCE_LABEL,
+  COMPANY_NAME_PLACEHOLDER,
+  JOB_DESCRIPTION_PLACEHOLDER,
+  WORK_EXPERIENCE_ITEM_ADDED,
+  WORK_EXPERIENCE_NOT_FOUND,
+  INCORRECT_DATE_ALERT
 } from "./constants";
 
 import {
-  LABEL_CURR_EMP,
-  LABEL_START_DATE,
-  LABEL_END_DATE,
+  CURRENT_EMPLOYER_LABEL,
+  START_DATE_LABEL,
+  END_DATE_LABEL,
+  SAVE_TEXT,
+  CLOSE_DELETE_TEXT,
 } from "../../constants";
 
-import WorkExpItem from "../WorkExpItem/WorkExpItem";
-import styles from "./WorkExp.module.css";
+import WorkExpItem from "../WorkExperienceItem/WorkExperienceItem";
+import styles from "./WorkExperience.module.css";
 import moment from "moment";
 
-const WorkExp = ({ isEdit }) => {
+const WorkExperience = ({ isEditModeEnabled }) => {
   const [showExperienceForm, setShowExperienceForm] = useState(false);
-  const [expList, setExpList] = useState([]);
-  const [compName, setCompName] = useState("");
+  const [workExperienceList, setWorkExperienceList] = useState([]);
+  const [companyName, setCompanyName] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [isCurrentEmp, setIsCurrentEmp] = useState(false);
+  const [isCurrentEmployer, setIsCurrentEmployer] = useState(false);
   const [jobDescription, setJobDescription] = useState("");
 
-  const SubmitWorkExpForm = (e) => {
+   const [maxDateLimit, setMaxDateLimit] = useState(
+     moment(new Date()).toISOString().split("T")[0]
+   );
+  const SubmitWorkExperienceForm = (e) => {
     e.preventDefault();
-    if (!isCurrentEmp && startDate > endDate) {
-      alert("incorrect end date.");
+    if (!isCurrentEmployer && startDate > endDate) {
+      alert({INCORRECT_DATE_ALERT});
     } else {
-      const newWorkExp = {
-        compName,
+      const newWorkExperience = {
+        companyName,
         startDate,
         endDate,
-        isCurrentEmp,
+        isCurrentEmployer,
         jobDescription,
       };
 
-      setExpList([...expList, newWorkExp]);
+      setWorkExperienceList([...workExperienceList, newWorkExperience]);
     }
     setShowExperienceForm(false);
-    alert("New Work Experience data is added.");
+    alert({WORK_EXPERIENCE_ITEM_ADDED});
   };
 
-  const deleteExperienceItem = (indexPassed) => {
-    const newList = expList.filter((item, index) => index !== indexPassed);
+  const deleteExperienceItem = (recievedIndex) => {
+    const newList = workExperienceList.filter(
+      (item, index) => index !== recievedIndex
+    );
 
-    setExpList(newList);
+    setWorkExperienceList(newList);
   };
 
   const updateExperienceItem = (
     itemIndex,
-    name,
+    companyName,
     startDate,
     endDate,
-    isCurrentEmp,
-    jobDesc
+    isCurrentEmployer,
+    jobDescription
   ) => {
-    console.log(
-      "Recieved info is :",
-      itemIndex,
-      name,
-      startDate,
-      endDate,
-      isCurrentEmp,
-      jobDesc
-    );
-
-    const updatedList = expList.map((item, index) => {
+    const updatedList = workExperienceList.map((item, index) => {
       if (index === itemIndex) {
-        item.compName = name;
+        item.companyName = companyName;
         item.startDate = startDate;
         item.endDate = endDate;
-        item.isCurrentEmp = isCurrentEmp;
-        item.jobDescription = jobDesc;
+        item.isCurrentEmployer = isCurrentEmployer;
+        item.jobDescription = jobDescription;
       }
       return item;
     });
 
-    setExpList([...updatedList]);
+    setWorkExperienceList([...updatedList]);
   };
 
   useEffect(() => {
     setShowExperienceForm(false);
-  }, [isEdit]);
+  }, [isEditModeEnabled]);
 
   return (
     <div className={styles.details}>
       <div>
-        <h1>{EXP_HEADING}</h1>
+        <h1>{WORK_EXPERIENCE_HEADING}</h1>
         <div className={styles.expSection}>
-          {expList.length > 0 ? (
+          {workExperienceList.length > 0 ? (
             <div className={styles.expListContainer}>
-              {expList.map((item, index) => (
+              {workExperienceList.map((item, index) => (
                 <WorkExpItem
                   key={index}
-                  isEdit={isEdit}
+                  isEditModeEnabled={isEditModeEnabled}
                   data={item}
                   index={index}
-                  onDelete={deleteExperienceItem}
-                  onUpdate={updateExperienceItem}
+                  onDeleteWorkExperience={deleteExperienceItem}
+                  onUpdateWorkExperience={updateExperienceItem}
                 />
               ))}
             </div>
           ) : (
-            <label>No Work Experience available</label>
+            <label>{WORK_EXPERIENCE_NOT_FOUND}</label>
           )}
 
-          {isEdit && !showExperienceForm && (
+          {isEditModeEnabled && !showExperienceForm && (
             <button
               className={styles.addExperience}
               onClick={(e) => {
                 setShowExperienceForm(true);
               }}
             >
-              {LABEL_ADD_EXP}
+              {ADD_EXPERIENCE_LABEL}
             </button>
           )}
         </div>
 
-        {isEdit && showExperienceForm && (
+        {isEditModeEnabled && showExperienceForm && (
           <div className={styles.showExperienceForm}>
             <form
               className={styles.workExpForm}
-              onSubmit={(e) => SubmitWorkExpForm(e)}
+              onSubmit={(e) => SubmitWorkExperienceForm(e)}
             >
               <div className={styles.closeBtn}>
                 <button
@@ -137,36 +134,36 @@ const WorkExp = ({ isEdit }) => {
                     setShowExperienceForm(false);
                   }}
                 >
-                  {CLOSE}
+                  {CLOSE_DELETE_TEXT}
                 </button>
               </div>
-              <h3>{HEADING_FILL_DETAILS}</h3>
+              <h3>{FILL_DETAILS_HEADING}</h3>
               <input
                 type="text"
                 pattern=".*\S+.*"
                 className={styles.companyName}
                 required
-                onChange={(e) => setCompName(e.target.value)}
-                placeholder={PLACEHOLDER_COMP_NAME}
+                onChange={(e) => setCompanyName(e.target.value)}
+                placeholder={COMPANY_NAME_PLACEHOLDER}
               />
               <div className={styles.dateSection}>
                 <div className={styles.dateSectionLabels}>
-                  <label>{LABEL_START_DATE}</label>
-                  <label>{LABEL_END_DATE}</label>
+                  <label>{START_DATE_LABEL}</label>
+                  <label>{END_DATE_LABEL}</label>
                   <label></label>
                 </div>
                 <div className={styles.dateSectionValues}>
                   <input
                     type="date"
                     required
-                    max={moment(new Date()).toISOString().split("T")[0]}
+                    max={maxDateLimit}
                     onChange={(e) => setStartDate(e.target.value)}
                   />
                   <input
                     type="date"
                     required
-                    disabled={isCurrentEmp}
-                    max={moment(new Date()).toISOString().split("T")[0]}
+                    disabled={isCurrentEmployer}
+                    max={maxDateLimit}
                     onChange={(e) => setEndDate(e.target.value)}
                   />
                   <div className={styles.checkboxSection}>
@@ -174,12 +171,12 @@ const WorkExp = ({ isEdit }) => {
                       type="checkbox"
                       className={styles.checkbox}
                       onChange={(e) => {
-                        setIsCurrentEmp(e.target.checked);
+                        setIsCurrentEmployer(e.target.checked);
                         setEndDate("");
                       }}
                     />
                     <label className={styles.labelEmployer}>
-                      {LABEL_CURR_EMP}
+                      {CURRENT_EMPLOYER_LABEL}
                     </label>
                   </div>
                 </div>
@@ -187,12 +184,12 @@ const WorkExp = ({ isEdit }) => {
               <textarea
                 className={styles.description}
                 required
-                placeholder={PLACEHOLDER_JOB_dESC}
+                placeholder={JOB_DESCRIPTION_PLACEHOLDER}
                 onChange={(e) => setJobDescription(e.target.value)}
               ></textarea>
-              <p className={styles.alertText}>{ERROR_JOB_DESC}</p>
+              <p className={styles.alertText}>{JOB_DESCRIPTION_ERROR}</p>
               <button className={styles.saveBtn} type="submit">
-                <p>{SAVE}</p>
+                <p>{SAVE_TEXT}</p>
                 <div className={styles.loader}></div>
               </button>
             </form>
@@ -203,4 +200,4 @@ const WorkExp = ({ isEdit }) => {
   );
 };
 
-export default WorkExp;
+export default WorkExperience;

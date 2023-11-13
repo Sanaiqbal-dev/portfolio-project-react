@@ -1,3 +1,3 @@
-export const LOGIN = "Login";
-export const SAVE = "Save";
-export const EDIT = "Edit";
+export const LOGIN_TEXT = "Login";
+export const SAVE_TEXT = "Save";
+export const EDIT_TEXT = "Edit";

@@ -1,13 +1,12 @@
-import styles from "./Details.module.css";
 import About from "../About/About";
-import WorkExp from "../WorkExp/WorkExp";
+import WorkExperience from "../WorkExperience/WorkExperience";
+import styles from "./Details.module.css";
 
-const Details = ({ isEdit }) => {
+const Details = ({ isEditModeEnabled }) => {
   return (
     <div className={styles.detailsSection}>
-      <About isEdit={isEdit} />
-
-      <WorkExp isEdit={isEdit} />
+      <About isEditModeEnabled={isEditModeEnabled} />
+      <WorkExperience isEditModeEnabled={isEditModeEnabled} />
     </div>
   );
 };
