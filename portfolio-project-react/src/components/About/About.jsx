@@ -12,7 +12,7 @@ const About = ({ isEdit, totalExp }) => {
     <div>
       <div className={styles.aboutHeader}>
         <h1 className={styles.titleAbout}>{ABOUT_HEADING}</h1>
-        <label>Total Experience: {totalExp[0]} years {totalExp[1] >0 && totalExp[1] } months</label>
+        <label>Total Experience: {totalExp[0]} years {totalExp[1] >0 ? totalExp[1] : 0} months</label>
       </div>
       {isEdit ? (
         <textarea

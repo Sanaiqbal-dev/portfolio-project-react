@@ -21,7 +21,7 @@ import WorkExpItem from "../WorkExpItem/WorkExpItem";
 import styles from "./WorkExp.module.css";
 import moment from "moment";
 
-const WorkExp = ({ isEdit, totalExp, onUpdateTotalExp }) => {
+const WorkExp = ({ isEdit, onUpdateTotalExp }) => {
   const [showExperienceForm, setShowExperienceForm] = useState(false);
   const [expList, setExpList] = useState([]);
   const [compName, setCompName] = useState("");
@@ -30,7 +30,6 @@ const WorkExp = ({ isEdit, totalExp, onUpdateTotalExp }) => {
   const [isCurrentEmp, setIsCurrentEmp] = useState(false);
   const [jobDescription, setJobDescription] = useState("");
 
-  const [totalExpValue, setTotalExpValue] = useState(totalExp);
 
   const SubmitWorkExpForm = (e) => {
     e.preventDefault();
@@ -99,21 +98,22 @@ const WorkExp = ({ isEdit, totalExp, onUpdateTotalExp }) => {
       0
     );
 
-    console.log("total days are : ", totalExpInDays)
+    console.log("total days are : ", totalExpInDays);
 
     const years = Math.floor(totalExpInDays / 365);
 
     const remDays = totalExpInDays % 365;
 
-    const months = Math.floor(remDays/30);
+    const months = Math.floor(remDays / 30);
 
-    
-    console.log("years: ",years,"  months:",months);
+    console.log("years: ", years, "  months:", months);
 
     onUpdateTotalExp([years, months]);
-
   };
   const calculateNoOfdays = (date1, date2) => {
+    if (date2 === "") {
+      date2 = new Date().getTime();
+    }
     return (
       (new Date(date2).getTime() - new Date(date1).getTime()) /
       (1000 * 3600 * 24)
@@ -121,9 +121,11 @@ const WorkExp = ({ isEdit, totalExp, onUpdateTotalExp }) => {
   };
   useEffect(() => {
     setShowExperienceForm(false);
-    calculateTotalExp();
   }, [isEdit]);
 
+  useEffect(() => {
+    calculateTotalExp();
+  }, [expList]);
   return (
     <div className={styles.details}>
       <div>
