@@ -5,11 +5,11 @@ import { SKILLS_DATA } from "./constants";
 const Skills = ({ isEditModeEnabled }) => {
   const [skillsList, setSkillsList] = useState(SKILLS_DATA);
 
-  const AddNewSkill = (newSkill) => {
+  const addNewSkill = (newSkill) => {
     setSkillsList([...skillsList, newSkill]);
   };
 
-  const DeleteSkill = (recievedIndex) => {
+  const deleteSkill = (recievedIndex) => {
     const updatedList = skillsList.filter(
       (item, index) => recievedIndex !== index
     );
@@ -25,13 +25,13 @@ const Skills = ({ isEditModeEnabled }) => {
             data={item}
             index={index}
             isAddNewSkillInput={false}
-            onAddSkill={AddNewSkill}
-            onDeleteSkill={DeleteSkill}
+            onAddSkill={addNewSkill}
+            onDeleteSkill={deleteSkill}
           />
         ))}
 
       {isEditModeEnabled && (
-        <SkillItem isAddNewSkillInput={true} onAddSkill={AddNewSkill} />
+        <SkillItem isAddNewSkillInput={true} onAddSkill={addNewSkill} />
       )}
     </div>
   );

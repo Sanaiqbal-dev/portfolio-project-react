@@ -13,15 +13,19 @@ const SkillItem = ({
 }) => {
   const [skill, setSkill] = useState(data);
   const [newSkill, setNewSkill] = useState("");
-  const handleEnterKeyPressEvent = (e) => {
+
+  const getItemWidth = () => {
+    return skill ? skill.length + 1 + CHAR_UNIT : 1 + CHAR_UNIT;
+  };
+
+  const [width, setWidth] = useState(getItemWidth);
+
+  const onEnterKeyPressHandler = (e) => {
     if (e.code === "Enter" && newSkill.length > 0) {
       onAddSkill(newSkill);
       setNewSkill("");
     }
   };
-  const [width, setWidth] = useState(
-    skill ? skill.length + 1 + CHAR_UNIT : 1 + CHAR_UNIT
-  );
 
   const onUpdateSkill = (e) => {
     setSkill(e.target.value);
@@ -33,7 +37,7 @@ const SkillItem = ({
   }, [data]);
 
   useEffect(() => {
-    setWidth(skill ? skill.length + 1 + CHAR_UNIT : 1 + CHAR_UNIT);
+    setWidth(getItemWidth);
   }, [skill]);
 
   return (
@@ -43,7 +47,7 @@ const SkillItem = ({
           <input
             className={styles.addNewItem}
             placeholder={ADD_PLACEHOLDER}
-            onKeyDown={(e) => handleEnterKeyPressEvent(e)}
+            onKeyDown={(e) => onEnterKeyPressHandler(e)}
             value={newSkill}
             onChange={(e) => setNewSkill(e.target.value)}
           />
@@ -55,7 +59,9 @@ const SkillItem = ({
             value={skill}
             style={{ width: width }}
             disabled={!isEditModeEnabled}
-            onChange={(e) => { onUpdateSkill(e)}}
+            onChange={(e) => {
+              onUpdateSkill(e);
+            }}
           />
           {isEditModeEnabled && (
             <label

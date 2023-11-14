@@ -3,13 +3,13 @@ import {
   COMPANY_NAME_LABEL,
   PRESENT_TEXT,
   DASH_TEXT,
-  INCORRECT_DATE_ALERT,
 } from "./constants";
 import {
   CURRENT_EMPLOYER_LABEL,
   END_DATE_LABEL,
   START_DATE_LABEL,
   SAVE_TEXT,
+  INCORRECT_DATE_ALERT,
 } from "../../constants";
 import moment from "moment";
 import styles from "./WorkExperienceItem.module.css";
@@ -23,7 +23,7 @@ const WorkExpItem = ({
   onDeleteWorkExperience,
   onUpdateWorkExperience,
 }) => {
-  const [editExperienceMode, setEditExperienceMode] = useState(false);
+  const [isItemEditModeEnabled, setIsItemEditModeEnabled] = useState(false);
   const [companyNameInput, setCompanyNameInput] = useState(data.companyName);
   let companyNameValue = index + 1 + ". " + companyNameInput;
 
@@ -35,17 +35,10 @@ const WorkExpItem = ({
   const [jobDescriptionInput, setJobDescriptionInput] = useState(
     data.jobDescription
   );
-
-  // const [jobDuration, setJobDuration] = useState(
-  //   startDateInput +
-  //     { DASH_TEXT } +
-  //     (isCurrentEmployerInput ? { PRESENT_TEXT } : endDateInput)
-  // );
-
   let jobDuration =
     startDateInput +
-    { DASH_TEXT } +
-    (isCurrentEmployerInput ? { PRESENT_TEXT } : endDateInput);
+     DASH_TEXT  +
+    (isCurrentEmployerInput ?  PRESENT_TEXT  : endDateInput);
 
   const [maxDateLimit, setMaxDateLimit] = useState(
     moment(new Date()).toISOString().split("T")[0]
@@ -53,9 +46,9 @@ const WorkExpItem = ({
 
   const updateExperienceItem = () => {
     if (!isCurrentEmployerInput && endDateInput < startDateInput) {
-      alert({ INCORRECT_DATE_ALERT });
+      alert( INCORRECT_DATE_ALERT );
     } else {
-      setEditExperienceMode(false);
+      setIsItemEditModeEnabled(false);
 
       onUpdateWorkExperience(
         index,
@@ -69,7 +62,7 @@ const WorkExpItem = ({
   };
 
   useEffect(() => {
-    setEditExperienceMode(false);
+    setIsItemEditModeEnabled(false);
     setCompanyNameInput(data.companyName);
     setStartDateInput(data.startDate);
     setEndDateInput(data.endDate);
@@ -80,7 +73,7 @@ const WorkExpItem = ({
   return (
     <div className={styles.expItemContainer}>
       <div className={styles.topSection}>
-        {editExperienceMode ? (
+        {isItemEditModeEnabled ? (
           <div>
             <label className={styles.companyNameLabel}>
               {COMPANY_NAME_LABEL}
@@ -97,7 +90,7 @@ const WorkExpItem = ({
           <h4 className={styles.companyName}>{companyNameValue}</h4>
         )}
 
-        {isEditModeEnabled && !editExperienceMode && (
+        {isEditModeEnabled && !isItemEditModeEnabled && (
           <div className={styles.headerEvents}>
             <button
               className={styles.deleteBtn}
@@ -110,7 +103,7 @@ const WorkExpItem = ({
             <button
               className={styles.editBtn}
               onClick={(e) => {
-                setEditExperienceMode(true);
+                setIsItemEditModeEnabled(true);
               }}
             >
               <img src={editIcon} />
@@ -119,7 +112,7 @@ const WorkExpItem = ({
         )}
       </div>
 
-      {editExperienceMode ? (
+      {isItemEditModeEnabled ? (
         <div className={styles.dateSection}>
           <div className={styles.dateSectionLabels}>
             <label>{START_DATE_LABEL}</label>
@@ -161,7 +154,7 @@ const WorkExpItem = ({
       ) : (
         <h5 className={styles.jobDuration}>{jobDuration}</h5>
       )}
-      {editExperienceMode ? (
+      {isItemEditModeEnabled ? (
         <textarea
           className={styles.description}
           value={jobDescriptionInput}
@@ -172,7 +165,7 @@ const WorkExpItem = ({
       ) : (
         <p className={styles.jobDescription}>{data.jobDescription}</p>
       )}
-      {editExperienceMode && (
+      {isItemEditModeEnabled && (
         <button
           className={styles.saveBtn}
           onClick={(e) => {

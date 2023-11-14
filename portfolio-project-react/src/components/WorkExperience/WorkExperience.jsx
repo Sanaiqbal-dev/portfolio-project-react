@@ -8,7 +8,6 @@ import {
   JOB_DESCRIPTION_PLACEHOLDER,
   WORK_EXPERIENCE_ITEM_ADDED,
   WORK_EXPERIENCE_NOT_FOUND,
-  INCORRECT_DATE_ALERT
 } from "./constants";
 
 import {
@@ -17,14 +16,15 @@ import {
   END_DATE_LABEL,
   SAVE_TEXT,
   CLOSE_DELETE_TEXT,
+  INCORRECT_DATE_ALERT,
 } from "../../constants";
 
 import WorkExpItem from "../WorkExperienceItem/WorkExperienceItem";
-import styles from "./WorkExperience.module.css";
 import moment from "moment";
+import styles from "./WorkExperience.module.css";
 
 const WorkExperience = ({ isEditModeEnabled }) => {
-  const [showExperienceForm, setShowExperienceForm] = useState(false);
+  const [isExperienceFormVisible, setIsExperienceFormVisible] = useState(false);
   const [workExperienceList, setWorkExperienceList] = useState([]);
   const [companyName, setCompanyName] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -32,13 +32,12 @@ const WorkExperience = ({ isEditModeEnabled }) => {
   const [isCurrentEmployer, setIsCurrentEmployer] = useState(false);
   const [jobDescription, setJobDescription] = useState("");
 
-   const [maxDateLimit, setMaxDateLimit] = useState(
-     moment(new Date()).toISOString().split("T")[0]
-   );
-  const SubmitWorkExperienceForm = (e) => {
+  const maxDateLimit = moment(new Date()).toISOString().split("T")[0];
+
+  const submitWorkExperienceForm = (e) => {
     e.preventDefault();
     if (!isCurrentEmployer && startDate > endDate) {
-      alert({INCORRECT_DATE_ALERT});
+      alert(INCORRECT_DATE_ALERT);
     } else {
       const newWorkExperience = {
         companyName,
@@ -49,9 +48,9 @@ const WorkExperience = ({ isEditModeEnabled }) => {
       };
 
       setWorkExperienceList([...workExperienceList, newWorkExperience]);
+      setIsExperienceFormVisible(false);
+      alert(WORK_EXPERIENCE_ITEM_ADDED);
     }
-    setShowExperienceForm(false);
-    alert({WORK_EXPERIENCE_ITEM_ADDED});
   };
 
   const deleteExperienceItem = (recievedIndex) => {
@@ -85,7 +84,7 @@ const WorkExperience = ({ isEditModeEnabled }) => {
   };
 
   useEffect(() => {
-    setShowExperienceForm(false);
+    setIsExperienceFormVisible(false);
   }, [isEditModeEnabled]);
 
   return (
@@ -110,11 +109,11 @@ const WorkExperience = ({ isEditModeEnabled }) => {
             <label>{WORK_EXPERIENCE_NOT_FOUND}</label>
           )}
 
-          {isEditModeEnabled && !showExperienceForm && (
+          {isEditModeEnabled && !isExperienceFormVisible && (
             <button
               className={styles.addExperience}
               onClick={(e) => {
-                setShowExperienceForm(true);
+                setIsExperienceFormVisible(true);
               }}
             >
               {ADD_EXPERIENCE_LABEL}
@@ -122,16 +121,16 @@ const WorkExperience = ({ isEditModeEnabled }) => {
           )}
         </div>
 
-        {isEditModeEnabled && showExperienceForm && (
-          <div className={styles.showExperienceForm}>
+        {isEditModeEnabled && isExperienceFormVisible && (
+          <div className={styles.experienceForm}>
             <form
               className={styles.workExpForm}
-              onSubmit={(e) => SubmitWorkExperienceForm(e)}
+              onSubmit={(e) => submitWorkExperienceForm(e)}
             >
               <div className={styles.closeBtn}>
                 <button
                   onClick={(e) => {
-                    setShowExperienceForm(false);
+                    setIsExperienceFormVisible(false);
                   }}
                 >
                   {CLOSE_DELETE_TEXT}
