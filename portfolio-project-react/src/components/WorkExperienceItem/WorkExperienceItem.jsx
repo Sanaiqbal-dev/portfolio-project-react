@@ -1,80 +1,101 @@
-import React, { useContext, useEffect, useState } from "react";
-import styles from "./WorkExpItem.module.css";
+import React, { useEffect, useState } from "react";
+import {
+  COMPANY_NAME_LABEL,
+  PRESENT_TEXT,
+  DASH_TEXT,
+} from "./constants";
+import {
+  CURRENT_EMPLOYER_LABEL,
+  END_DATE_LABEL,
+  START_DATE_LABEL,
+  SAVE_TEXT,
+  INCORRECT_DATE_ALERT,
+} from "../../constants";
+import moment from "moment";
+import styles from "./WorkExperienceItem.module.css";
 import deleteIcon from "./assets/ic_delete.png";
 import editIcon from "./assets/ic_edit.png";
-import {
-  LABEL_CURR_EMP,
-  LABEL_END_DATE,
-  LABEL_START_DATE,
-} from "../../constants";
-import { IsEditMode } from "../../IsEditMode";
 
-import moment from "moment";
+const WorkExpItem = ({
+  isEditModeEnabled,
+  data,
+  index,
+  onDeleteWorkExperience,
+  onUpdateWorkExperience,
+}) => {
+  const [isItemEditModeEnabled, setIsItemEditModeEnabled] = useState(false);
+  const [companyNameInput, setCompanyNameInput] = useState(data.companyName);
+  let companyNameValue = index + 1 + ". " + companyNameInput;
 
-const WorkExpItem = ({ data, index, onDelete, onUpdate }) => {
-  const isEditMode = useContext(IsEditMode);
-
-  const [editExp, setEditExp] = useState(false);
-
-  const [compNameInput, setCompNameInput] = useState(data.compName);
   const [startDateInput, setStartDateInput] = useState(data.startDate);
   const [endDateInput, setEndDateInput] = useState(data.endDate);
-  const [isCurrentEmpInput, setIsCurrentEmpInput] = useState(data.isCurrentEmp);
+  const [isCurrentEmployerInput, setIsCurrentEmployerInput] = useState(
+    data.isCurrentEmployer
+  );
   const [jobDescriptionInput, setJobDescriptionInput] = useState(
     data.jobDescription
   );
+  let jobDuration =
+    startDateInput +
+     DASH_TEXT  +
+    (isCurrentEmployerInput ?  PRESENT_TEXT  : endDateInput);
+
+  const [maxDateLimit, setMaxDateLimit] = useState(
+    moment(new Date()).toISOString().split("T")[0]
+  );
 
   const updateExperienceItem = () => {
-    if (!isCurrentEmpInput && endDateInput < startDateInput) {
-      alert("Incorrect end date");
+    if (!isCurrentEmployerInput && endDateInput < startDateInput) {
+      alert( INCORRECT_DATE_ALERT );
     } else {
-      setEditExp(false);
+      setIsItemEditModeEnabled(false);
 
-      onUpdate(
+      onUpdateWorkExperience(
         index,
-        compNameInput,
+        companyNameInput,
         startDateInput,
         endDateInput,
-        isCurrentEmpInput,
+        isCurrentEmployerInput,
         jobDescriptionInput
       );
     }
   };
 
   useEffect(() => {
-    setEditExp(false);
-    setCompNameInput(data.compName);
+    setIsItemEditModeEnabled(false);
+    setCompanyNameInput(data.companyName);
     setStartDateInput(data.startDate);
     setEndDateInput(data.endDate);
-    setIsCurrentEmpInput(data.isCurrentEmp);
+    setIsCurrentEmployerInput(data.isCurrentEmployer);
     setJobDescriptionInput(data.jobDescription);
-  }, [isEditMode]);
+  }, [isEditModeEnabled]);
+
   return (
     <div className={styles.expItemContainer}>
       <div className={styles.topSection}>
-        {editExp ? (
+        {isItemEditModeEnabled ? (
           <div>
-            <label className={styles.companyNameLabel}>Company Name: </label>
+            <label className={styles.companyNameLabel}>
+              {COMPANY_NAME_LABEL}
+            </label>
             <input
               className={styles.compNameInput}
-              value={compNameInput}
+              value={companyNameInput}
               onChange={(e) => {
-                setCompNameInput(e.target.value);
+                setCompanyNameInput(e.target.value);
               }}
             />
           </div>
         ) : (
-          <h4 className={styles.companyName}>
-            {index + 1 + ". " + data.compName}
-          </h4>
+          <h4 className={styles.companyName}>{companyNameValue}</h4>
         )}
 
-        {isEditMode && !editExp && (
+        {isEditModeEnabled && !isItemEditModeEnabled && (
           <div className={styles.headerEvents}>
             <button
               className={styles.deleteBtn}
               onClick={(e) => {
-                onDelete(index);
+                onDeleteWorkExperience(index);
               }}
             >
               <img src={deleteIcon} />
@@ -82,7 +103,7 @@ const WorkExpItem = ({ data, index, onDelete, onUpdate }) => {
             <button
               className={styles.editBtn}
               onClick={(e) => {
-                setEditExp(true);
+                setIsItemEditModeEnabled(true);
               }}
             >
               <img src={editIcon} />
@@ -91,51 +112,49 @@ const WorkExpItem = ({ data, index, onDelete, onUpdate }) => {
         )}
       </div>
 
-      {editExp ? (
+      {isItemEditModeEnabled ? (
         <div className={styles.dateSection}>
           <div className={styles.dateSectionLabels}>
-            <label>{LABEL_START_DATE}</label>
-            <label>{LABEL_END_DATE}</label>
+            <label>{START_DATE_LABEL}</label>
+            <label>{END_DATE_LABEL}</label>
             <label></label>
           </div>
           <div className={styles.dateSectionValues}>
             <input
               type="date"
               required
-              max={moment(new Date()).toISOString().split("T")[0]}
+              max={maxDateLimit}
               value={startDateInput}
               onChange={(e) => setStartDateInput(e.target.value)}
             />
             <input
               type="date"
               required
-              max={moment(new Date()).toISOString().split("T")[0]}
+              max={maxDateLimit}
               value={endDateInput}
-              disabled={isCurrentEmpInput}
+              disabled={isCurrentEmployerInput}
               onChange={(e) => setEndDateInput(e.target.value)}
             />
             <div className={styles.checkboxSection}>
               <input
                 type="checkbox"
                 className={styles.checkbox}
-                checked={isCurrentEmpInput}
+                checked={isCurrentEmployerInput}
                 onChange={(e) => {
-                  setIsCurrentEmpInput(e.target.checked);
+                  setIsCurrentEmployerInput(e.target.checked);
                   setEndDateInput("");
                 }}
               />
-              <label className={styles.labelEmployer}>{LABEL_CURR_EMP}</label>
+              <label className={styles.labelEmployer}>
+                {CURRENT_EMPLOYER_LABEL}
+              </label>
             </div>
           </div>
         </div>
       ) : (
-        <h5 className={styles.jobDuration}>
-          {data.startDate +
-            " - " +
-            (data.isCurrentEmp ? "Present" : data.endDate)}
-        </h5>
+        <h5 className={styles.jobDuration}>{jobDuration}</h5>
       )}
-      {editExp ? (
+      {isItemEditModeEnabled ? (
         <textarea
           className={styles.description}
           value={jobDescriptionInput}
@@ -146,14 +165,14 @@ const WorkExpItem = ({ data, index, onDelete, onUpdate }) => {
       ) : (
         <p className={styles.jobDescription}>{data.jobDescription}</p>
       )}
-      {editExp && (
+      {isItemEditModeEnabled && (
         <button
           className={styles.saveBtn}
           onClick={(e) => {
             updateExperienceItem();
           }}
         >
-          SAVE
+          {SAVE_TEXT}
         </button>
       )}
 

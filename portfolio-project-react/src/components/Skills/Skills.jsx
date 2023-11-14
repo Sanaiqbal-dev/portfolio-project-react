@@ -7,22 +7,18 @@ import styles from "./Skills.module.css";
 const Skills = () => {
 
   const [skillsList, setSkillsList] = useState(SKILLS_DATA);
-  const isEditMode = useContext(IsEditMode);
+  const isEditModeEnabled = useContext(IsEditMode);
 
-  const AddNewSkill = (newSkill) => {
+  const addNewSkill = (newSkill) => {
     setSkillsList([...skillsList, newSkill]);
-    console.log(skillsList);
   };
 
-  const DeleteSkill = (recievedIndex) => {
+  const deleteSkill = (recievedIndex) => {
     const updatedList = skillsList.filter(
       (item, index) => recievedIndex !== index
     );
     setSkillsList(updatedList);
   };
-  useEffect(() => {
-    console.log(skillsList);
-  }, [skillsList]);
   return (
     <div className={styles.skillsContainer}>
       {skillsList &&
@@ -31,16 +27,15 @@ const Skills = () => {
             key={index}
             data={item}
             index={index}
-            isAddNewItem={false}
-            onAdd={AddNewSkill}
-            onDelete={DeleteSkill}
+            isAddNewSkillInput={false}
+            onAddSkill={addNewSkill}
+            onDeleteSkill={deleteSkill}
           />
         ))}
 
-      {isEditMode && <SkillItem
-        isAddNewItem={true}
-        onAdd={AddNewSkill}
-      />}
+      {isEditModeEnabledisEditModeEnabled && (
+        <SkillItem isAddNewItem={true} onAdd={addNewSkill} />
+      )}
     </div>
   );
 };

@@ -27,6 +27,7 @@
   border: none;
   color: white;
   outline: none;
+  line-break: normal;
 }
 .addNewItem::placeholder {
   color: white;
