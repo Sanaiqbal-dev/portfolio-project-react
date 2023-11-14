@@ -4,11 +4,11 @@ import styles from "./Content.module.css"
 import logo from "../Picture/assets/ic-profile.png";
 
 
-const Content = ({ isEdit }) => {
+const Content = ({ isEditModeEnabled }) => {
   return (
     <main>
-      <Details isEdit={isEdit} />
-      <Picture isEdit={isEdit} url={logo} size={"250px"} />
+      <Details isEditModeEnabled={isEditModeEnabled} />
+      <Picture isEditModeEnabled={isEditModeEnabled} url={logo} size={"250px"} />
     </main>
   );
 };

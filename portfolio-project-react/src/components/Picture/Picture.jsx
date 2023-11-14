@@ -1,15 +1,15 @@
 import { useState } from "react";
-import { JOB_TITLE, NAME, PLACEHOLDER_JOB_DESCRIPTION, PLACEHOLDER_NAME } from "./constants";
-import styles from "./Picture.module.css";
 import Skills from "../Skills/Skills";
+import { JOB_TITLE_CONTENT, NAME_CONTENT, JOB_DESCRIPTION_PLACEHOLDER, NAME_PLACEHOLDER } from "./constants";
+import styles from "./Picture.module.css";
 
 const Picture = (props) => {
 
-  const { isEdit, url, size } = props;
+  const { isEditModeEnabled, url, size } = props;
 
   const [imageUrl, setImageUrl] = useState(url);
-  const [name, setName] = useState(NAME);
-  const [designation, setDesignation] = useState(JOB_TITLE);
+  const [name, setName] = useState(NAME_CONTENT);
+  const [designation, setDesignation] = useState(JOB_TITLE_CONTENT);
   const onImageChange = (e) => {
     if (e.target.files[0]) {
       setImageUrl(URL.createObjectURL(e.target.files[0]));
@@ -21,7 +21,7 @@ const Picture = (props) => {
       <div className={styles.imageContainer}>
         <img src={imageUrl} style={{ width: size, height: size }} />
       </div>
-      {isEdit && (
+      {isEditModeEnabled && (
         <input
           className={styles.changeImage}
           type="file"
@@ -31,20 +31,20 @@ const Picture = (props) => {
           }}
         />
       )}
-      {isEdit ? (
+      {isEditModeEnabled ? (
         <input
           className={styles.changeName}
-          placeholder={PLACEHOLDER_NAME}
+          placeholder={NAME_PLACEHOLDER}
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
       ) : (
         <h2>{name}</h2>
       )}
-      {isEdit ? (
+      {isEditModeEnabled ? (
         <input
           className={styles.changeDesignation}
-          placeholder={PLACEHOLDER_JOB_DESCRIPTION}
+          placeholder={JOB_DESCRIPTION_PLACEHOLDER}
           value={designation}
           onChange={(e) => setDesignation(e.target.value)}
         />
@@ -52,7 +52,7 @@ const Picture = (props) => {
         <h3>{designation}</h3>
       )}
 
-      <Skills isEdit={isEdit} />
+      <Skills isEditModeEnabled={isEditModeEnabled} />
     </div>
   );
 };

@@ -1,12 +1,21 @@
 import React, { useState } from "react";
 
-import {ABOUT, ABOUT_HEADING, CONTACT, CONTACT_HEADING, EMAIL, EMAIL_HEADING, LABEL_CONTACT, LABEL_EMAIL} from "./constants"
+import {
+  ABOUT_DATA,
+  ABOUT_HEADING,
+  CONTACT_DATA,
+  CONTACT_HEADING,
+  EMAIL_DATA,
+  EMAIL_HEADING,
+  CONTACT_PLACEHOLDER,
+  EMAIL_PLACEHOLDER,
+} from "./constants";
 import styles from "./About.module.css";
 
-const About = ({ isEdit, totalExp }) => {
-  const [aboutContent, setAboutContent] = useState(ABOUT);
-  const [phone, setPhone] = useState(CONTACT);
-  const [email, setEmail] = useState(EMAIL);
+const About = ({  isEditModeEnabled , totalExp }) => {
+  const [aboutContent, setAboutContent] = useState(ABOUT_DATA);
+  const [phone, setPhone] = useState(CONTACT_DATA);
+  const [email, setEmail] = useState(EMAIL_DATA);
 
   return (
     <div>
@@ -28,9 +37,9 @@ const About = ({ isEdit, totalExp }) => {
 
       <br />
       <h3 className={styles.inlineDiv}>{CONTACT_HEADING}</h3>
-      {isEdit ? (
+      {isEditModeEnabled ? (
         <input
-          placeholder={LABEL_CONTACT}
+          placeholder={CONTACT_PLACEHOLDER}
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
         />
@@ -40,9 +49,9 @@ const About = ({ isEdit, totalExp }) => {
 
       <br />
       <h3 className={styles.inlineDiv}>{EMAIL_HEADING}</h3>
-      {isEdit ? (
+      {isEditModeEnabled ? (
         <input
-          placeholder={LABEL_EMAIL}
+          placeholder={EMAIL_PLACEHOLDER}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />

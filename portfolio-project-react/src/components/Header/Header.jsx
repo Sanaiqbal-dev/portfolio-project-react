@@ -1,24 +1,24 @@
-import { EDIT, LOGIN, SAVE } from "./constants";
+import { EDIT_TEXT, LOGIN_TEXT, SAVE_TEXT } from "./constants";
 import styles from "./Header.module.css";
-const Header = ({ isEdit, changeEditState }) => {
+const Header = ({ isEditModeEnabled, changeEditModeEnabledState }) => {
   return (
     <header>
-      <a>{LOGIN}</a>
-      {isEdit ? (
+      <a>{LOGIN_TEXT}</a>
+      {isEditModeEnabled ? (
         <a
           onClick={() => {
-            changeEditState(false);
+            changeEditModeEnabledState(false);
           }}
         >
-          {SAVE}
+          {SAVE_TEXT}
         </a>
       ) : (
         <a
           onClick={() => {
-            changeEditState(true);
+            changeEditModeEnabledState(true);
           }}
         >
-          {EDIT}
+          {EDIT_TEXT}
         </a>
       )}
     </header>

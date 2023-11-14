@@ -100,7 +100,7 @@
     resize: none;
 }
 
-.showExperienceForm {
+.experienceForm {
     display: flex;
     justify-content: center;
     padding: 10px;

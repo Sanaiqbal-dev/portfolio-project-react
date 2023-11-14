@@ -1,9 +1,8 @@
-import styles from "./Details.module.css";
 import About from "../About/About";
-import WorkExp from "../WorkExp/WorkExp";
-import { useState } from "react";
+import WorkExperience from "../WorkExperience/WorkExperience";
+import styles from "./Details.module.css";
 
-const Details = ({ isEdit }) => {
+const Details = ({ isEditModeEnabled }) => {
   const [totalExp, setTotalExp] = useState([0,0]);
 
   const UpdateTotalExperience = (totalExpRcvd) => {
@@ -12,10 +11,8 @@ const Details = ({ isEdit }) => {
   
   return (
     <div className={styles.detailsSection}>
-      <About isEdit={isEdit} totalExp={totalExp} />
-
-      <WorkExp
-        isEdit={isEdit}
+      <About isEditModeEnabled={isEditModeEnabled} totalExp={totalExp} />
+      <WorkExperience isEditModeEnabled={isEditModeEnabled}
         totalExp={totalExp}
         onUpdateTotalExp={UpdateTotalExperience}
       />
