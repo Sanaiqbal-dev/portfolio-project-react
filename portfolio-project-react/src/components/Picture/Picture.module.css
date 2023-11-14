@@ -9,7 +9,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 3%;
+  padding: 2%;
   box-sizing: border-box;
 }
 
@@ -24,4 +24,16 @@
 
 #jobTitle {
   margin-top: 0px;
+}
+
+
+.changeDesignation,
+.changeName {
+  margin-top: 20px;
+  width: 100%;
+  padding: 5px;
+}
+
+.changeImage {
+  margin-top: 20px;
 }

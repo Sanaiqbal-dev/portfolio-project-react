@@ -1,0 +1,1 @@
+export const SKILLS_DATA = ["React JS", "Express JS", "Node JS", "MongoDB", "Web Development", "UI/UX"];

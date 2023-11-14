@@ -1,1 +1,1 @@
-export const LINKEDIN = "Linkedin";
+export const LINKEDIN_TEXT = "Linkedin";

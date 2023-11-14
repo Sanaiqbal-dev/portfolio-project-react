@@ -1,13 +1,7 @@
 .detailsSection {
   width: 70%;
+  height: max-content;
 }
-.titleAbout {
-  margin-top: 0;
-}
-.inlineDiv {
-  display: inline-block;
-  padding-right: 10px;
-}
-.details {
-  margin-top: 50px;
+.detailsSection input {
+  padding: 5px;
 }

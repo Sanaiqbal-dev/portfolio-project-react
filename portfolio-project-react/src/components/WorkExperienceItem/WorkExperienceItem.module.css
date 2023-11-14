@@ -1,0 +1,140 @@
+.headerEvents {
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 10px;
+}
+
+.headerEvents img {
+  width: 18px;
+  height: 18px;
+}
+
+.editBtn,
+.deleteBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  height: 30px;
+  border: none;
+  background-color: rgb(47, 47, 163);
+  cursor: pointer;
+}
+
+.expItemContainer {
+  padding: 0px 30px;
+  color: black;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+hr {
+  width: 100%;
+  margin: 30px;
+}
+
+.topSection {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.companyName {
+  margin-top: 0px;
+  display: block;
+}
+
+.jobDuration {
+  width: 100%;
+  padding-left: 40px;
+  margin: 0px;
+}
+
+.jobDescription {
+  width: 100%;
+  padding-left: 40px;
+}
+
+.compNameInput {
+  margin-left: 10px;
+}
+
+.companyNameLabel {
+  font-size: medium;
+  font-weight: 600;
+}
+
+
+.saveBtn {
+  margin: 35px auto;
+  padding: 10px 50px;
+  border: none;
+  background-color: orange;
+  color: white;
+  font-size: large;
+  border-radius: 10px;
+  box-shadow: 3px 3px 10px lightgrey;
+}
+
+.saveBtn p {
+  margin: 0px auto;
+}
+
+.saveBtn:hover {
+  background-color: rgb(222, 146, 5);
+}
+
+.dateSection {
+  width: 100%;
+  margin: 30px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.dateSectionLabels,
+.dateSectionValues,
+.dateSectionValues-editable {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.dateSectionValues>*,
+.dateSection-Values-Editable>* {
+  width: 100%;
+}
+
+.checkboxSection {
+  display: flex;
+  align-items: center;
+}
+
+
+.dateSectionLabels>label {
+  width: 50%;
+  font-size: medium;
+  font-weight: 600;
+}
+
+.description {
+  display: block;
+  width: 100%;
+  height: 30px;
+  background-color: white;
+  font-size: medium;
+  padding: 10px;
+  box-sizing: border-box;
+  min-height: 100px;
+  resize: none;
+}
+.labelEmployer {
+  font-size: medium;
+  font-weight: 600;
+}

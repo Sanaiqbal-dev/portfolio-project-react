@@ -11,6 +11,7 @@ header a {
   cursor: pointer;
   font-weight: 600;
   font-size: x-large;
+  padding-left: 50px;
 }
 
 header a:hover {
