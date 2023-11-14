@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import moment from "moment";
-import { IsEditMode } from "../../IsEditMode";
+import { IsEditModeEnabled } from "../../EditMode";
 import { COMPANY_NAME_LABEL, PRESENT_TEXT, DASH_TEXT } from "./constants";
 import {
   CURRENT_EMPLOYER_LABEL,
@@ -19,7 +19,7 @@ const WorkExperienceItem = ({
   onDeleteWorkExperience,
   onUpdateWorkExperience,
 }) => {
-  const isEditModeEnabled = useContext(IsEditMode);
+  const isEditModeEnabled = useContext(IsEditModeEnabled);
 
   const [isItemEditModeEnabled, setIsItemEditModeEnabled] = useState(false);
   const [companyNameInput, setCompanyNameInput] = useState(data.companyName);
