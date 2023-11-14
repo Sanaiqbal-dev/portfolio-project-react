@@ -27,7 +27,12 @@ const WorkExperience = ({ onUpdateTotalExperience }) => {
   const isEditModeEnabled = useContext(IsEditMode);
 
   const [isExperienceFormVisible, setIsExperienceFormVisible] = useState(false);
-  const [workExperienceList, setWorkExperienceList] = useState([]);
+
+  let locallyStoredData = localStorage.getItem("work-experience-list")
+    ? JSON.parse(localStorage.getItem("work-experience-list"))
+    : [];
+
+  const [workExperienceList, setWorkExperienceList] = useState(locallyStoredData);
   const [companyName, setCompanyName] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -114,6 +119,10 @@ const WorkExperience = ({ onUpdateTotalExperience }) => {
   };
   useEffect(() => {
     calculateTotalExp();
+    localStorage.setItem(
+      "work-experience-list",
+      JSON.stringify(workExperienceList)
+    );
   }, [workExperienceList]);
 
   useEffect(() => {
