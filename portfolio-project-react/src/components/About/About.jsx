@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   ABOUT_DATA,
@@ -12,7 +12,7 @@ import {
 } from "./constants";
 import styles from "./About.module.css";
 
-const About = ({  isEditModeEnabled , totalExp }) => {
+const About = ({ isEditModeEnabled, totalWorkExperience }) => {
   const [aboutContent, setAboutContent] = useState(ABOUT_DATA);
   const [phone, setPhone] = useState(CONTACT_DATA);
   const [email, setEmail] = useState(EMAIL_DATA);
@@ -21,9 +21,12 @@ const About = ({  isEditModeEnabled , totalExp }) => {
     <div>
       <div className={styles.aboutHeader}>
         <h1 className={styles.titleAbout}>{ABOUT_HEADING}</h1>
-        <label>Total Experience: {totalExp[0]} years {totalExp[1] >0 ? totalExp[1] : 0} months</label>
+        <label>
+          Total Experience: {totalWorkExperience[0]} years{" "}
+          {totalWorkExperience[1] > 0 ? totalWorkExperience[1] : 0} months
+        </label>
       </div>
-      {isEdit ? (
+      {isEditModeEnabled ? (
         <textarea
           className={styles.aboutTextArea}
           value={aboutContent}

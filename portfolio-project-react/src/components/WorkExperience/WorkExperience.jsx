@@ -23,7 +23,10 @@ import WorkExpItem from "../WorkExperienceItem/WorkExperienceItem";
 import moment from "moment";
 import styles from "./WorkExperience.module.css";
 
-const WorkExperience = ({ isEditModeEnabled }) => {
+const WorkExperience = ({
+  isEditModeEnabled,
+  onUpdateTotalExperience,
+}) => {
   const [isExperienceFormVisible, setIsExperienceFormVisible] = useState(false);
   const [workExperienceList, setWorkExperienceList] = useState([]);
   const [companyName, setCompanyName] = useState("");
@@ -82,6 +85,37 @@ const WorkExperience = ({ isEditModeEnabled }) => {
 
     setWorkExperienceList([...updatedList]);
   };
+
+  const calculateTotalExp = () => {
+    const arrayNoOfDays = workExperienceList.map((item) => {
+      return calculateNoOfdays(item.startDate, item.endDate);
+    });
+
+    const totalExperienceInDays = arrayNoOfDays.reduce(
+      (previousValue, currentValue, index) => previousValue + currentValue,
+      0
+    );
+
+    const years = Math.floor(totalExperienceInDays / 365);
+
+    const remainingDays = totalExperienceInDays % 365;
+
+    const months = Math.floor(remainingDays / 30);
+
+    onUpdateTotalExperience([years, months]);
+  };
+  const calculateNoOfdays = (startDate, endDate) => {
+    if (endDate === "") {
+      endDate = new Date().getTime();
+    }
+    return (
+      (new Date(endDate).getTime() - new Date(startDate).getTime()) /
+      (1000 * 3600 * 24)
+    );
+  };
+  useEffect(() => {
+    calculateTotalExp();
+  }, [workExperienceList]);
 
   useEffect(() => {
     setIsExperienceFormVisible(false);
