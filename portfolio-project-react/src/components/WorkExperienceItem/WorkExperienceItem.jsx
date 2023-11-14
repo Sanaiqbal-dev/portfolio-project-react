@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from "react";
-import {
-  COMPANY_NAME_LABEL,
-  PRESENT_TEXT,
-  DASH_TEXT,
-} from "./constants";
+import { useEffect, useState, useContext } from "react";
+import moment from "moment";
+import { IsEditMode } from "../../IsEditMode";
+import { COMPANY_NAME_LABEL, PRESENT_TEXT, DASH_TEXT } from "./constants";
 import {
   CURRENT_EMPLOYER_LABEL,
   END_DATE_LABEL,
@@ -11,18 +9,18 @@ import {
   SAVE_TEXT,
   INCORRECT_DATE_ALERT,
 } from "../../constants";
-import moment from "moment";
 import styles from "./WorkExperienceItem.module.css";
 import deleteIcon from "./assets/ic_delete.png";
 import editIcon from "./assets/ic_edit.png";
 
-const WorkExpItem = ({
-  isEditModeEnabled,
+const WorkExperienceItem = ({
   data,
   index,
   onDeleteWorkExperience,
   onUpdateWorkExperience,
 }) => {
+  const isEditModeEnabled = useContext(IsEditMode);
+
   const [isItemEditModeEnabled, setIsItemEditModeEnabled] = useState(false);
   const [companyNameInput, setCompanyNameInput] = useState(data.companyName);
   let companyNameValue = index + 1 + ". " + companyNameInput;
@@ -37,8 +35,8 @@ const WorkExpItem = ({
   );
   let jobDuration =
     startDateInput +
-     DASH_TEXT  +
-    (isCurrentEmployerInput ?  PRESENT_TEXT  : endDateInput);
+    DASH_TEXT +
+    (isCurrentEmployerInput ? PRESENT_TEXT : endDateInput);
 
   const [maxDateLimit, setMaxDateLimit] = useState(
     moment(new Date()).toISOString().split("T")[0]
@@ -46,7 +44,7 @@ const WorkExpItem = ({
 
   const updateExperienceItem = () => {
     if (!isCurrentEmployerInput && endDateInput < startDateInput) {
-      alert( INCORRECT_DATE_ALERT );
+      alert(INCORRECT_DATE_ALERT);
     } else {
       setIsItemEditModeEnabled(false);
 
@@ -181,4 +179,4 @@ const WorkExpItem = ({
   );
 };
 
-export default WorkExpItem;
+export default WorkExperienceItem;

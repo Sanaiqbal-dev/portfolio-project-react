@@ -2,16 +2,16 @@ import { useContext } from "react";
 import { IsEditMode } from "../../IsEditMode";
 import { EDIT_TEXT, LOGIN_TEXT, SAVE_TEXT } from "./constants";
 import styles from "./Header.module.css";
-const Header = ({ changeEditModeEnabledMode }) => {
-  const isEditModeEnabledMode = useContext(IsEditMode);
+const Header = ({ changeEditMode }) => {
+  const isEditModeEnabled = useContext(IsEditMode);
 
   return (
     <header>
       <a>{LOGIN_TEXT}</a>
-      {isEditModeEnabledMode ? (
+      {isEditModeEnabled ? (
         <a
           onClick={() => {
-            changeEditModeEnabledMode(false);
+            changeEditMode(false);
           }}
         >
           {SAVE_TEXT}
@@ -19,7 +19,7 @@ const Header = ({ changeEditModeEnabledMode }) => {
       ) : (
         <a
           onClick={() => {
-            changeEditModeEnabledMode(true);
+            changeEditMode(true);
           }}
         >
           {EDIT_TEXT}

@@ -1,3 +1,5 @@
+import { useContext, useState } from "react";
+import { IsEditMode } from "../../IsEditMode";
 import {
   ABOUT_DATA,
   ABOUT_HEADING,
@@ -8,13 +10,10 @@ import {
   CONTACT_PLACEHOLDER,
   EMAIL_PLACEHOLDER,
 } from "./constants";
-import React, { useContext, useState } from "react";
-import { IsEditMode } from "../../IsEditMode";
 import styles from "./About.module.css";
 
-
-const About = ({ isEditModeEnabled }) => {
-    const isEditMode = useContext(IsEditMode);
+const About = ({ totalWorkExperience }) => {
+  const isEditMode = useContext(IsEditMode);
 
   const [aboutContent, setAboutContent] = useState(ABOUT_DATA);
   const [phone, setPhone] = useState(CONTACT_DATA);
@@ -25,8 +24,8 @@ const About = ({ isEditModeEnabled }) => {
       <div className={styles.aboutHeader}>
         <h1 className={styles.titleAbout}>{ABOUT_HEADING}</h1>
         <label>
-          Total Experience: {totalExp[0]} years{" "}
-          {totalExp[1] > 0 ? totalExp[1] : 0} months
+          Total Experience: {totalWorkExperience[0]} years{" "}
+          {totalWorkExperience[1] > 0 ? totalWorkExperience[1] : 0} months
         </label>
       </div>
       {isEditMode ? (

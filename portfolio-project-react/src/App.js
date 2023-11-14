@@ -1,16 +1,16 @@
 import { useState } from "react";
 import Header from "./components/Header/Header";
 import Content from "./components/Content/Content";
-import Footer from "./components/Footer/Footer";;
-import "./index.css";
+import Footer from "./components/Footer/Footer";
 import { IsEditMode } from "./IsEditMode";
+import "./index.css";
 
 const App = () => {
-  const [editMode, setEditMode] = useState(false);
+  const [isEditModeEnabled, setIsEditModeEnabled] = useState(false);
   return (
     <>
-      <IsEditMode.Provider value={isEditMode}>
-        <Header changeEditMode={setIsEditMode} />
+      <IsEditMode.Provider value={isEditModeEnabled}>
+        <Header changeEditMode={setIsEditModeEnabled} />
         <Content />
         <Footer />
       </IsEditMode.Provider>

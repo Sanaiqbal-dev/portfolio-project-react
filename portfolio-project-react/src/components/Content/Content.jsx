@@ -4,10 +4,9 @@ import styles from "./Content.module.css";
 import logo from "../Picture/assets/ic-profile.png";
 
 const Content = () => {
-
   return (
     <main>
-      <Details/>
+      <Details />
       <Picture url={logo} size={"250px"} />
     </main>
   );

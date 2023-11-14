@@ -1,11 +1,16 @@
 import { useState, useContext } from "react";
-import { IsEditMode } from "../../IsEditMode";
+import { IsEditModeEnabled } from "../../EditMode";
 import Skills from "../Skills/Skills";
-import { JOB_TITLE_CONTENT, NAME_CONTENT, JOB_DESCRIPTION_PLACEHOLDER, NAME_PLACEHOLDER } from "./constants";
+import {
+  JOB_TITLE_CONTENT,
+  NAME_CONTENT,
+  JOB_DESCRIPTION_PLACEHOLDER,
+  NAME_PLACEHOLDER,
+} from "./constants";
 import styles from "./Picture.module.css";
 
 const Picture = ({ url, size }) => {
-  const isEditModeEnabled = useContext(IsEditMode);
+  const isEditModeEnabled = useContext(IsEditModeEnabled);
   const [imageUrl, setImageUrl] = useState(url);
   const [name, setName] = useState(NAME_CONTENT);
   const [designation, setDesignation] = useState(JOB_TITLE_CONTENT);
@@ -51,7 +56,7 @@ const Picture = ({ url, size }) => {
         <h3>{designation}</h3>
       )}
 
-      <Skills isEditModeEnabled={isEditModeEnabled} />
+      <Skills />
     </div>
   );
 };

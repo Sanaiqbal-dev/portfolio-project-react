@@ -1,4 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import moment from "moment";
+import WorkExperienceItem from "../WorkExperienceItem/WorkExperienceItem";
+import { IsEditMode } from "../../IsEditMode";
 import {
   JOB_DESCRIPTION_ERROR,
   WORK_EXPERIENCE_HEADING,
@@ -9,7 +12,6 @@ import {
   WORK_EXPERIENCE_ITEM_ADDED,
   WORK_EXPERIENCE_NOT_FOUND,
 } from "./constants";
-
 import {
   CURRENT_EMPLOYER_LABEL,
   START_DATE_LABEL,
@@ -19,11 +21,11 @@ import {
   INCORRECT_DATE_ALERT,
 } from "../../constants";
 
-import WorkExpItem from "../WorkExperienceItem/WorkExperienceItem";
-import moment from "moment";
 import styles from "./WorkExperience.module.css";
 
-const WorkExperience = ({ isEditModeEnabled }) => {
+const WorkExperience = ({ onUpdateTotalExperience }) => {
+  const isEditModeEnabled = useContext(IsEditMode);
+
   const [isExperienceFormVisible, setIsExperienceFormVisible] = useState(false);
   const [workExperienceList, setWorkExperienceList] = useState([]);
   const [companyName, setCompanyName] = useState("");
@@ -83,6 +85,37 @@ const WorkExperience = ({ isEditModeEnabled }) => {
     setWorkExperienceList([...updatedList]);
   };
 
+  const calculateTotalExp = () => {
+    const arrayNoOfDays = workExperienceList.map((item) => {
+      return calculateNoOfdays(item.startDate, item.endDate);
+    });
+
+    const totalExperienceInDays = arrayNoOfDays.reduce(
+      (previousValue, currentValue, index) => previousValue + currentValue,
+      0
+    );
+
+    const years = Math.floor(totalExperienceInDays / 365);
+
+    const remainingDays = totalExperienceInDays % 365;
+
+    const months = Math.floor(remainingDays / 30);
+
+    onUpdateTotalExperience([years, months]);
+  };
+  const calculateNoOfdays = (startDate, endDate) => {
+    if (endDate === "") {
+      endDate = new Date().getTime();
+    }
+    return (
+      (new Date(endDate).getTime() - new Date(startDate).getTime()) /
+      (1000 * 3600 * 24)
+    );
+  };
+  useEffect(() => {
+    calculateTotalExp();
+  }, [workExperienceList]);
+
   useEffect(() => {
     setIsExperienceFormVisible(false);
   }, [isEditModeEnabled]);
@@ -95,7 +128,7 @@ const WorkExperience = ({ isEditModeEnabled }) => {
           {workExperienceList.length > 0 ? (
             <div className={styles.expListContainer}>
               {workExperienceList.map((item, index) => (
-                <WorkExpItem
+                <WorkExperienceItem
                   key={index}
                   isEditModeEnabled={isEditModeEnabled}
                   data={item}
