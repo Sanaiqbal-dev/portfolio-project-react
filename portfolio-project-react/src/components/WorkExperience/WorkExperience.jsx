@@ -25,10 +25,10 @@ import styles from "./WorkExperience.module.css";
 
 const WorkExperience = ({
   isEditModeEnabled,
-  onUpdateTotalExperience,
+  workExperienceList,
+  onUpdateWorkExperienceList,
 }) => {
   const [isExperienceFormVisible, setIsExperienceFormVisible] = useState(false);
-  const [workExperienceList, setWorkExperienceList] = useState([]);
   const [companyName, setCompanyName] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -50,7 +50,7 @@ const WorkExperience = ({
         jobDescription,
       };
 
-      setWorkExperienceList([...workExperienceList, newWorkExperience]);
+      onUpdateWorkExperienceList([...workExperienceList, newWorkExperience]);
       setIsExperienceFormVisible(false);
       alert(WORK_EXPERIENCE_ITEM_ADDED);
     }
@@ -61,7 +61,7 @@ const WorkExperience = ({
       (item, index) => index !== recievedIndex
     );
 
-    setWorkExperienceList(newList);
+    onUpdateWorkExperienceList(newList);
   };
 
   const updateExperienceItem = (
@@ -83,40 +83,8 @@ const WorkExperience = ({
       return item;
     });
 
-    setWorkExperienceList([...updatedList]);
+    onUpdateWorkExperienceList([...updatedList]);
   };
-
-  const calculateTotalExp = () => {
-    const arrayNoOfDays = workExperienceList.map((item) => {
-      return calculateNoOfdays(item.startDate, item.endDate);
-    });
-
-    const totalExperienceInDays = arrayNoOfDays.reduce(
-      (previousValue, currentValue, index) => previousValue + currentValue,
-      0
-    );
-
-    const years = Math.floor(totalExperienceInDays / 365);
-
-    const remainingDays = totalExperienceInDays % 365;
-
-    const months = Math.floor(remainingDays / 30);
-
-    onUpdateTotalExperience([years, months]);
-  };
-  const calculateNoOfdays = (startDate, endDate) => {
-    if (endDate === "") {
-      endDate = new Date().getTime();
-    }
-    return (
-      (new Date(endDate).getTime() - new Date(startDate).getTime()) /
-      (1000 * 3600 * 24)
-    );
-  };
-  useEffect(() => {
-    calculateTotalExp();
-  }, [workExperienceList]);
-
   useEffect(() => {
     setIsExperienceFormVisible(false);
   }, [isEditModeEnabled]);
