@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import moment from "moment";
 import WorkExperienceItem from "../WorkExperienceItem/WorkExperienceItem";
-import { IsEditMode } from "../../IsEditMode";
+import { IsEditModeEnabled } from "../../EditMode";
 import {
   JOB_DESCRIPTION_ERROR,
   WORK_EXPERIENCE_HEADING,
@@ -24,7 +24,7 @@ import {
 import styles from "./WorkExperience.module.css";
 
 const WorkExperience = ({ onUpdateTotalExperience }) => {
-  const isEditModeEnabled = useContext(IsEditMode);
+  const isEditModeEnabled = useContext(IsEditModeEnabled);
 
   const [isExperienceFormVisible, setIsExperienceFormVisible] = useState(false);
 

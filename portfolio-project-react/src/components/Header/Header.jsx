@@ -1,9 +1,9 @@
 import { useContext } from "react";
-import { IsEditMode } from "../../IsEditMode";
+import { IsEditModeEnabled } from "../../EditMode";
 import { EDIT_TEXT, LOGIN_TEXT, SAVE_TEXT } from "./constants";
 import styles from "./Header.module.css";
 const Header = ({ changeEditMode }) => {
-  const isEditModeEnabled = useContext(IsEditMode);
+  const isEditModeEnabled = useContext(IsEditModeEnabled);
 
   return (
     <header>

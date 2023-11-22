@@ -1,5 +1,5 @@
-import { useContext, useState } from "react";
-import { IsEditMode } from "../../IsEditMode";
+import { useContext, useEffect, useState } from "react";
+import { IsEditModeEnabled } from "../../EditMode";
 import {
   ABOUT_DATA,
   ABOUT_HEADING,
@@ -13,11 +13,17 @@ import {
 import styles from "./About.module.css";
 
 const About = ({ totalWorkExperience }) => {
-  const isEditMode = useContext(IsEditMode);
+  const isEditModeEnabled = useContext(IsEditModeEnabled);
 
-  const [aboutContent, setAboutContent] = useState(ABOUT_DATA);
-  const [phone, setPhone] = useState(CONTACT_DATA);
-  const [email, setEmail] = useState(EMAIL_DATA);
+
+  const [aboutContent, setAboutContent] = useState(localStorage.getItem("about") ? localStorage.getItem("about") : ABOUT_DATA);
+  const [phone, setPhone] = useState(localStorage.getItem("phone") ? localStorage.getItem("phone") : CONTACT_DATA);
+  const [email, setEmail] = useState(localStorage.getItem("email") ? localStorage.getItem("email") : EMAIL_DATA);
+
+
+  useEffect(()=> {localStorage.setItem("about", aboutContent)},[aboutContent]);
+  useEffect(()=> {localStorage.setItem("phone", phone)},[phone]);
+  useEffect(()=> {localStorage.setItem("email", email)},[email]);
 
   return (
     <div>
@@ -28,7 +34,7 @@ const About = ({ totalWorkExperience }) => {
           {totalWorkExperience[1] > 0 ? totalWorkExperience[1] : 0} months
         </label>
       </div>
-      {isEditMode ? (
+      {isEditModeEnabled ? (
         <textarea
           className={styles.aboutTextArea}
           value={aboutContent}
@@ -42,7 +48,7 @@ const About = ({ totalWorkExperience }) => {
 
       <br />
       <h3 className={styles.inlineDiv}>{CONTACT_HEADING}</h3>
-      {isEditMode ? (
+      {isEditModeEnabled ? (
         <input
           placeholder={CONTACT_PLACEHOLDER}
           value={phone}
@@ -54,7 +60,7 @@ const About = ({ totalWorkExperience }) => {
 
       <br />
       <h3 className={styles.inlineDiv}>{EMAIL_HEADING}</h3>
-      {isEditMode ? (
+      {isEditModeEnabled ? (
         <input
           placeholder={EMAIL_PLACEHOLDER}
           value={email}
