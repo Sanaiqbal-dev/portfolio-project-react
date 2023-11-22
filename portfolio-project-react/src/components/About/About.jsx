@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { IsEditModeEnabled } from "../../EditMode";
+import { IsEditModeEnabled } from "../../EditModeContext";
 import {
   ABOUT_DATA,
   ABOUT_HEADING,

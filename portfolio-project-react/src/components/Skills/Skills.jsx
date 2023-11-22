@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
 import SkillItem from "../SkillItem/SkillItem";
-import { IsEditModeEnabled } from "../../EditMode";
+import { IsEditModeEnabled } from "../../EditModeContext";
 import { SKILLS_DATA } from "./constants";
 import styles from "./Skills.module.css";
 
@@ -18,6 +18,7 @@ const Skills = () => {
     );
     setSkillsList(updatedList);
   };
+
   return (
     <div className={styles.skillsContainer}>
       {skillsList &&

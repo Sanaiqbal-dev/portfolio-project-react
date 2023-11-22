@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import { IsEditModeEnabled } from "../../EditMode";
+import { IsEditModeEnabled } from "../../EditModeContext";
 import Skills from "../Skills/Skills";
 import {
   JOB_TITLE_CONTENT,
@@ -14,6 +14,7 @@ const Picture = ({ url, size }) => {
   const [imageUrl, setImageUrl] = useState(url);
   const [name, setName] = useState(NAME_CONTENT);
   const [designation, setDesignation] = useState(JOB_TITLE_CONTENT);
+
   const onImageChange = (e) => {
     if (e.target.files[0]) {
       setImageUrl(URL.createObjectURL(e.target.files[0]));
@@ -23,7 +24,10 @@ const Picture = ({ url, size }) => {
   return (
     <div className={styles.pictureSection}>
       <div className={styles.imageContainer}>
-        <img src={imageUrl} style={{ width: size, height: size }} />
+        <img
+          src={imageUrl}
+          style={{ width: size.width, height: size.height }}
+        />
       </div>
       {isEditModeEnabled && (
         <input

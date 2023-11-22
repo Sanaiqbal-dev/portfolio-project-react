@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import moment from "moment";
 import WorkExperienceItem from "../WorkExperienceItem/WorkExperienceItem";
-import { IsEditModeEnabled } from "../../EditMode";
+import { IsEditModeEnabled } from "../../EditModeContext";
 import {
   JOB_DESCRIPTION_ERROR,
   WORK_EXPERIENCE_HEADING,
@@ -59,7 +59,6 @@ const WorkExperience = ({ onUpdateTotalExperience }) => {
     const newList = workExperienceList.filter(
       (item, index) => index !== recievedIndex
     );
-
     setWorkExperienceList(newList);
   };
 
@@ -85,34 +84,36 @@ const WorkExperience = ({ onUpdateTotalExperience }) => {
     setWorkExperienceList([...updatedList]);
   };
 
-  const calculateTotalExp = () => {
-    const arrayNoOfDays = workExperienceList.map((item) => {
-      return calculateNoOfdays(item.startDate, item.endDate);
-    });
-
-    const totalExperienceInDays = arrayNoOfDays.reduce(
-      (previousValue, currentValue, index) => previousValue + currentValue,
-      0
-    );
-
-    const years = Math.floor(totalExperienceInDays / 365);
-
-    const remainingDays = totalExperienceInDays % 365;
-
-    const months = Math.floor(remainingDays / 30);
-
-    onUpdateTotalExperience([years, months]);
-  };
-  const calculateNoOfdays = (startDate, endDate) => {
-    if (endDate === "") {
-      endDate = new Date().getTime();
-    }
-    return (
-      (new Date(endDate).getTime() - new Date(startDate).getTime()) /
-      (1000 * 3600 * 24)
-    );
-  };
   useEffect(() => {
+    const calculateTotalExp = () => {
+      const arrayNoOfDays = workExperienceList.map((item) => {
+        return calculateNoOfdays(item.startDate, item.endDate);
+      });
+
+      const totalExperienceInDays = arrayNoOfDays.reduce(
+        (previousValue, currentValue, index) => previousValue + currentValue,
+        0
+      );
+
+      const years = Math.floor(totalExperienceInDays / 365);
+
+      const remainingDays = totalExperienceInDays % 365;
+
+      const months = Math.floor(remainingDays / 30);
+
+      onUpdateTotalExperience([years, months]);
+    };
+
+    const calculateNoOfdays = (startDate, endDate) => {
+      if (endDate === "") {
+        endDate = new Date().getTime();
+      }
+      return (
+        (new Date(endDate).getTime() - new Date(startDate).getTime()) /
+        (1000 * 3600 * 24)
+      );
+    };
+
     calculateTotalExp();
   }, [workExperienceList]);
 

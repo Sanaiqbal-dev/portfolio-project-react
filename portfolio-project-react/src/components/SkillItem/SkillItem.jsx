@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from "react";
-import { IsEditModeEnabled } from "../../EditMode";
+import { IsEditModeEnabled } from "../../EditModeContext";
 import { CHAR_UNIT, ADD_PLACEHOLDER } from "./constants";
 import { CLOSE_DELETE_TEXT } from "../../constants";
 import styles from "./SkillItem.module.css";
@@ -32,6 +32,7 @@ const SkillItem = ({
     setSkill(e.target.value);
     setWidth(skill.length + 1);
   };
+
   useEffect(() => {
     setSkill(data);
     setNewSkill("");
