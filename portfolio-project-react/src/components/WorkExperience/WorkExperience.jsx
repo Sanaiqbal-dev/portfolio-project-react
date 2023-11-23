@@ -23,16 +23,13 @@ import {
 
 import styles from "./WorkExperience.module.css";
 
-const WorkExperience = ({ onUpdateTotalExperience }) => {
-  const isEditModeEnabled = useContext(IsEditModeEnabled);
+const WorkExperience = ({
+  workExperienceList,
+  onUpdateWorkExperienceList,
+}) => {
+    const isEditModeEnabled = useContext(IsEditModeEnabled);
 
   const [isExperienceFormVisible, setIsExperienceFormVisible] = useState(false);
-
-  let locallyStoredData = localStorage.getItem("work-experience-list")
-    ? JSON.parse(localStorage.getItem("work-experience-list"))
-    : [];
-
-  const [workExperienceList, setWorkExperienceList] = useState(locallyStoredData);
   const [companyName, setCompanyName] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -54,7 +51,7 @@ const WorkExperience = ({ onUpdateTotalExperience }) => {
         jobDescription,
       };
 
-      setWorkExperienceList([...workExperienceList, newWorkExperience]);
+      onUpdateWorkExperienceList([...workExperienceList, newWorkExperience]);
       setIsExperienceFormVisible(false);
       alert(WORK_EXPERIENCE_ITEM_ADDED);
     }
@@ -65,7 +62,7 @@ const WorkExperience = ({ onUpdateTotalExperience }) => {
       (item, index) => index !== recievedIndex
     );
 
-    setWorkExperienceList(newList);
+    onUpdateWorkExperienceList(newList);
   };
 
   const updateExperienceItem = (
@@ -87,43 +84,8 @@ const WorkExperience = ({ onUpdateTotalExperience }) => {
       return item;
     });
 
-    setWorkExperienceList([...updatedList]);
+    onUpdateWorkExperienceList([...updatedList]);
   };
-
-  const calculateTotalExp = () => {
-    const arrayNoOfDays = workExperienceList.map((item) => {
-      return calculateNoOfdays(item.startDate, item.endDate);
-    });
-
-    const totalExperienceInDays = arrayNoOfDays.reduce(
-      (previousValue, currentValue, index) => previousValue + currentValue,
-      0
-    );
-
-    const years = Math.floor(totalExperienceInDays / 365);
-
-    const remainingDays = totalExperienceInDays % 365;
-
-    const months = Math.floor(remainingDays / 30);
-
-    onUpdateTotalExperience([years, months]);
-  };
-  const calculateNoOfdays = (startDate, endDate) => {
-    if (endDate === "") {
-      endDate = new Date().getTime();
-    }
-    return (
-      (new Date(endDate).getTime() - new Date(startDate).getTime()) /
-      (1000 * 3600 * 24)
-    );
-  };
-  useEffect(() => {
-    calculateTotalExp();
-    localStorage.setItem(
-      "work-experience-list",
-      JSON.stringify(workExperienceList)
-    );
-  }, [workExperienceList]);
 
   useEffect(() => {
     setIsExperienceFormVisible(false);

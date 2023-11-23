@@ -54,8 +54,9 @@ const About = ({ totalWorkExperience }) => {
       <div className={styles.aboutHeader}>
         <h1 className={styles.titleAbout}>{ABOUT_HEADING}</h1>
         <label>
-          Total Experience: {totalWorkExperience[0]} years{" "}
-          {totalWorkExperience[1] > 0 ? totalWorkExperience[1] : 0} months
+          Total Experience: {totalWorkExperience.years} years{" "}
+          {totalWorkExperience.months > 0 ? totalWorkExperience.months : 0}{" "}
+          months
         </label>
       </div>
       {isEditModeEnabled ? (
