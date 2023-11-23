@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { IsEditModeEnabled } from "../../EditMode";
+import { IsEditModeEnabled } from "../../EditModeContext";
 import {
   ABOUT_DATA,
   ABOUT_HEADING,
@@ -42,9 +42,11 @@ const About = ({ totalWorkExperience }) => {
   useEffect(() => {
     localStorage.setItem("about", aboutContent);
   }, [aboutContent]);
+
   useEffect(() => {
     localStorage.setItem("phone", phone);
   }, [phone]);
+
   useEffect(() => {
     localStorage.setItem("email", email);
   }, [email]);

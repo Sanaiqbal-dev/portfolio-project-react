@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import moment from "moment";
-import { IsEditModeEnabled } from "../../EditMode";
+import { IsEditModeEnabled } from "../../EditModeContext";
 import { COMPANY_NAME_LABEL, PRESENT_TEXT, DASH_TEXT } from "./constants";
 import {
   CURRENT_EMPLOYER_LABEL,

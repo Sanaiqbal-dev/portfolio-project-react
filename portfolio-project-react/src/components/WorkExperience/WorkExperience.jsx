@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import moment from "moment";
 import WorkExperienceItem from "../WorkExperienceItem/WorkExperienceItem";
-import { IsEditModeEnabled } from "../../EditMode";
+import { IsEditModeEnabled } from "../../EditModeContext";
 import {
   JOB_DESCRIPTION_ERROR,
   WORK_EXPERIENCE_HEADING,

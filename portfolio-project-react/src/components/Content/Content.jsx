@@ -4,10 +4,12 @@ import styles from "./Content.module.css";
 import logo from "../Picture/assets/ic-profile.png";
 
 const Content = () => {
+  const size = { width: "250px", height: "250px" };
+
   return (
     <main>
       <Details />
-      <Picture url={logo} size={"250px"} />
+      <Picture url={logo} size={size} />
     </main>
   );
 };
