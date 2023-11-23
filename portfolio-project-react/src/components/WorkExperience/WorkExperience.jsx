@@ -23,9 +23,12 @@ import WorkExpItem from "../WorkExperienceItem/WorkExperienceItem";
 import moment from "moment";
 import styles from "./WorkExperience.module.css";
 
-const WorkExperience = ({ isEditModeEnabled }) => {
+const WorkExperience = ({
+  isEditModeEnabled,
+  workExperienceList,
+  onUpdateWorkExperienceList,
+}) => {
   const [isExperienceFormVisible, setIsExperienceFormVisible] = useState(false);
-  const [workExperienceList, setWorkExperienceList] = useState([]);
   const [companyName, setCompanyName] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -47,7 +50,7 @@ const WorkExperience = ({ isEditModeEnabled }) => {
         jobDescription,
       };
 
-      setWorkExperienceList([...workExperienceList, newWorkExperience]);
+      onUpdateWorkExperienceList([...workExperienceList, newWorkExperience]);
       setIsExperienceFormVisible(false);
       alert(WORK_EXPERIENCE_ITEM_ADDED);
     }
@@ -58,7 +61,7 @@ const WorkExperience = ({ isEditModeEnabled }) => {
       (item, index) => index !== recievedIndex
     );
 
-    setWorkExperienceList(newList);
+    onUpdateWorkExperienceList(newList);
   };
 
   const updateExperienceItem = (
@@ -80,9 +83,8 @@ const WorkExperience = ({ isEditModeEnabled }) => {
       return item;
     });
 
-    setWorkExperienceList([...updatedList]);
+    onUpdateWorkExperienceList([...updatedList]);
   };
-
   useEffect(() => {
     setIsExperienceFormVisible(false);
   }, [isEditModeEnabled]);
