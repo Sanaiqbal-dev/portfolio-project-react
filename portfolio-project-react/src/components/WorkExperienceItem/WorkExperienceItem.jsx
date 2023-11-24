@@ -20,11 +20,9 @@ const WorkExperienceItem = ({
   onUpdateWorkExperience,
 }) => {
   const isEditModeEnabled = useContext(IsEditModeEnabled);
-
   const [isItemEditModeEnabled, setIsItemEditModeEnabled] = useState(false);
   const [companyNameInput, setCompanyNameInput] = useState(data.companyName);
   let companyNameValue = index + 1 + ". " + companyNameInput;
-
   const [startDateInput, setStartDateInput] = useState(data.startDate);
   const [endDateInput, setEndDateInput] = useState(data.endDate);
   const [isCurrentEmployerInput, setIsCurrentEmployerInput] = useState(
@@ -37,7 +35,6 @@ const WorkExperienceItem = ({
     startDateInput +
     DASH_TEXT +
     (isCurrentEmployerInput ? PRESENT_TEXT : endDateInput);
-
   const [maxDateLimit, setMaxDateLimit] = useState(
     moment(new Date()).toISOString().split("T")[0]
   );
@@ -66,7 +63,7 @@ const WorkExperienceItem = ({
     setEndDateInput(data.endDate);
     setIsCurrentEmployerInput(data.isCurrentEmployer);
     setJobDescriptionInput(data.jobDescription);
-  }, [isEditModeEnabled]);
+  }, [isEditModeEnabled,data]);
 
   return (
     <div className={styles.expItemContainer}>
