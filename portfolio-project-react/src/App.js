@@ -2,7 +2,7 @@ import { useState } from "react";
 import Header from "./components/Header/Header";
 import Content from "./components/Content/Content";
 import Footer from "./components/Footer/Footer";
-import { IsEditModeEnabled, isEditModeEnabled } from "./EditModeContext";
+import { IsEditModeEnabled } from "./EditModeContext";
 import "./index.css";
 
 const App = () => {

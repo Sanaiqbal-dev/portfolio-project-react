@@ -1,11 +1,15 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import SkillItem from "../SkillItem/SkillItem";
 import { IsEditModeEnabled } from "../../EditModeContext";
 import { SKILLS_DATA } from "./constants";
 import styles from "./Skills.module.css";
 
 const Skills = () => {
-  const [skillsList, setSkillsList] = useState(SKILLS_DATA);
+  const [skillsList, setSkillsList] = useState(
+    localStorage.getItem("skills-list")
+      ? JSON.parse(localStorage.getItem("skills-list"))
+      : SKILLS_DATA
+  );
   const isEditModeEnabled = useContext(IsEditModeEnabled);
 
   const addNewSkill = (newSkill) => {
@@ -19,6 +23,9 @@ const Skills = () => {
     setSkillsList(updatedList);
   };
 
+  useEffect(() => {
+    localStorage.setItem("skills-list", JSON.stringify(skillsList));
+  }, [skillsList]);
   return (
     <div className={styles.skillsContainer}>
       {skillsList &&

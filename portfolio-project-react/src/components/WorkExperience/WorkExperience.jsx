@@ -85,6 +85,7 @@ const WorkExperience = ({
 
     onUpdateWorkExperienceList([...updatedList]);
   };
+
   useEffect(() => {
     setIsExperienceFormVisible(false);
   }, [isEditModeEnabled]);

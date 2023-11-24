@@ -1,5 +1,5 @@
-import { useState, useContext } from "react";
-import { IsEditModeEnabled } from "../../EditModeContext";
+import { useState, useContext, useEffect } from "react";
+import { IsEditModeEnabled } from "../../EditModeContextContext";
 import Skills from "../Skills/Skills";
 import {
   JOB_TITLE_CONTENT,
@@ -12,8 +12,16 @@ import styles from "./Picture.module.css";
 const Picture = ({ url, size }) => {
   const isEditModeEnabled = useContext(IsEditModeEnabled);
   const [imageUrl, setImageUrl] = useState(url);
-  const [name, setName] = useState(NAME_CONTENT);
-  const [designation, setDesignation] = useState(JOB_TITLE_CONTENT);
+  const [name, setName] = useState(
+    localStorage.getItem("username")
+      ? localStorage.getItem("username")
+      : NAME_CONTENT
+  );
+  const [designation, setDesignation] = useState(
+    localStorage.getItem("designation")
+      ? localStorage.getItem("designation")
+      : JOB_TITLE_CONTENT
+  );
 
   const onImageChange = (e) => {
     if (e.target.files[0]) {
@@ -21,6 +29,12 @@ const Picture = ({ url, size }) => {
     }
   };
 
+  useEffect(() => {
+    localStorage.setItem("username", name);
+  }, [name]);
+  useEffect(() => {
+    localStorage.setItem("designation", designation);
+  }, [designation]);
   return (
     <div className={styles.pictureSection}>
       <div className={styles.imageContainer}>

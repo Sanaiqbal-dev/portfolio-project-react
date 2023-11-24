@@ -3,12 +3,16 @@ import About from "../About/About";
 import WorkExperience from "../WorkExperience/WorkExperience";
 import styles from "./Details.module.css";
 
-const Details = ({ isEditModeEnabled }) => {
+const Details = () => {
   const [totalWorkExperience, setTotalWorkExperience] = useState({
     years: 0,
     months: 0,
   });
-  const [workExperienceList, setWorkExperienceList] = useState([]);
+  let locallyStoredData = localStorage.getItem("work-experience-list")
+    ? JSON.parse(localStorage.getItem("work-experience-list"))
+    : [];
+  const [workExperienceList, setWorkExperienceList] =
+    useState(locallyStoredData);
 
   useEffect(() => {
     const calculateTotalExp = () => {
@@ -28,8 +32,13 @@ const Details = ({ isEditModeEnabled }) => {
       const months = Math.floor(remainingDays / 30);
 
       setTotalWorkExperience({ years: years, months: months });
+
+      localStorage.setItem(
+        "work-experience-list",
+        JSON.stringify(workExperienceList)
+      );
     };
-    
+
     const calculateNoOfdays = (startDate, endDate) => {
       if (endDate === "") {
         endDate = new Date().getTime();
@@ -45,12 +54,8 @@ const Details = ({ isEditModeEnabled }) => {
 
   return (
     <div className={styles.detailsSection}>
-      <About
-        isEditModeEnabled={isEditModeEnabled}
-        totalWorkExperience={totalWorkExperience}
-      />
+      <About totalWorkExperience={totalWorkExperience} />
       <WorkExperience
-        isEditModeEnabled={isEditModeEnabled}
         workExperienceList={workExperienceList}
         onUpdateWorkExperienceList={setWorkExperienceList}
       />
