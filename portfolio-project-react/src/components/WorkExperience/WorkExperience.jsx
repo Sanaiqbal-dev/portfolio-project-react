@@ -1,4 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import moment from "moment";
+import WorkExperienceItem from "../WorkExperienceItem/WorkExperienceItem";
+import { IsEditModeEnabled } from "../../EditModeContext";
 import {
   JOB_DESCRIPTION_ERROR,
   WORK_EXPERIENCE_HEADING,
@@ -9,7 +12,6 @@ import {
   WORK_EXPERIENCE_ITEM_ADDED,
   WORK_EXPERIENCE_NOT_FOUND,
 } from "./constants";
-
 import {
   CURRENT_EMPLOYER_LABEL,
   START_DATE_LABEL,
@@ -19,15 +21,14 @@ import {
   INCORRECT_DATE_ALERT,
 } from "../../constants";
 
-import WorkExpItem from "../WorkExperienceItem/WorkExperienceItem";
-import moment from "moment";
 import styles from "./WorkExperience.module.css";
 
 const WorkExperience = ({
-  isEditModeEnabled,
   workExperienceList,
   onUpdateWorkExperienceList,
 }) => {
+    const isEditModeEnabled = useContext(IsEditModeEnabled);
+
   const [isExperienceFormVisible, setIsExperienceFormVisible] = useState(false);
   const [companyName, setCompanyName] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -85,6 +86,7 @@ const WorkExperience = ({
 
     onUpdateWorkExperienceList([...updatedList]);
   };
+
   useEffect(() => {
     setIsExperienceFormVisible(false);
   }, [isEditModeEnabled]);
@@ -97,7 +99,7 @@ const WorkExperience = ({
           {workExperienceList.length > 0 ? (
             <div className={styles.expListContainer}>
               {workExperienceList.map((item, index) => (
-                <WorkExpItem
+                <WorkExperienceItem
                   key={index}
                   isEditModeEnabled={isEditModeEnabled}
                   data={item}

@@ -1,25 +1,46 @@
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
+import { IsEditModeEnabled } from "../../EditModeContext";
 import Skills from "../Skills/Skills";
-import { JOB_TITLE_CONTENT, NAME_CONTENT, JOB_DESCRIPTION_PLACEHOLDER, NAME_PLACEHOLDER } from "./constants";
+import {
+  JOB_TITLE_CONTENT,
+  NAME_CONTENT,
+  JOB_DESCRIPTION_PLACEHOLDER,
+  NAME_PLACEHOLDER,
+} from "./constants";
 import styles from "./Picture.module.css";
 
-const Picture = (props) => {
-
-  const { isEditModeEnabled, url, size } = props;
-
+const Picture = ({ url, size }) => {
+  const isEditModeEnabled = useContext(IsEditModeEnabled);
   const [imageUrl, setImageUrl] = useState(url);
-  const [name, setName] = useState(NAME_CONTENT);
-  const [designation, setDesignation] = useState(JOB_TITLE_CONTENT);
+  const [name, setName] = useState(
+    localStorage.getItem("username")
+      ? localStorage.getItem("username")
+      : NAME_CONTENT
+  );
+  const [designation, setDesignation] = useState(
+    localStorage.getItem("designation")
+      ? localStorage.getItem("designation")
+      : JOB_TITLE_CONTENT
+  );
   const onImageChange = (e) => {
     if (e.target.files[0]) {
       setImageUrl(URL.createObjectURL(e.target.files[0]));
     }
   };
 
+  useEffect(() => {
+    localStorage.setItem("username", name);
+  }, [name]);
+  useEffect(() => {
+    localStorage.setItem("designation", designation);
+  }, [designation]);
   return (
     <div className={styles.pictureSection}>
       <div className={styles.imageContainer}>
-        <img src={imageUrl} style={{ width: size, height: size }} />
+        <img
+          src={imageUrl}
+          style={{ width: size.width, height: size.height }}
+        />
       </div>
       {isEditModeEnabled && (
         <input
@@ -52,7 +73,7 @@ const Picture = (props) => {
         <h3>{designation}</h3>
       )}
 
-      <Skills isEditModeEnabled={isEditModeEnabled} />
+      <Skills />
     </div>
   );
 };

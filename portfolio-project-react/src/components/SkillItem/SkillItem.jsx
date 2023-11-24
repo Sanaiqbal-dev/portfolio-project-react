@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from "react";
-import styles from "./SkillItem.module.css";
+import { useEffect, useState, useContext } from "react";
+import { IsEditModeEnabled } from "../../EditModeContext";
 import { CHAR_UNIT, ADD_PLACEHOLDER } from "./constants";
 import { CLOSE_DELETE_TEXT } from "../../constants";
+import styles from "./SkillItem.module.css";
 
 const SkillItem = ({
-  isEditModeEnabled,
   data,
   index,
   isAddNewSkillInput,
   onAddSkill,
   onDeleteSkill,
 }) => {
+  const isEditModeEnabled = useContext(IsEditModeEnabled);
   const [skill, setSkill] = useState(data);
   const [newSkill, setNewSkill] = useState("");
 

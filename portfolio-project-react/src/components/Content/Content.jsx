@@ -1,14 +1,15 @@
 import Details from "../Details/Details";
 import Picture from "../Picture/Picture";
-import styles from "./Content.module.css"
+import styles from "./Content.module.css";
 import logo from "../Picture/assets/ic-profile.png";
 
+const Content = () => {
+  const size = { width: "250px", height: "250px" };
 
-const Content = ({ isEditModeEnabled }) => {
   return (
     <main>
-      <Details isEditModeEnabled={isEditModeEnabled} />
-      <Picture isEditModeEnabled={isEditModeEnabled} url={logo} size={"250px"} />
+      <Details />
+      <Picture url={logo} size={size} />
     </main>
   );
 };
