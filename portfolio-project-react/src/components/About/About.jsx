@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import { useContext, useState } from "react";
-=======
 import { useContext, useEffect, useState } from "react";
->>>>>>> main
 import { IsEditModeEnabled } from "../../EditModeContext";
 import {
   ABOUT_DATA,
@@ -19,11 +15,6 @@ import styles from "./About.module.css";
 const About = ({ totalWorkExperience }) => {
   const isEditModeEnabled = useContext(IsEditModeEnabled);
 
-<<<<<<< HEAD
-  const [aboutContent, setAboutContent] = useState(ABOUT_DATA);
-  const [phone, setPhone] = useState(CONTACT_DATA);
-  const [email, setEmail] = useState(EMAIL_DATA);
-=======
   const [aboutContent, setAboutContent] = useState(
     localStorage.getItem("about") ? localStorage.getItem("about") : ABOUT_DATA
   );
@@ -38,7 +29,7 @@ const About = ({ totalWorkExperience }) => {
 
   const totalExperienceContent =
     totalWorkExperience.years === 0 && totalWorkExperience.months === 0
-      ? "No past experience"
+      ? "NO PAST EXPERIENCE"
       : totalWorkExperience.years === 0
       ? `Total Experience: ` + totalWorkExperience.months + ` months`
       : totalWorkExperience.months === 0
@@ -71,19 +62,12 @@ const About = ({ totalWorkExperience }) => {
   useEffect(() => {
     localStorage.setItem("email", email);
   }, [email]);
->>>>>>> main
 
   return (
     <div>
       <div className={styles.aboutHeader}>
         <h1 className={styles.titleAbout}>{ABOUT_HEADING}</h1>
-<<<<<<< HEAD
-        <label>
-          Total Experience: {totalWorkExperience.years} years {totalWorkExperience.months > 0 ? totalWorkExperience.months : 0} months
-        </label>
-=======
         <label className={styles.totalExperienceContent}>{totalExperienceContent}</label>
->>>>>>> main
       </div>
       {isEditModeEnabled ? (
         <textarea
