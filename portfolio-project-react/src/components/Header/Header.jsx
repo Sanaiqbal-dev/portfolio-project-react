@@ -3,9 +3,11 @@ import { IsEditModeEnabled } from "../../EditModeContext";
 import { EDIT_TEXT, SIGNUP_TEXT, SAVE_TEXT, PORTFOLIO } from "./constants";
 import styles from "./Header.module.css";
 import { Link } from "react-router-dom";
-const Header = ({ changeEditMode }) => {
+const Header = ({ changeEditMode, isPortfolioRouteEnabled }) => {
   const isEditModeEnabled = useContext(IsEditModeEnabled);
-  const [isPortfolioEnabled, setIsPortfolioEnabled] = useState(true);
+  const [isPortfolioEnabled, setIsPortfolioEnabled] = useState(
+    isPortfolioRouteEnabled
+  );
 
   return (
     <header>
