@@ -1,26 +1,42 @@
 import { Button } from "@mui/material";
 import styles from "../SignUp/SignUp.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 const SignUp = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const [nameError, setNameError] = useState(false);
-  const [emailError, setEmailError] = useState(false);
-  const [passwordError, setPasswordError] = useState(false);
+  const [nameError, setNameError] = useState(true);
+  const [emailError, setEmailError] = useState(true);
+  const [passwordError, setPasswordError] = useState(true);
   const [isSignUpCompleted, setIsSignupCompleted] = useState(false);
 
+  const [isValidated, setIsValidated] = useState(false);
   const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
-  const validateForm = () => {
-    name.trim(" ").length < 1 ? setNameError(true) : setNameError(false);
-    !regex.test(email) ? setEmailError(true) : setEmailError(false);
-    password.length < 8 ? setPasswordError(true) : setPasswordError(false);
+  const validateForm = (e) => {
+    e.preventDefault();
 
-    !nameError && !emailError && !passwordError
-      ? setIsSignupCompleted(true)
-      : setIsSignupCompleted(false);
+    if (name.trim(" ").length < 1) {
+      setNameError(true);
+    } else {
+      setNameError(false);
+    }
+    if (!regex.test(email)) setEmailError(true);
+    else setEmailError(false);
+    if (password.length < 8) setPasswordError(true);
+    else setPasswordError(false);
+
+    if (
+      nameError === false &&
+      emailError === false &&
+      passwordError === false
+    ) {
+      setIsSignupCompleted(true);
+    } else {
+      setIsSignupCompleted(false);
+    }
+    setIsValidated(true);
   };
 
   return (
@@ -28,37 +44,51 @@ const SignUp = () => {
       <div>
         <form
           className={styles.signupFormContainer}
-          onSubmit={(e) => validateForm()}
+          onSubmit={(e) => validateForm(e)}
         >
           <h2>SIGN UP</h2>
           <input
             placeholder="Enter your name here."
-            style={{ borderColor: nameError ? "red" : "transparent" }}
+            style={{
+              borderColor: nameError && isValidated ? "red" : "transparent",
+            }}
             onChange={(e) => {
               setName(e.target.value);
             }}
           />
-          {nameError && <label>Enter your name.</label>}
+          {isValidated && nameError && <label>Enter your name.</label>}
           <input
             placeholder="Enter your email address here."
-            style={{ borderColor: emailError ? "red" : "transparent" }}
+            style={{
+              borderColor: emailError && isValidated ? "red" : "transparent",
+            }}
             onChange={(e) => {
               setEmail(e.target.value);
             }}
           />
-          {emailError && <label>Enter correct email address.</label>}
+          {isValidated && emailError && (
+            <label>Enter correct email address.</label>
+          )}
 
           <input
             placeholder="Enter password here."
-            style={{ borderColor: passwordError ? "red" : "transparent" }}
+            style={{
+              borderColor: passwordError && isValidated ? "red" : "transparent",
+            }}
             onChange={(e) => {
               setPassword(e.target.value);
             }}
           />
-          {password && <label>Password length: minimum 8 characters.</label>}
+          {isValidated && passwordError && (
+            <label>Password length: minimum 8 characters.</label>
+          )}
 
           <button type="submit">Submit</button>
         </form>
+        {isValidated &&
+          nameError === false &&
+          emailError === false &&
+          passwordError === false && <h2 className={styles.successMsg}>Registration successful 🙂</h2>}
       </div>
     </div>
   );
