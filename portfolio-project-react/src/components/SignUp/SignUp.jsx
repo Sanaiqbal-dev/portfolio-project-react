@@ -1,4 +1,3 @@
-import { Button } from "@mui/material";
 import styles from "../SignUp/SignUp.module.css";
 import { useEffect, useState } from "react";
 const SignUp = () => {
@@ -9,9 +8,12 @@ const SignUp = () => {
   const [nameError, setNameError] = useState(true);
   const [emailError, setEmailError] = useState(true);
   const [passwordError, setPasswordError] = useState(true);
-  const [isSignUpCompleted, setIsSignupCompleted] = useState(false);
 
+  const [isSignUpCompleted, setIsSignupCompleted] = useState(false);
   const [isValidated, setIsValidated] = useState(false);
+
+  const [isApiRequestSuccessfull, setIsApiRequestSuccessfull] = useState(false);
+
   const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
   const validateForm = (e) => {
@@ -27,6 +29,20 @@ const SignUp = () => {
     if (password.length < 8) setPasswordError(true);
     else setPasswordError(false);
 
+    setIsApiRequestSuccessfull(false);
+    setIsValidated(true);
+  };
+
+  const resetForm = () => {
+    setName("");
+    setEmail("");
+    setPassword("");
+  };
+
+  useEffect(() => {
+    setIsValidated(false);
+  }, [name, email, password]);
+  useEffect(() => {
     if (
       nameError === false &&
       emailError === false &&
@@ -36,9 +52,39 @@ const SignUp = () => {
     } else {
       setIsSignupCompleted(false);
     }
-    setIsValidated(true);
-  };
+  }, [isValidated]);
 
+  useEffect(() => {
+    if (isValidated && isSignUpCompleted) {
+      submitUserInformation();
+    }
+  }, [isSignUpCompleted]);
+
+  const submitUserInformation = async () => {
+    try {
+      const response = await fetch(`https://dummyjson.com/users/add`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstName: name,
+          email: email,
+          password: password,
+        }),
+      });
+
+      if (response.ok) {
+        console.log("Successfull");
+        setIsApiRequestSuccessfull(true);
+      } else {
+        console.log("Failed");
+        setIsApiRequestSuccessfull(false);
+      }
+      resetForm();
+    } catch (e) {
+      alert("Api request has been failed!");
+    }
+    setIsValidated(false);
+  };
   return (
     <div>
       <div>
@@ -48,6 +94,7 @@ const SignUp = () => {
         >
           <h2>SIGN UP</h2>
           <input
+            value={name}
             placeholder="Enter your name here."
             style={{
               borderColor: nameError && isValidated ? "red" : "transparent",
@@ -58,6 +105,7 @@ const SignUp = () => {
           />
           {isValidated && nameError && <label>Enter your name.</label>}
           <input
+            value={email}
             placeholder="Enter your email address here."
             style={{
               borderColor: emailError && isValidated ? "red" : "transparent",
@@ -71,6 +119,7 @@ const SignUp = () => {
           )}
 
           <input
+            value={password}
             placeholder="Enter password here."
             style={{
               borderColor: passwordError && isValidated ? "red" : "transparent",
@@ -83,12 +132,15 @@ const SignUp = () => {
             <label>Password length: minimum 8 characters.</label>
           )}
 
-          <button type="submit">Submit</button>
+          {isValidated && isSignUpCompleted ? (
+            <button>Submitting...</button>
+          ) : (
+            <button type="submit">Submit</button>
+          )}
         </form>
-        {isValidated &&
-          nameError === false &&
-          emailError === false &&
-          passwordError === false && <h2 className={styles.successMsg}>Registration successful 🙂</h2>}
+        {isApiRequestSuccessfull && (
+          <h2 className={styles.successMsg}>Registration successful 🙂</h2>
+        )}
       </div>
     </div>
   );
