@@ -1,5 +1,20 @@
 import styles from "../SignUp/SignUp.module.css";
 import { useEffect, useState } from "react";
+import {
+  ALERT_EMAIL,
+  ALERT_NAME,
+  ALERT_PASSWORD,
+  FAILURE_MSG,
+  PLACEHOLDER_NAME,
+  PLACEHOLDER_PASSWORD,
+  REGEX_EMAIL,
+  SIGNUP_TITLE,
+  SUBMITTING_CONTENT,
+  SUBMIT_CONTENT,
+  COLOR_RED,
+  COLOR_TRANSPARENT,
+  REGISTRATION_SUCCESSFULL,
+} from "./constants";
 const SignUp = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -14,21 +29,18 @@ const SignUp = () => {
 
   const [isApiRequestSuccessfull, setIsApiRequestSuccessfull] = useState(false);
 
-  const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-
   const validateForm = (e) => {
     e.preventDefault();
 
     setIsApiRequestSuccessfull(false);
     setIsSignupCompleted(false);
-    // setIsValidated(false);
 
     if (name.trim(" ").length < 1) {
       setNameError(true);
     } else {
       setNameError(false);
     }
-    if (!regex.test(email)) setEmailError(true);
+    if (!REGEX_EMAIL.test(email)) setEmailError(true);
     else setEmailError(false);
     if (password.length < 8) setPasswordError(true);
     else setPasswordError(false);
@@ -76,15 +88,13 @@ const SignUp = () => {
       });
 
       if (response.ok) {
-        console.log("Successfull");
         setIsApiRequestSuccessfull(true);
       } else {
-        console.log("Failed");
         setIsApiRequestSuccessfull(false);
       }
       resetForm();
     } catch (e) {
-      alert("Api request has been failed!");
+      alert(FAILURE_MSG);
     }
     setIsValidated(false);
   };
@@ -95,54 +105,57 @@ const SignUp = () => {
           className={styles.signupFormContainer}
           onSubmit={(e) => validateForm(e)}
         >
-          <h2>SIGN UP</h2>
+          <h2>{SIGNUP_TITLE}</h2>
           <input
             value={name}
-            placeholder="Enter your name here."
+            placeholder={PLACEHOLDER_NAME}
             style={{
-              borderColor: nameError && isValidated ? "red" : "transparent",
+              borderColor:
+                nameError && isValidated
+                  ?  COLOR_RED 
+                  :  COLOR_TRANSPARENT ,
             }}
             onChange={(e) => {
               setName(e.target.value);
             }}
           />
-          {isValidated && nameError && <label>Enter your name.</label>}
+          {isValidated && nameError && <label>{ALERT_NAME}</label>}
           <input
             value={email}
-            placeholder="Enter your email address here."
+            placeholder={PLACEHOLDER_NAME}
             style={{
-              borderColor: emailError && isValidated ? "red" : "transparent",
+              borderColor:
+                emailError && isValidated ? COLOR_RED : COLOR_TRANSPARENT,
             }}
             onChange={(e) => {
               setEmail(e.target.value);
             }}
           />
-          {isValidated && emailError && (
-            <label>Enter correct email address.</label>
-          )}
+          {isValidated && emailError && <label>{ALERT_EMAIL}</label>}
 
           <input
             value={password}
-            placeholder="Enter password here."
+            placeholder={PLACEHOLDER_PASSWORD}
             style={{
-              borderColor: passwordError && isValidated ? "red" : "transparent",
+              borderColor:
+                passwordError && isValidated
+                  ? COLOR_RED 
+                  :  COLOR_TRANSPARENT,
             }}
             onChange={(e) => {
               setPassword(e.target.value);
             }}
           />
-          {isValidated && passwordError && (
-            <label>Password length: minimum 8 characters.</label>
-          )}
+          {isValidated && passwordError && <label>{ALERT_PASSWORD}</label>}
 
           {isValidated && isSignUpCompleted ? (
-            <button>Submitting...</button>
+            <button>{SUBMITTING_CONTENT}</button>
           ) : (
-            <button type="submit">Submit</button>
+            <button type="submit">{SUBMIT_CONTENT}</button>
           )}
         </form>
         {isApiRequestSuccessfull && (
-          <h2 className={styles.successMsg}>Registration successful 🙂</h2>
+          <h2 className={styles.successMsg}>{REGISTRATION_SUCCESSFULL}</h2>
         )}
       </div>
     </div>
