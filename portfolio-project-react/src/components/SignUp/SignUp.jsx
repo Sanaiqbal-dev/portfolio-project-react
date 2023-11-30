@@ -19,6 +19,10 @@ const SignUp = () => {
   const validateForm = (e) => {
     e.preventDefault();
 
+    setIsApiRequestSuccessfull(false);
+    setIsSignupCompleted(false);
+    // setIsValidated(false);
+
     if (name.trim(" ").length < 1) {
       setNameError(true);
     } else {
@@ -29,7 +33,6 @@ const SignUp = () => {
     if (password.length < 8) setPasswordError(true);
     else setPasswordError(false);
 
-    setIsApiRequestSuccessfull(false);
     setIsValidated(true);
   };
 
