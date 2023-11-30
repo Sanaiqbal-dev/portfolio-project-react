@@ -14,6 +14,7 @@ import {
   COLOR_RED,
   COLOR_TRANSPARENT,
   REGISTRATION_SUCCESSFULL,
+  PLACEHOLDER_EMAIL,
 } from "./constants";
 const SignUp = () => {
   const [name, setName] = useState("");
@@ -122,7 +123,7 @@ const SignUp = () => {
           {isValidated && nameError && <label>{ALERT_NAME}</label>}
           <input
             value={email}
-            placeholder={PLACEHOLDER_NAME}
+            placeholder={PLACEHOLDER_EMAIL}
             style={{
               borderColor:
                 emailError && isValidated ? COLOR_RED : COLOR_TRANSPARENT,
