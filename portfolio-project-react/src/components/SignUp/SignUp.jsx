@@ -1,6 +1,17 @@
-import { Button } from "@mui/material";
 import styles from "../SignUp/SignUp.module.css";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
+import {
+  ALERT_EMAIL,
+  ALERT_NAME,
+  ALERT_PASSWORD,
+  PLACEHOLDER_NAME,
+  PLACEHOLDER_PASSWORD,
+  REGEX_EMAIL,
+  SIGNUP_TITLE,
+  SUBMIT_CONTENT,
+  REGISTRATION_SUCCESSFULL,
+  PLACEHOLDER_EMAIL,
+} from "./constants";
 const SignUp = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -12,7 +23,6 @@ const SignUp = () => {
   const [isSignUpCompleted, setIsSignupCompleted] = useState(false);
 
   const [isValidated, setIsValidated] = useState(false);
-  const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
   const validateForm = (e) => {
     e.preventDefault();
@@ -22,7 +32,7 @@ const SignUp = () => {
     } else {
       setNameError(false);
     }
-    if (!regex.test(email)) setEmailError(true);
+    if (!REGEX_EMAIL.test(email)) setEmailError(true);
     else setEmailError(false);
     if (password.length < 8) setPasswordError(true);
     else setPasswordError(false);
@@ -46,9 +56,9 @@ const SignUp = () => {
           className={styles.signupFormContainer}
           onSubmit={(e) => validateForm(e)}
         >
-          <h2>SIGN UP</h2>
+          <h2>{SIGNUP_TITLE}</h2>
           <input
-            placeholder="Enter your name here."
+            placeholder={PLACEHOLDER_NAME}
             style={{
               borderColor: nameError && isValidated ? "red" : "transparent",
             }}
@@ -56,9 +66,9 @@ const SignUp = () => {
               setName(e.target.value);
             }}
           />
-          {isValidated && nameError && <label>Enter your name.</label>}
+          {isValidated && nameError && <label>{ALERT_NAME}</label>}
           <input
-            placeholder="Enter your email address here."
+            placeholder={PLACEHOLDER_EMAIL}
             style={{
               borderColor: emailError && isValidated ? "red" : "transparent",
             }}
@@ -67,11 +77,11 @@ const SignUp = () => {
             }}
           />
           {isValidated && emailError && (
-            <label>Enter correct email address.</label>
+            <label>{ALERT_EMAIL}</label>
           )}
 
           <input
-            placeholder="Enter password here."
+            placeholder={PLACEHOLDER_PASSWORD}
             style={{
               borderColor: passwordError && isValidated ? "red" : "transparent",
             }}
@@ -80,15 +90,15 @@ const SignUp = () => {
             }}
           />
           {isValidated && passwordError && (
-            <label>Password length: minimum 8 characters.</label>
+            <label>{ALERT_PASSWORD}</label>
           )}
 
-          <button type="submit">Submit</button>
+          <button type="submit">{SUBMIT_CONTENT}</button>
         </form>
         {isValidated &&
           nameError === false &&
           emailError === false &&
-          passwordError === false && <h2 className={styles.successMsg}>Registration successful 🙂</h2>}
+          passwordError === false && <h2 className={styles.successMsg}>{REGISTRATION_SUCCESSFULL}</h2>}
       </div>
     </div>
   );

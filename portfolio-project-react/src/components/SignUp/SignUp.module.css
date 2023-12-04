@@ -42,6 +42,11 @@
   background-color: rgb(163, 163, 194);
   color: rgb(1, 1, 65);
 }
+
+.signupFormContainer label{
+  color: red;
+  font-size: x-small;
+}
 .successMsg{
     width: 100%;
     text-align: center;
