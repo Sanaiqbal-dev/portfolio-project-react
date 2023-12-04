@@ -9,12 +9,38 @@ const Details = () => {
     months: 0,
   });
 
-  let locallyStoredData = localStorage.getItem("work-experience-list")
-    ? JSON.parse(localStorage.getItem("work-experience-list"))
-    : [];
+   let locallyStoredData = localStorage.getItem("work-experience-list")
+     ? JSON.parse(localStorage.getItem("work-experience-list"))
+     : [];
+
+  ///////////////////////////////
+
+  const fetchDataFromDB = async () => {
+    await fetch(`http://localhost:3000/api/portfolio/experience/getAll`)
+      .then((response) => response.json())
+      .then((jsonData) => {
+        // updateLocalData(jsonData);
+        // locallyStoredData = jsonData;
+            setOriginalWorkExperienceList(jsonData);
+
+        
+      })
+      .catch((error) => {
+        console.log(error);
+        // getElement("#preloader").style.display = "none";
+      });
+  };
+
+  useEffect(() => {
+    fetchDataFromDB();
+    // setOriginalWorkExperienceList(locallyStoredData);
+  }, []);
+
+  /////////////////////////////////////
+ 
 
   const [originalWorkExperienceList, setOriginalWorkExperienceList] =
-    useState(locallyStoredData);
+    useState([]);
 
   const [filteredWorkExperienceList, setfilteredWorkExperienceList] = useState(
     originalWorkExperienceList
@@ -29,7 +55,6 @@ const Details = () => {
     );
     setfilteredWorkExperienceList(SearchedList);
   };
-
 
   useEffect(() => {
     const calculateTotalExp = () => {
@@ -69,12 +94,11 @@ const Details = () => {
     calculateTotalExp();
   }, [originalWorkExperienceList]);
 
-
   useEffect(() => {
     if (searchText.length === 0)
       setfilteredWorkExperienceList(originalWorkExperienceList);
   });
-  
+
   return (
     <div className={styles.detailsSection}>
       <About totalWorkExperience={totalWorkExperience} />

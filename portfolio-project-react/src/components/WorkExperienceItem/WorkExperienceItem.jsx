@@ -29,7 +29,7 @@ const WorkExperienceItem = ({
     data.isCurrentEmployer
   );
   const [jobDescriptionInput, setJobDescriptionInput] = useState(
-    data.jobDescription
+    data.description
   );
   let jobDuration =
     startDateInput +
@@ -62,7 +62,7 @@ const WorkExperienceItem = ({
     setStartDateInput(data.startDate);
     setEndDateInput(data.endDate);
     setIsCurrentEmployerInput(data.isCurrentEmployer);
-    setJobDescriptionInput(data.jobDescription);
+    setJobDescriptionInput(data.description);
   }, [isEditModeEnabled,data]);
 
   return (
@@ -158,7 +158,7 @@ const WorkExperienceItem = ({
           }}
         />
       ) : (
-        <p className={styles.jobDescription}>{data.jobDescription}</p>
+        <p className={styles.jobDescription}>{data.description}</p>
       )}
       {isItemEditModeEnabled && (
         <button
