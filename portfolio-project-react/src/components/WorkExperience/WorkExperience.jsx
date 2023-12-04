@@ -97,7 +97,7 @@ const WorkExperience = ({
     <div className={styles.details}>
       <div>
         <h1>{WORK_EXPERIENCE_HEADING}</h1>
-        {(isEditModeEnabled && filteredWorkExperienceList.length>0)&& (
+        {(isEditModeEnabled)&& (
           <input
             className={styles.searchText}
             placeholder="Search Here..."

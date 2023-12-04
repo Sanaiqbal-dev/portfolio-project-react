@@ -23,9 +23,9 @@ const Details = () => {
   const [searchText, setSearchText] = useState("");
 
   const searchHandler = (searchText) => {
-    setSearchText(searchText);
+    setSearchText(searchText.toLowerCase());
     const SearchedList = originalWorkExperienceList.filter((item) =>
-      item.companyName.includes(searchText)
+      item.companyName.toLowerCase().includes(searchText)
     );
     setfilteredWorkExperienceList(SearchedList);
   };
