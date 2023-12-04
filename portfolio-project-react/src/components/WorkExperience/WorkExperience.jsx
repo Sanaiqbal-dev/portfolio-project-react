@@ -24,6 +24,7 @@ import {
 import styles from "./WorkExperience.module.css";
 
 const WorkExperience = ({
+  originalWorkExperienceList,
   filteredWorkExperienceList,
   onUpdateWorkExperienceList,
   onSearchWorkExperience,
@@ -52,7 +53,7 @@ const WorkExperience = ({
       };
 
       onUpdateWorkExperienceList([
-        ...filteredWorkExperienceList,
+        ...originalWorkExperienceList,
         newWorkExperience,
       ]);
       setIsExperienceFormVisible(false);
@@ -61,7 +62,7 @@ const WorkExperience = ({
   };
 
   const deleteExperienceItem = (recievedIndex) => {
-    const newList = filteredWorkExperienceList.filter(
+    const newList = originalWorkExperienceList.filter(
       (item, index) => index !== recievedIndex
     );
     onUpdateWorkExperienceList(newList);

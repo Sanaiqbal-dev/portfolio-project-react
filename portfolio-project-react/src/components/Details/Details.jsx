@@ -1,9 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import About from "../About/About";
 import WorkExperience from "../WorkExperience/WorkExperience";
+import { IsEditModeEnabled } from "../../EditModeContext";
 import styles from "./Details.module.css";
 
 const Details = () => {
+  const isEditModeEnabled = useContext(IsEditModeEnabled);
+
   const [totalWorkExperience, setTotalWorkExperience] = useState({
     years: 0,
     months: 0,
@@ -20,16 +23,15 @@ const Details = () => {
     originalWorkExperienceList
   );
 
-  const [searchText, setSearchText] = useState("");
+  let searchText_ = "";
 
   const searchHandler = (searchText) => {
-    setSearchText(searchText.toLowerCase());
+    searchText_ = searchText.toLowerCase();
     const SearchedList = originalWorkExperienceList.filter((item) =>
-      item.companyName.toLowerCase().includes(searchText)
+      item.companyName.toLowerCase().includes(searchText.toLowerCase())
     );
     setfilteredWorkExperienceList(SearchedList);
   };
-
 
   useEffect(() => {
     const calculateTotalExp = () => {
@@ -67,18 +69,18 @@ const Details = () => {
     };
 
     calculateTotalExp();
+    if (searchText_.length === 0)
+      setfilteredWorkExperienceList(originalWorkExperienceList);
   }, [originalWorkExperienceList]);
 
-
   useEffect(() => {
-    if (searchText.length === 0)
-      setfilteredWorkExperienceList(originalWorkExperienceList);
-  });
-  
+    setfilteredWorkExperienceList(originalWorkExperienceList);
+  }, [isEditModeEnabled]);
   return (
     <div className={styles.detailsSection}>
       <About totalWorkExperience={totalWorkExperience} />
       <WorkExperience
+        originalWorkExperienceList={originalWorkExperienceList}
         filteredWorkExperienceList={filteredWorkExperienceList}
         onUpdateWorkExperienceList={setOriginalWorkExperienceList}
         onSearchWorkExperience={searchHandler}
