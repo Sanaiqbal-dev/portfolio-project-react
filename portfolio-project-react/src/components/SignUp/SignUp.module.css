@@ -1,0 +1,55 @@
+.signupFormContainer {
+    box-sizing: border-box;
+  width: max-content;
+  height: max-content;
+  margin: 50px auto;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 5px;
+  background-color: rgb(224, 224, 236);
+}
+
+.signupFormContainer h2 {
+  color: rgb(1, 1, 65);
+  margin: 0px auto 20px auto;
+}
+
+.signupFormContainer input {
+  width: 270px;
+  height: 25px;
+  padding: 5px;
+  outline: none;
+  border-radius: 5px;
+  border-width: 1px;
+  margin: 5px auto;
+  font-size: small;
+}
+
+.signupFormContainer button {
+  width: 150px;
+  padding: 5px;
+  margin: 20px auto;
+  font-size: medium;
+  font-weight: 500;
+  background-color: rgb(1, 1, 65);
+  color: white;
+  border: none;
+  border-radius: 3px;
+}
+
+.signupFormContainer button:hover {
+  background-color: rgb(163, 163, 194);
+  color: rgb(1, 1, 65);
+}
+
+.signupFormContainer label{
+  color: red;
+  font-size: x-small;
+}
+.successMsg{
+    width: 100%;
+    text-align: center;
+    margin: 40px 0;
+    color: green;
+}

@@ -1,19 +1,10 @@
-import { useState } from "react";
-import Header from "./components/Header/Header";
-import Content from "./components/Content/Content";
-import Footer from "./components/Footer/Footer";
-import { IsEditModeEnabled } from "./EditModeContext";
+import Portfolio from "./components/Portfolio/Portfolio"
 import "./index.css";
-
 const App = () => {
-  const [isEditModeEnabled, setIsEditModeEnabled] = useState(false);
   return (
-      <IsEditModeEnabled.Provider value={isEditModeEnabled}>
-        <Header changeEditMode={setIsEditModeEnabled} />
-        <Content />
-        <Footer />
-      </IsEditModeEnabled.Provider>
+    <Portfolio/>
   );
 };
 
 export default App;
+
