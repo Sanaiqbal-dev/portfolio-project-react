@@ -16,8 +16,8 @@ import editIcon from "./assets/ic_edit.png";
 const WorkExperienceItem = ({
   data,
   index,
-  onDeleteWorkExperience,
-  onUpdateWorkExperience,
+  onDeleteWorkExperienceItem,
+  onUpdateWorkExperienceItem,
 }) => {
   const isEditModeEnabled = useContext(IsEditModeEnabled);
   const [isItemEditModeEnabled, setIsItemEditModeEnabled] = useState(false);
@@ -45,14 +45,13 @@ const WorkExperienceItem = ({
     } else {
       setIsItemEditModeEnabled(false);
 
-      onUpdateWorkExperience(
-        index,
-        companyNameInput,
-        startDateInput,
-        endDateInput,
-        isCurrentEmployerInput,
-        jobDescriptionInput
-      );
+      onUpdateWorkExperienceItem({
+        id: data._id,
+        updatedCompanyName: companyNameInput,
+        updatedStartDate: startDateInput,
+        updatedEndDate: isCurrentEmployerInput ? "Present" : endDateInput,
+        updatedDescription: jobDescriptionInput,
+      });
     }
   };
 
@@ -63,7 +62,7 @@ const WorkExperienceItem = ({
     setEndDateInput(data.endDate);
     setIsCurrentEmployerInput(data.isCurrentEmployer);
     setJobDescriptionInput(data.description);
-  }, [isEditModeEnabled,data]);
+  }, [isEditModeEnabled, data]);
 
   return (
     <div className={styles.expItemContainer}>
@@ -90,7 +89,7 @@ const WorkExperienceItem = ({
             <button
               className={styles.deleteBtn}
               onClick={(e) => {
-                onDeleteWorkExperience(data._id);
+                onDeleteWorkExperienceItem(data._id);
               }}
             >
               <img src={deleteIcon} />

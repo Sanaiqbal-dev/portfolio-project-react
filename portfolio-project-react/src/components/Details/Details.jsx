@@ -3,7 +3,6 @@ import About from "../About/About";
 import WorkExperience from "../WorkExperience/WorkExperience";
 import styles from "./Details.module.css";
 import { WORK_EXPERIENCE_ITEM_ADDED } from "./constants";
-import { response } from "express";
 
 const Details = () => {
   const [totalWorkExperience, setTotalWorkExperience] = useState({
@@ -23,7 +22,7 @@ const Details = () => {
 
   const fetchDataFromDB = async () => {
     await fetch(`http://localhost:3000/api/portfolio/experience/getAll`)
-      .then((response) => response.json())
+      .then((res) => res.json())
       .then((jsonData) => {
         setOriginalWorkExperienceList(jsonData);
       })
@@ -44,20 +43,46 @@ const Details = () => {
         "Content-Type": "application/json",
       },
     })
-      .then((response) => response.json())
+      .then((res) => res.json())
       .then((jsonData) => {
         console.log(jsonData);
         alert(WORK_EXPERIENCE_ITEM_ADDED);
         setOriginalWorkExperienceList([
           ...originalWorkExperienceList,
-          newWorkExperience,
+          jsonData,
         ]);
       })
       .catch((error) => {
         console.log(error);
       });
   };
-  const updateWorkExperienceHandler = () => {};
+  const updateWorkExperienceHandler = async (id, updatedWorkExperienceItem) => {
+    await fetch(`http://localhost:3000/api/portfolio/experience/update/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify(updatedWorkExperienceItem),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((jsonData) => {
+        console.log(jsonData);
+        const updatedList = originalWorkExperienceList.map((item) => {
+          if (item._id === id) {
+            item.companyName = updatedWorkExperienceItem.companyName;
+            item.startDate = updatedWorkExperienceItem.startDate;
+            item.endDate = updatedWorkExperienceItem.endDate;
+            item.isCurrentEmployer =
+              updatedWorkExperienceItem.endDate === "Present" ? true : false;
+            item.jobDescription = updatedWorkExperienceItem.description;
+          }
+          return item;
+        });
+
+        setOriginalWorkExperienceList(updatedList);
+      })
+      .catch((error) => console.log(error));
+  };
   const deleteWorkExperienceHandler = async (workExperienceItemId) => {
     await fetch(
       `http://localhost:3000/api/portfolio/experience/delete/${workExperienceItemId}`,
@@ -65,8 +90,14 @@ const Details = () => {
         method: "DELETE",
       }
     )
-      .then((response) => response.json())
-      .then((jsonData) => console.log(jsonData))
+      .then((res) => res.json())
+      .then((jsonData) => {
+        console.log(jsonData);
+        const filteredList = originalWorkExperienceList.filter(
+          (item) => item._id !== workExperienceItemId
+        );
+        setOriginalWorkExperienceList(filteredList);
+      })
       .catch((error) => {
         console.log(error);
       });
@@ -122,9 +153,8 @@ const Details = () => {
       <About totalWorkExperience={totalWorkExperience} />
       <WorkExperience
         filteredWorkExperienceList={filteredWorkExperienceList}
-        onUpdateWorkExperienceList={setOriginalWorkExperienceList}
         onAddNewWorkExperience={addNewWorkExperienceHandler}
-        onUpdateWorkEXperience={updateWorkExperienceHandler}
+        onUpdateWorkExperience={updateWorkExperienceHandler}
         onDeleteWorkExperience={deleteWorkExperienceHandler}
         onSearchWorkExperience={searchHandler}
       />

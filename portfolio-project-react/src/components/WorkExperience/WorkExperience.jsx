@@ -9,7 +9,6 @@ import {
   ADD_EXPERIENCE_LABEL,
   COMPANY_NAME_PLACEHOLDER,
   JOB_DESCRIPTION_PLACEHOLDER,
-  WORK_EXPERIENCE_ITEM_ADDED,
   WORK_EXPERIENCE_NOT_FOUND,
 } from "./constants";
 import {
@@ -25,9 +24,8 @@ import styles from "./WorkExperience.module.css";
 
 const WorkExperience = ({
   filteredWorkExperienceList,
-  onUpdateWorkExperienceList,
   onAddNewWorkExperience,
-  onUpdateWorkEXperience,
+  onUpdateWorkExperience,
   onDeleteWorkExperience,
   onSearchWorkExperience,
 }) => {
@@ -58,33 +56,25 @@ const WorkExperience = ({
   };
 
   const deleteExperienceItem = (workExperienceItemId) => {
-    // const newList = filteredWorkExperienceList.filter(
-    //   (item) => item._id !== itemId
-    // );
-    // onUpdateWorkExperienceList(newList);
     onDeleteWorkExperience(workExperienceItemId);
   };
 
-  const updateExperienceItem = (
-    itemIndex,
-    companyName,
-    startDate,
-    endDate,
-    isCurrentEmployer,
-    jobDescription
-  ) => {
-    const updatedList = filteredWorkExperienceList.map((item, index) => {
-      if (index === itemIndex) {
-        item.companyName = companyName;
-        item.startDate = startDate;
-        item.endDate = endDate;
-        item.isCurrentEmployer = isCurrentEmployer;
-        item.jobDescription = jobDescription;
-      }
-      return item;
-    });
-
-    onUpdateWorkExperienceList([...updatedList]);
+  const updateExperienceItem = (updatedTask) => {
+    const {
+      id,
+      updatedCompanyName,
+      updatedStartDate,
+      updatedEndDate,
+      updatedDescription,
+    } = updatedTask;
+    
+    const updatedWorkExperienceItem = {
+      companyName: updatedCompanyName,
+      startDate: updatedStartDate,
+      endDate: updatedEndDate,
+      description: updatedDescription,
+    };
+    onUpdateWorkExperience(id, updatedWorkExperienceItem);
   };
 
   useEffect(() => {
@@ -114,8 +104,8 @@ const WorkExperience = ({
                   isEditModeEnabled={isEditModeEnabled}
                   data={item}
                   index={index}
-                  onDeleteWorkExperience={deleteExperienceItem}
-                  onUpdateWorkExperience={updateExperienceItem}
+                  onDeleteWorkExperienceItem={deleteExperienceItem}
+                  onUpdateWorkExperienceItem={updateExperienceItem}
                 />
               ))}
             </div>
@@ -197,6 +187,7 @@ const WorkExperience = ({
               <textarea
                 className={styles.description}
                 required
+                value={jobDescription}
                 placeholder={JOB_DESCRIPTION_PLACEHOLDER}
                 onChange={(e) => setJobDescription(e.target.value)}
               ></textarea>
