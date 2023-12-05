@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import About from "../About/About";
 import WorkExperience from "../WorkExperience/WorkExperience";
 import styles from "./Details.module.css";
+import { WORK_EXPERIENCE_ITEM_ADDED } from "./constants";
+import { response } from "express";
 
 const Details = () => {
   const [totalWorkExperience, setTotalWorkExperience] = useState({
@@ -9,38 +11,9 @@ const Details = () => {
     months: 0,
   });
 
-   let locallyStoredData = localStorage.getItem("work-experience-list")
-     ? JSON.parse(localStorage.getItem("work-experience-list"))
-     : [];
-
-  ///////////////////////////////
-
-  const fetchDataFromDB = async () => {
-    await fetch(`http://localhost:3000/api/portfolio/experience/getAll`)
-      .then((response) => response.json())
-      .then((jsonData) => {
-        // updateLocalData(jsonData);
-        // locallyStoredData = jsonData;
-            setOriginalWorkExperienceList(jsonData);
-
-        
-      })
-      .catch((error) => {
-        console.log(error);
-        // getElement("#preloader").style.display = "none";
-      });
-  };
-
-  useEffect(() => {
-    fetchDataFromDB();
-    // setOriginalWorkExperienceList(locallyStoredData);
-  }, []);
-
-  /////////////////////////////////////
- 
-
-  const [originalWorkExperienceList, setOriginalWorkExperienceList] =
-    useState([]);
+  const [originalWorkExperienceList, setOriginalWorkExperienceList] = useState(
+    []
+  );
 
   const [filteredWorkExperienceList, setfilteredWorkExperienceList] = useState(
     originalWorkExperienceList
@@ -48,10 +21,60 @@ const Details = () => {
 
   const [searchText, setSearchText] = useState("");
 
+  const fetchDataFromDB = async () => {
+    await fetch(`http://localhost:3000/api/portfolio/experience/getAll`)
+      .then((response) => response.json())
+      .then((jsonData) => {
+        setOriginalWorkExperienceList(jsonData);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    fetchDataFromDB();
+  }, []);
+
+  const addNewWorkExperienceHandler = async (newWorkExperience) => {
+    await fetch(`http://localhost:3000/api/portfolio/experience/post`, {
+      method: "POST",
+      body: JSON.stringify(newWorkExperience),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((jsonData) => {
+        console.log(jsonData);
+        alert(WORK_EXPERIENCE_ITEM_ADDED);
+        setOriginalWorkExperienceList([
+          ...originalWorkExperienceList,
+          newWorkExperience,
+        ]);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  const updateWorkExperienceHandler = () => {};
+  const deleteWorkExperienceHandler = async (workExperienceItemId) => {
+    await fetch(
+      `http://localhost:3000/api/portfolio/experience/delete/${workExperienceItemId}`,
+      {
+        method: "DELETE",
+      }
+    )
+      .then((response) => response.json())
+      .then((jsonData) => console.log(jsonData))
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   const searchHandler = (searchText) => {
     setSearchText(searchText);
     const SearchedList = originalWorkExperienceList.filter((item) =>
-      item.companyName.includes(searchText)
+      item.companyName.toLowerCase().includes(searchText.toLowerCase())
     );
     setfilteredWorkExperienceList(SearchedList);
   };
@@ -74,15 +97,10 @@ const Details = () => {
       const months = Math.floor(remainingDays / 30);
 
       setTotalWorkExperience({ years: years, months: months });
-
-      localStorage.setItem(
-        "work-experience-list",
-        JSON.stringify(originalWorkExperienceList)
-      );
     };
 
     const calculateNoOfdays = (startDate, endDate) => {
-      if (endDate === "") {
+      if (endDate === "" || endDate === "Present") {
         endDate = new Date().getTime();
       }
       return (
@@ -105,6 +123,9 @@ const Details = () => {
       <WorkExperience
         filteredWorkExperienceList={filteredWorkExperienceList}
         onUpdateWorkExperienceList={setOriginalWorkExperienceList}
+        onAddNewWorkExperience={addNewWorkExperienceHandler}
+        onUpdateWorkEXperience={updateWorkExperienceHandler}
+        onDeleteWorkExperience={deleteWorkExperienceHandler}
         onSearchWorkExperience={searchHandler}
       />
     </div>

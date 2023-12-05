@@ -26,6 +26,9 @@ import styles from "./WorkExperience.module.css";
 const WorkExperience = ({
   filteredWorkExperienceList,
   onUpdateWorkExperienceList,
+  onAddNewWorkExperience,
+  onUpdateWorkEXperience,
+  onDeleteWorkExperience,
   onSearchWorkExperience,
 }) => {
   const isEditModeEnabled = useContext(IsEditModeEnabled);
@@ -44,27 +47,22 @@ const WorkExperience = ({
       alert(INCORRECT_DATE_ALERT);
     } else {
       const newWorkExperience = {
-        companyName,
-        startDate,
-        endDate,
-        isCurrentEmployer,
-        jobDescription,
+        companyName: companyName,
+        startDate: startDate,
+        endDate: isCurrentEmployer ? "Present" : endDate,
+        description: jobDescription,
       };
-
-      onUpdateWorkExperienceList([
-        ...filteredWorkExperienceList,
-        newWorkExperience,
-      ]);
+      onAddNewWorkExperience(newWorkExperience);
       setIsExperienceFormVisible(false);
-      alert(WORK_EXPERIENCE_ITEM_ADDED);
     }
   };
 
-  const deleteExperienceItem = (recievedIndex) => {
-    const newList = filteredWorkExperienceList.filter(
-      (item, index) => index !== recievedIndex
-    );
-    onUpdateWorkExperienceList(newList);
+  const deleteExperienceItem = (workExperienceItemId) => {
+    // const newList = filteredWorkExperienceList.filter(
+    //   (item) => item._id !== itemId
+    // );
+    // onUpdateWorkExperienceList(newList);
+    onDeleteWorkExperience(workExperienceItemId);
   };
 
   const updateExperienceItem = (
@@ -97,7 +95,7 @@ const WorkExperience = ({
     <div className={styles.details}>
       <div>
         <h1>{WORK_EXPERIENCE_HEADING}</h1>
-        {isEditModeEnabled && filteredWorkExperienceList.length > 0 && (
+        {isEditModeEnabled && (
           <input
             className={styles.searchText}
             placeholder="Search Here..."
@@ -112,7 +110,7 @@ const WorkExperience = ({
             <div className={styles.expListContainer}>
               {filteredWorkExperienceList.map((item, index) => (
                 <WorkExperienceItem
-                  key={index}
+                  key={item._id}
                   isEditModeEnabled={isEditModeEnabled}
                   data={item}
                   index={index}

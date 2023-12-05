@@ -90,7 +90,7 @@ const WorkExperienceItem = ({
             <button
               className={styles.deleteBtn}
               onClick={(e) => {
-                onDeleteWorkExperience(index);
+                onDeleteWorkExperience(data._id);
               }}
             >
               <img src={deleteIcon} />
