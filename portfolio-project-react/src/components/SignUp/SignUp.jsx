@@ -41,6 +41,7 @@ const SignUp = () => {
       setNameError(false);
     }
     if (!REGEX_EMAIL.test(email)) setEmailError(true);
+    if (!REGEX_EMAIL.test(email)) setEmailError(true);
     else setEmailError(false);
     if (password.length < 8) setPasswordError(true);
     else setPasswordError(false);
@@ -106,6 +107,7 @@ const SignUp = () => {
           onSubmit={(e) => validateForm(e)}
         >
           <h2>{SIGNUP_TITLE}</h2>
+          <h2>{SIGNUP_TITLE}</h2>
           <input
             value={name}
             placeholder={PLACEHOLDER_NAME}
@@ -119,6 +121,7 @@ const SignUp = () => {
               setName(e.target.value);
             }}
           />
+          {isValidated && nameError && <label>{ALERT_NAME}</label>}
           {isValidated && nameError && <label>{ALERT_NAME}</label>}
           <input
             value={email}

@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from "react";
-import { IsEditModeEnabled } from "../../EditModeContext";
+import { IsEditModeEnabled } from "../../EditModeContextContext";
 import Skills from "../Skills/Skills";
 import {
   JOB_TITLE_CONTENT,
@@ -22,6 +22,7 @@ const Picture = ({ url, size }) => {
       ? localStorage.getItem("designation")
       : JOB_TITLE_CONTENT
   );
+
   const onImageChange = (e) => {
     if (e.target.files[0]) {
       setImageUrl(URL.createObjectURL(e.target.files[0]));

@@ -10,5 +10,3 @@ export const ALERT_PASSWORD = "Password length: minimum 8 characters.";
 export const SUBMIT_CONTENT = "SUBMIT";
 export const SUBMITTING_CONTENT="SUBMITTING...";
 export const REGISTRATION_SUCCESSFULL ="Registration successful 🙂";
-export const COLOR_RED = "red";
-export const COLOR_TRANSPARENT = "transparent";
