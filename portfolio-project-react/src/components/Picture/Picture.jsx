@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from "react";
-import { IsEditModeEnabled } from "../../EditModeContextContext";
+import { IsEditModeEnabled } from "../../EditModeContext";
 import Skills from "../Skills/Skills";
 import {
   JOB_TITLE_CONTENT,
@@ -32,9 +32,11 @@ const Picture = ({ url, size }) => {
   useEffect(() => {
     localStorage.setItem("username", name);
   }, [name]);
+
   useEffect(() => {
     localStorage.setItem("designation", designation);
   }, [designation]);
+
   return (
     <div className={styles.pictureSection}>
       <div className={styles.imageContainer}>

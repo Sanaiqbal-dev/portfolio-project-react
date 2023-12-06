@@ -1,4 +1,3 @@
-import styles from "../SignUp/SignUp.module.css";
 import { useEffect, useState } from "react";
 import {
   ALERT_EMAIL,
@@ -14,7 +13,10 @@ import {
   COLOR_RED,
   COLOR_TRANSPARENT,
   REGISTRATION_SUCCESSFULL,
+  PLACEHOLDER_EMAIL,
 } from "./constants";
+import styles from "../SignUp/SignUp.module.css";
+
 const SignUp = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -26,7 +28,6 @@ const SignUp = () => {
 
   const [isSignUpCompleted, setIsSignupCompleted] = useState(false);
   const [isValidated, setIsValidated] = useState(false);
-
   const [isApiRequestSuccessfull, setIsApiRequestSuccessfull] = useState(false);
 
   const validateForm = (e) => {
@@ -58,6 +59,7 @@ const SignUp = () => {
   useEffect(() => {
     setIsValidated(false);
   }, [name, email, password]);
+
   useEffect(() => {
     if (
       nameError === false &&
@@ -99,6 +101,7 @@ const SignUp = () => {
     }
     setIsValidated(false);
   };
+
   return (
     <div>
       <div>
@@ -107,25 +110,21 @@ const SignUp = () => {
           onSubmit={(e) => validateForm(e)}
         >
           <h2>{SIGNUP_TITLE}</h2>
-          <h2>{SIGNUP_TITLE}</h2>
           <input
             value={name}
             placeholder={PLACEHOLDER_NAME}
             style={{
               borderColor:
-                nameError && isValidated
-                  ?  COLOR_RED 
-                  :  COLOR_TRANSPARENT ,
+                nameError && isValidated ? COLOR_RED : COLOR_TRANSPARENT,
             }}
             onChange={(e) => {
               setName(e.target.value);
             }}
           />
           {isValidated && nameError && <label>{ALERT_NAME}</label>}
-          {isValidated && nameError && <label>{ALERT_NAME}</label>}
           <input
             value={email}
-            placeholder={PLACEHOLDER_NAME}
+            placeholder={PLACEHOLDER_EMAIL}
             style={{
               borderColor:
                 emailError && isValidated ? COLOR_RED : COLOR_TRANSPARENT,
@@ -141,9 +140,7 @@ const SignUp = () => {
             placeholder={PLACEHOLDER_PASSWORD}
             style={{
               borderColor:
-                passwordError && isValidated
-                  ? COLOR_RED 
-                  :  COLOR_TRANSPARENT,
+                passwordError && isValidated ? COLOR_RED : COLOR_TRANSPARENT,
             }}
             onChange={(e) => {
               setPassword(e.target.value);
