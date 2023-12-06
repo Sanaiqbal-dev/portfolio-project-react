@@ -29,7 +29,7 @@ const About = ({ totalWorkExperience }) => {
 
   const totalExperienceContent =
     totalWorkExperience.years === 0 && totalWorkExperience.months === 0
-      ? "No past experience"
+      ? "NO PAST EXPERIENCE"
       : totalWorkExperience.years === 0
       ? `Total Experience: ` + totalWorkExperience.months + ` months`
       : totalWorkExperience.months === 0
