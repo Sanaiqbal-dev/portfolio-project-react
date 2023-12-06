@@ -32,6 +32,7 @@ const SkillItem = ({
     setSkill(e.target.value);
     setWidth(skill.length + 1);
   };
+
   useEffect(() => {
     setSkill(data);
     setNewSkill("");
