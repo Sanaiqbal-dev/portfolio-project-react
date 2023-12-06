@@ -1,5 +1,5 @@
 .signupFormContainer {
-    box-sizing: border-box;
+  box-sizing: border-box;
   width: max-content;
   height: max-content;
   margin: 50px auto;
@@ -38,13 +38,19 @@
   border-radius: 3px;
 }
 
+.signupFormContainer label {
+  color: red;
+  font-size: x-small;
+}
+
 .signupFormContainer button:hover {
   background-color: rgb(163, 163, 194);
   color: rgb(1, 1, 65);
 }
-.successMsg{
-    width: 100%;
-    text-align: center;
-    margin: 40px 0;
-    color: green;
+
+.successMsg {
+  width: 100%;
+  text-align: center;
+  margin: 40px 0;
+  color: green;
 }
