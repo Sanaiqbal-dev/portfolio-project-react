@@ -15,17 +15,13 @@ import styles from "./About.module.css";
 const About = ({ totalWorkExperience }) => {
   const isEditModeEnabled = useContext(IsEditModeEnabled);
 
-  const [aboutContent, setAboutContent] = useState(
-    localStorage.getItem("about") ? localStorage.getItem("about") : ABOUT_DATA
-  );
+  const [id, setId] = useState("");
 
-  const [phone, setPhone] = useState(
-    localStorage.getItem("phone") ? localStorage.getItem("phone") : CONTACT_DATA
-  );
+  const [aboutContent, setAboutContent] = useState("");
 
-  const [email, setEmail] = useState(
-    localStorage.getItem("email") ? localStorage.getItem("email") : EMAIL_DATA
-  );
+  const [phone, setPhone] = useState("");
+
+  const [email, setEmail] = useState("");
 
   const validateInput = (e) => {
     const key = e.key;
@@ -50,6 +46,59 @@ const About = ({ totalWorkExperience }) => {
   useEffect(() => {
     localStorage.setItem("email", email);
   }, [email]);
+
+  const updateAboutContent = async (id, aboutSectionData) => {
+    await fetch(
+      `http://localhost:3000/api/portfolio/experience/updateAboutContent/${id}`,
+      {
+        method: "POST",
+        body: JSON.stringify(aboutSectionData),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
+      .then((res) => {
+        res.json();
+      })
+      .then((jsonData) => {
+        console.log(jsonData);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const fetchAboutContent = async () => {
+    await fetch(
+      `http://localhost:3000/api/portfolio/experience/getAboutContent`
+    )
+      .then((res) => res.json())
+      .then((jsonData) => {
+        console.log(jsonData);
+        setId(jsonData[0]._id);
+        setAboutContent(jsonData[0].about);
+        setPhone(jsonData[0].contact);
+        setEmail(jsonData[0].email);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    if (!isEditModeEnabled && aboutContent && phone && email) {
+      updateAboutContent(id, {
+        about: aboutContent,
+        contact: phone,
+        email: email,
+      });
+    }
+  }, [isEditModeEnabled]);
+
+  useEffect(() => {
+    fetchAboutContent();
+  }, []);
 
   return (
     <div>

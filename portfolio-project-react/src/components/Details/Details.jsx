@@ -27,7 +27,7 @@ const Details = () => {
         setOriginalWorkExperienceList(jsonData);
       })
       .catch((error) => {
-        console.log(error);
+        alert("Failed to fetch work experience data from database.")
       });
   };
 
@@ -53,7 +53,7 @@ const Details = () => {
         ]);
       })
       .catch((error) => {
-        console.log(error);
+        alert("Failed to add new work Experience item.")
       });
   };
   const updateWorkExperienceHandler = async (id, updatedWorkExperienceItem) => {
@@ -74,14 +74,14 @@ const Details = () => {
             item.endDate = updatedWorkExperienceItem.endDate;
             item.isCurrentEmployer =
               updatedWorkExperienceItem.endDate === "Present" ? true : false;
-            item.jobDescription = updatedWorkExperienceItem.description;
+            item.description = updatedWorkExperienceItem.description;
           }
           return item;
         });
 
         setOriginalWorkExperienceList(updatedList);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => alert("Failed to updated requested data in database."));
   };
   const deleteWorkExperienceHandler = async (workExperienceItemId) => {
     await fetch(
@@ -99,7 +99,7 @@ const Details = () => {
         setOriginalWorkExperienceList(filteredList);
       })
       .catch((error) => {
-        console.log(error);
+        alert("Failed to delete requested data in database.")
       });
   };
   const searchHandler = (searchText) => {
