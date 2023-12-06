@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { ID, IMG, URL, LOADING_TXT, TITLE } from "./constants";
+import { ID, IMG, URL, LOADING_TXT, TITLE, REQUEST_FAILED } from "./constants";
 import styles from "./DataViewPage.module.css";
 
 const DataViewPage = () => {
   const [tableDataset, setTableDataset] = useState([]);
+  const [isApiRequestSuccessfull, setIsApiRequestSuccessfull] = useState(true);
 
   const fetchExternalData = () => {
     fetch("https://jsonplaceholder.typicode.com/photos?albumId=1")
@@ -12,6 +13,9 @@ const DataViewPage = () => {
         setTimeout(() => {
           setTableDataset(json);
         }, 1000);
+      })
+      .catch((error) => {
+        setIsApiRequestSuccessfull(false);
       });
   };
   useEffect(() => {
@@ -47,8 +51,10 @@ const DataViewPage = () => {
             </table>
           </div>
         </div>
+      ) : isApiRequestSuccessfull ? (
+        <h3 className={styles.loadingLabel}>{LOADING_TXT}</h3>
       ) : (
-        <h2 className={styles.loadingLabel}>{LOADING_TXT}</h2>
+        <h3 className={styles.loadingLabel}>{REQUEST_FAILED}</h3>
       )}
     </>
   );
