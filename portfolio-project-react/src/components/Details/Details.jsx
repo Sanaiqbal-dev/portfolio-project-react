@@ -8,15 +8,32 @@ const Details = () => {
     years: 0,
     months: 0,
   });
+
   let locallyStoredData = localStorage.getItem("work-experience-list")
     ? JSON.parse(localStorage.getItem("work-experience-list"))
     : [];
-  const [workExperienceList, setWorkExperienceList] =
+
+  const [originalWorkExperienceList, setOriginalWorkExperienceList] =
     useState(locallyStoredData);
+
+  const [filteredWorkExperienceList, setfilteredWorkExperienceList] = useState(
+    originalWorkExperienceList
+  );
+
+  const [searchText, setSearchText] = useState("");
+
+  const searchHandler = (searchText) => {
+    setSearchText(searchText);
+    const SearchedList = originalWorkExperienceList.filter((item) =>
+      item.companyName.includes(searchText)
+    );
+    setfilteredWorkExperienceList(SearchedList);
+  };
+
 
   useEffect(() => {
     const calculateTotalExp = () => {
-      const arrayNoOfDays = workExperienceList.map((item) => {
+      const arrayNoOfDays = originalWorkExperienceList.map((item) => {
         return calculateNoOfdays(item.startDate, item.endDate);
       });
 
@@ -35,7 +52,7 @@ const Details = () => {
 
       localStorage.setItem(
         "work-experience-list",
-        JSON.stringify(workExperienceList)
+        JSON.stringify(originalWorkExperienceList)
       );
     };
 
@@ -50,14 +67,21 @@ const Details = () => {
     };
 
     calculateTotalExp();
-  }, [workExperienceList]);
+  }, [originalWorkExperienceList]);
 
+
+  useEffect(() => {
+    if (searchText.length === 0)
+      setfilteredWorkExperienceList(originalWorkExperienceList);
+  });
+  
   return (
     <div className={styles.detailsSection}>
       <About totalWorkExperience={totalWorkExperience} />
       <WorkExperience
-        workExperienceList={workExperienceList}
-        onUpdateWorkExperienceList={setWorkExperienceList}
+        filteredWorkExperienceList={filteredWorkExperienceList}
+        onUpdateWorkExperienceList={setOriginalWorkExperienceList}
+        onSearchWorkExperience={searchHandler}
       />
     </div>
   );

@@ -14,6 +14,15 @@ header a {
   padding-left: 50px;
 }
 
+.signupLink {
+  color: white;
+  text-decoration: none;
+}
+
 header a:hover {
   color: rgb(195, 195, 255);
 }
+/* label{
+  color: red;
+  font-size: x-small;
+} */

@@ -11,6 +11,7 @@ import {
   JOB_DESCRIPTION_PLACEHOLDER,
   WORK_EXPERIENCE_ITEM_ADDED,
   WORK_EXPERIENCE_NOT_FOUND,
+  PLACEHOLDER_SEARCH,
 } from "./constants";
 import {
   CURRENT_EMPLOYER_LABEL,
@@ -24,8 +25,9 @@ import {
 import styles from "./WorkExperience.module.css";
 
 const WorkExperience = ({
-  workExperienceList,
+  filteredWorkExperienceList,
   onUpdateWorkExperienceList,
+  onSearchWorkExperience,
 }) => {
   const isEditModeEnabled = useContext(IsEditModeEnabled);
   const [isExperienceFormVisible, setIsExperienceFormVisible] = useState(false);
@@ -50,17 +52,19 @@ const WorkExperience = ({
         jobDescription,
       };
 
-      onUpdateWorkExperienceList([...workExperienceList, newWorkExperience]);
+      onUpdateWorkExperienceList([
+        ...filteredWorkExperienceList,
+        newWorkExperience,
+      ]);
       setIsExperienceFormVisible(false);
       alert(WORK_EXPERIENCE_ITEM_ADDED);
     }
   };
 
   const deleteExperienceItem = (recievedIndex) => {
-    const newList = workExperienceList.filter(
+    const newList = filteredWorkExperienceList.filter(
       (item, index) => index !== recievedIndex
     );
-
     onUpdateWorkExperienceList(newList);
   };
 
@@ -72,7 +76,7 @@ const WorkExperience = ({
     isCurrentEmployer,
     jobDescription
   ) => {
-    const updatedList = workExperienceList.map((item, index) => {
+    const updatedList = filteredWorkExperienceList.map((item, index) => {
       if (index === itemIndex) {
         item.companyName = companyName;
         item.startDate = startDate;
@@ -94,10 +98,20 @@ const WorkExperience = ({
     <div className={styles.details}>
       <div>
         <h1>{WORK_EXPERIENCE_HEADING}</h1>
+        {(isEditModeEnabled && filteredWorkExperienceList.length>0)&& (
+          <input
+            className={styles.searchText}
+            placeholder={PLACEHOLDER_SEARCH}
+            onInput={(e) => {
+              onSearchWorkExperience(e.target.value);
+            }}
+          />
+        )}
+
         <div className={styles.expSection}>
-          {workExperienceList.length > 0 ? (
+          {filteredWorkExperienceList.length > 0 ? (
             <div className={styles.expListContainer}>
-              {workExperienceList.map((item, index) => (
+              {filteredWorkExperienceList.map((item, index) => (
                 <WorkExperienceItem
                   key={index}
                   isEditModeEnabled={isEditModeEnabled}

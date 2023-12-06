@@ -1,31 +1,45 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { IsEditModeEnabled } from "../../EditModeContext";
-import { EDIT_TEXT, LOGIN_TEXT, SAVE_TEXT } from "./constants";
+import { EDIT_TEXT, SIGNUP_TEXT, SAVE_TEXT, PORTFOLIO } from "./constants";
 import styles from "./Header.module.css";
-
-const Header = ({ changeEditMode }) => {
+import { Link } from "react-router-dom";
+const Header = ({ changeEditMode, isPortfolioRouteEnabled }) => {
   const isEditModeEnabled = useContext(IsEditModeEnabled);
+  const [isPortfolioEnabled, setIsPortfolioEnabled] = useState(
+    isPortfolioRouteEnabled
+  );
 
   return (
     <header>
-      <a>{LOGIN_TEXT}</a>
-      {isEditModeEnabled ? (
-        <a
-          onClick={() => {
-            changeEditMode(false);
-          }}
-        >
-          {SAVE_TEXT}
-        </a>
-      ) : (
-        <a
-          onClick={() => {
-            changeEditMode(true);
-          }}
-        >
-          {EDIT_TEXT}
-        </a>
-      )}
+      <Link
+        to={isPortfolioEnabled ? "/signup" : "/"}
+        className={styles.signupLink}
+        onClick={(e) => {
+          setIsPortfolioEnabled(!isPortfolioEnabled);
+          changeEditMode(false);
+        }}
+      >
+        {isPortfolioEnabled ? SIGNUP_TEXT : PORTFOLIO}
+      </Link>
+
+      {isPortfolioEnabled &&
+        (isEditModeEnabled ? (
+          <a
+            onClick={() => {
+              changeEditMode(false);
+            }}
+          >
+            {SAVE_TEXT}
+          </a>
+        ) : (
+          <a
+            onClick={() => {
+              changeEditMode(true);
+            }}
+          >
+            {EDIT_TEXT}
+          </a>
+        ))}
     </header>
   );
 };
