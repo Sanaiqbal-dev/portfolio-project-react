@@ -1,6 +1,4 @@
-export const IMG = "IMG";
-export const ID = "ID";
-export const TITLE = "TITLE";
-export const URL = "URL";
+export const URL_PHOTOS_DATA ="https://jsonplaceholder.typicode.com/photos?albumId=1";
 export const LOADING_TXT = "Please wait! data is being loaded.";
-export const REQUEST_FAILED = "Api request to fetch data is failed.";
+export const REQUEST_FAILED = "API request has been failed";
+

@@ -11,13 +11,9 @@ import DataViewPage from "../DataViewPage/DataViewPage";
 const Portfolio = () => {
   const [isEditModeEnabled, setIsEditModeEnabled] = useState(false);
   const location = useLocation();
-  const [isPortfolioRouteEnabled, setIsPortfolioRouteEnabled] = useState(
-    location.pathname === "/" ? true : false
-  );
+  const [isPortfolioRouteEnabled, setIsPortfolioRouteEnabled] = useState(location.pathname === "/");
 
-  const [isDataViewPageRouteEnabled, setIsDataViewPageRouteEnabled] = useState(
-    location.pathname === "dataviewpage" ? true : false
-  );
+  const [isDataViewPageRouteEnabled, setIsDataViewPageRouteEnabled] = useState(location.pathname === "dataviewpage");
 
   return (
     <IsEditModeEnabled.Provider value={isEditModeEnabled}>
