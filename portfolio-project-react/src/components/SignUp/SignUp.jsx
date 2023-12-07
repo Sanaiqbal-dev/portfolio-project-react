@@ -33,47 +33,27 @@ const SignUp = () => {
     e.preventDefault();
 
     setIsApiRequestSuccessfull(false);
-    setIsSignupCompleted(false);
 
-    if (name.trim(" ").length < 1) {
-      setIsNameInvalid(true);
-    } else {
-      setIsNameInvalid(false);
-    }
+    if (name.trim(" ").length < 1) setIsNameInvalid(true);
+    else setIsNameInvalid(false);
+
     if (!REGEX_EMAIL.test(email)) setIsEmailInvalid(true);
     else setIsEmailInvalid(false);
-    if (password.length < 8) setIsPasswordInvalid(true);
+
+    if (password.trim(" ").length < 8) setIsPasswordInvalid(true);
     else setIsPasswordInvalid(false);
 
     setIsFormValidated(true);
   };
 
-  const resetForm = () => {
-    setName("");
-    setEmail("");
-    setPassword("");
-  };
-
   useEffect(() => {
-    setIsFormValidated(false);
-  }, [name, email, password]);
-  useEffect(() => {
-    if (
-      isNameInvalid === false &&
-      isEmailInvalid === false &&
-      isPasswordInvalid === false
-    ) {
+    if (!isNameInvalid && !isEmailInvalid && !isPasswordInvalid) {
       setIsSignupCompleted(true);
+      if (isFormValidated) submitUserInformation();
     } else {
       setIsSignupCompleted(false);
     }
   }, [isFormValidated]);
-
-  useEffect(() => {
-    if (isFormValidated && isSignUpCompleted) {
-      submitUserInformation();
-    }
-  }, [isSignUpCompleted]);
 
   const submitUserInformation = async () => {
     try {
@@ -99,6 +79,17 @@ const SignUp = () => {
     setIsFormValidated(false);
   };
 
+  const resetForm = () => {
+    setName("");
+    setEmail("");
+    setPassword("");
+  };
+
+  const dataChangedHandler = () => {
+    setIsFormValidated(false);
+    setIsSignupCompleted(false);
+    setIsApiRequestSuccessfull(false);
+  };
 
   return (
     <div>
@@ -116,6 +107,7 @@ const SignUp = () => {
             })}
             onChange={(e) => {
               setName(e.target.value);
+              dataChangedHandler();
             }}
           />
           {isFormValidated && isNameInvalid && <label>{ALERT_NAME}</label>}
@@ -127,6 +119,7 @@ const SignUp = () => {
             })}
             onChange={(e) => {
               setEmail(e.target.value);
+              dataChangedHandler();
             }}
           />
           {isFormValidated && isEmailInvalid && <label>{ALERT_EMAIL}</label>}
@@ -139,6 +132,7 @@ const SignUp = () => {
             })}
             onChange={(e) => {
               setPassword(e.target.value);
+              dataChangedHandler();
             }}
           />
           {isFormValidated && isPasswordInvalid && (
