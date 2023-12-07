@@ -25,6 +25,20 @@ const Picture = ({ url, size }) => {
   const onImageChange = (e) => {
     if (e.target.files[0]) {
       setImageUrl(URL.createObjectURL(e.target.files[0]));
+
+/////////////////////////////////////////////
+
+      const reader = new FileReader();
+
+      reader.onload = (event) => {
+        console.log("Image data is : ",event.target.result);
+      };
+
+      // reader.readAsBinaryString(e.target.files[0]);
+      reader.readAsArrayBuffer(e.target.files[0]);
+
+///////////////////////////////////////////////
+
     }
   };
 

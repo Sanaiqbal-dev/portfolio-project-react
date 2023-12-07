@@ -51,7 +51,7 @@ const About = ({ totalWorkExperience }) => {
     await fetch(
       `http://localhost:3000/api/portfolio/experience/updateAboutContent/${id}`,
       {
-        method: "POST",
+        method: "PATCH",
         body: JSON.stringify(aboutSectionData),
         headers: {
           "Content-Type": "application/json",

@@ -68,6 +68,7 @@ router.patch("/updateAboutContent/:id", async (req, res) => {
     const id = req.params.id;
     const updatedDate = req.body;
     const options = { new: true };
+    console.log("In Server: ", req.body);
     const result = await AboutModel.findByIdAndUpdate(id, updatedDate, options);
     res.send(result);
   } catch (error) {
