@@ -33,48 +33,29 @@ const SignUp = () => {
     e.preventDefault();
 
     setIsApiRequestSuccessfull(false);
-    setIsSignupCompleted(false);
 
-    if (name.trim(" ").length < 1) {
-      setIsNameInvalid(true);
-    } else {
-      setIsNameInvalid(false);
-    }
+    if (name.trim(" ").length < 1) setIsNameInvalid(true);
+    else setIsNameInvalid(false);
+
     if (!REGEX_EMAIL.test(email)) setIsEmailInvalid(true);
     else setIsEmailInvalid(false);
-    if (password.length < 8) setIsPasswordInvalid(true);
+
+    if (password.trim(" ").length < 8) setIsPasswordInvalid(true);
     else setIsPasswordInvalid(false);
 
     setIsFormValidated(true);
   };
 
-  const resetForm = () => {
-    setName("");
-    setEmail("");
-    setPassword("");
-  };
+   useEffect(() => {
+     if (!isNameInvalid && !isEmailInvalid && !isPasswordInvalid) {
+       setIsSignupCompleted(true);
+       if (isFormValidated) submitUserInformation();
+     } else {
+       setIsSignupCompleted(false);
+     }
+   }, [isFormValidated]);
 
-  useEffect(() => {
-    setIsFormValidated(false);
-  }, [name, email, password]);
-  useEffect(() => {
-    if (
-      isNameInvalid === false &&
-      isEmailInvalid === false &&
-      isPasswordInvalid === false
-    ) {
-      setIsSignupCompleted(true);
-    } else {
-      setIsSignupCompleted(false);
-    }
-  }, [isFormValidated]);
-
-  useEffect(() => {
-    if (isFormValidated && isSignUpCompleted) {
-      submitUserInformation();
-    }
-  }, [isSignUpCompleted]);
-
+   
   const submitUserInformation = async () => {
     try {
       const response = await fetch(`https://dummyjson.com/users/add`, {
@@ -98,6 +79,20 @@ const SignUp = () => {
     }
     setIsFormValidated(false);
   };
+
+  const resetForm = () => {
+    setName("");
+    setEmail("");
+    setPassword("");
+  };
+
+  const dataChangedHandler = () => {
+    setIsFormValidated(false);
+    setIsSignupCompleted(false);
+    setIsApiRequestSuccessfull(false);
+  };
+
+ 
   return (
     <div>
       <div>
@@ -111,10 +106,10 @@ const SignUp = () => {
             placeholder={PLACEHOLDER_NAME}
             className={clsx(styles.inputField, {
               [styles.inputError]: isNameInvalid && isFormValidated,
-              [styles.inputNoError]: !isNameInvalid,
             })}
             onChange={(e) => {
               setName(e.target.value);
+              dataChangedHandler();
             }}
           />
           {isFormValidated && isNameInvalid && <label>{ALERT_NAME}</label>}
@@ -123,10 +118,10 @@ const SignUp = () => {
             placeholder={PLACEHOLDER_EMAIL}
             className={clsx(styles.inputField, {
               [styles.inputError]: isEmailInvalid && isFormValidated,
-              [styles.inputNoError]: !isEmailInvalid,
             })}
             onChange={(e) => {
               setEmail(e.target.value);
+              dataChangedHandler();
             }}
           />
           {isFormValidated && isEmailInvalid && <label>{ALERT_EMAIL}</label>}
@@ -136,10 +131,10 @@ const SignUp = () => {
             placeholder={PLACEHOLDER_PASSWORD}
             className={clsx(styles.inputField, {
               [styles.inputError]: isPasswordInvalid && isFormValidated,
-              [styles.inputNoError]: !isPasswordInvalid,
             })}
             onChange={(e) => {
               setPassword(e.target.value);
+              dataChangedHandler();
             }}
           />
           {isFormValidated && isPasswordInvalid && (

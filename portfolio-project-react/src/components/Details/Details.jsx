@@ -57,7 +57,7 @@ const Details = () => {
     };
 
     const calculateNoOfdays = (startDate, endDate) => {
-      if (endDate === "") {
+      if (endDate === "" || endDate === "Present") {
         endDate = new Date().getTime();
       }
       return (
