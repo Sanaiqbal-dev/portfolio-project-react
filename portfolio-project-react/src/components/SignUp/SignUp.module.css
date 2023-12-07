@@ -14,8 +14,7 @@
   color: rgb(1, 1, 65);
   margin: 0px auto 20px auto;
 }
-
-.signupFormContainer input {
+.inputField {
   width: 270px;
   height: 25px;
   padding: 5px;
@@ -24,6 +23,11 @@
   border-width: 1px;
   margin: 5px auto;
   font-size: small;
+  border-color: transparent;
+}
+
+.inputError {
+  border-color: red;
 }
 
 .signupFormContainer button {
