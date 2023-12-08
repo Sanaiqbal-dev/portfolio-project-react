@@ -2,7 +2,7 @@ var mongoose = require("mongoose");
 var personalInformationSchema = new mongoose.Schema({
   name: String,
   designation: String,
-  img: {
+  image: {
     data: Buffer,
     contentType: String,
   },

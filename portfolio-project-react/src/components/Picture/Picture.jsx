@@ -11,7 +11,8 @@ import styles from "./Picture.module.css";
 
 const Picture = ({ url, size }) => {
   const isEditModeEnabled = useContext(IsEditModeEnabled);
-  const [imageUrl, setImageUrl] = useState(url);
+  const [imageUrl, setImageUrl] = useState("");
+  const [imageBufferArray, setImageBufferArray] = useState([]);
   const [name, setName] = useState(
     localStorage.getItem("username")
       ? localStorage.getItem("username")
@@ -26,21 +27,79 @@ const Picture = ({ url, size }) => {
     if (e.target.files[0]) {
       setImageUrl(URL.createObjectURL(e.target.files[0]));
 
-/////////////////////////////////////////////
+      /////////////////////////////////////////////
 
       const reader = new FileReader();
 
       reader.onload = (event) => {
-        console.log("Image data is : ",event.target.result);
+        console.log("Image data is : ", event.target.result);
+
+        uploadToDB({
+          name: name,
+          designation: designation,
+          image: event.target.result,
+        });
       };
 
       // reader.readAsBinaryString(e.target.files[0]);
       reader.readAsArrayBuffer(e.target.files[0]);
 
-///////////////////////////////////////////////
-
+      ///////////////////////////////////////////////
     }
   };
+
+  const uploadToDB = async (personalInformation) => {
+    // await fetch(
+    //   `http://localhost:3000/api/portfolio/experience/postPersonalInformation`,
+    //   {
+    //     method: "POST",
+    //     body: JSON.stringify(personalInformation),
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //   }
+    // )
+    //   .then((res) => {
+    //     res.json();
+    //   })
+    //   .then((jsonData) => {
+    //     console.log(jsonData);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
+  };
+
+  const fetchPersonalInfo = async () => {
+    await fetch( 
+      `http://localhost:3000/api/portfolio/experience/getPersonalInfo`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
+      .then((res) => res.json())
+      .then((jsonData) => {
+        console.log(jsonData);
+        setImageBufferArray(jsonData);
+
+        jsonData.map((jsonData) => {
+          const base64String = btoa(String.fromCharCode(...new Uint8Array(jsonData[0].image.data.data)));
+          setImageUrl(`data:image/png;base64,${base64String}`)
+        })
+
+
+
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  useEffect(() => {
+    fetchPersonalInfo();
+  }, []);
 
   useEffect(() => {
     localStorage.setItem("username", name);

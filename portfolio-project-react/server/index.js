@@ -2,9 +2,7 @@ const dotEnv = require('dotenv');
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-
 const routes = require('./routes/route');
-
 dotEnv.config();
 
 const mongoString = process.env.DATABASE_URL;
@@ -25,6 +23,8 @@ database.once("connected", () => {
 const app = express();
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.use(cors());
 app.use('/api/portfolio/experience', routes);
 
