@@ -1,0 +1,90 @@
+.externalDataDiv {
+    width: 802px;
+    min-height: 400px;
+    margin: 100px auto;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.infoTable {
+    background-color: transparent;
+    width: 800px;
+    box-sizing: border-box;
+}
+
+.infoTable tr {
+    height: 50px;
+    box-sizing: border-box;
+}
+
+.imageCell,
+.idCell {
+    background-color: #dd8727;
+    color: white;
+    min-width: 78px;
+    max-width: 78px;
+    box-sizing: border-box;
+}
+
+.imageCellData,
+.idCellData {
+    min-width: 78px;
+    max-width: 78px;
+    box-sizing: border-box;
+    background-color: #ddcab5;
+    text-align: center;
+}
+
+.titleCellData,
+.urlCellData {
+    max-width: 318px;
+    min-width: 318px;
+    background-color: #ddcab5;
+    padding-left: 10px;
+    box-sizing: border-box;
+    text-align: start;
+}
+
+.titleCellData::-webkit-scrollbar,
+.urlCellData::-webkit-scrollbar {
+    display: none;
+}
+
+.titleCell,
+.urlLabelCell {
+    background-color: #dd8727;
+    color: white;
+    min-width: 318px;
+    max-width: 318px;
+    box-sizing: border-box;
+}
+
+.tableContainer {
+    width: 100%;
+    height: 400px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.saveButtonEditable {
+    margin: 20px auto;
+    padding: 5px 40px;
+    font-size: smaller;
+}
+
+.imageCellData img {
+    width: 30px;
+    height: 30px;
+    margin: auto;
+}
+
+.loadingLabel {
+    color: red;
+    width: 100%;
+    margin: auto;
+    padding: 190px;
+    text-align: center;
+    box-sizing: border-box;
+}

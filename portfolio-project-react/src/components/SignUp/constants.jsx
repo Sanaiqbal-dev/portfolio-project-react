@@ -1,4 +1,5 @@
 export const REGEX_EMAIL = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+export const FAILURE_MSG = "Api request has been failed!";
 export const SIGNUP_TITLE = "SIGN UP";
 export const PLACEHOLDER_NAME = "Enter your name here.";
 export const PLACEHOLDER_EMAIL = "Enter your email address here.";
@@ -7,4 +8,7 @@ export const ALERT_NAME = "Enter your name.";
 export const ALERT_EMAIL = "Enter correct email address.";
 export const ALERT_PASSWORD = "Password length: minimum 8 characters.";
 export const SUBMIT_CONTENT = "SUBMIT";
-export const REGISTRATION_SUCCESSFULL = "Registration successful 🙂";
+export const SUBMITTING_CONTENT="SUBMITTING...";
+export const REGISTRATION_SUCCESSFULL ="Registration successful 🙂";
+export const COLOR_RED = "red";
+export const COLOR_TRANSPARENT = "transparent";

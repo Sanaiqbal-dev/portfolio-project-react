@@ -1,0 +1,8 @@
+.loadingLabel{
+    color: red;
+    width: 100%;
+    margin: auto;
+    padding: 190px;
+    text-align: center;
+    box-sizing: border-box;
+}

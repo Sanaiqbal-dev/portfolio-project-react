@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from "react";
-import { IsEditModeEnabled } from "../../EditModeContextContext";
+import { IsEditModeEnabled } from "../../EditModeContext";
 import Skills from "../Skills/Skills";
 import {
   JOB_TITLE_CONTENT,

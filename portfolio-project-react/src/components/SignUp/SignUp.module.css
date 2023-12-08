@@ -1,5 +1,5 @@
 .signupFormContainer {
-    box-sizing: border-box;
+  box-sizing: border-box;
   width: max-content;
   height: max-content;
   margin: 50px auto;
@@ -15,7 +15,7 @@
   margin: 0px auto 20px auto;
 }
 
-.signupFormContainer input {
+.inputField {
   width: 270px;
   height: 25px;
   padding: 5px;
@@ -24,13 +24,18 @@
   border-width: 1px;
   margin: 5px auto;
   font-size: small;
+  border-color: transparent;
+}
+
+.inputError {
+  border-color: red;
 }
 
 .signupFormContainer button {
   width: 150px;
   padding: 5px;
   margin: 20px auto;
-  font-size: medium;
+  font-size: small;
   font-weight: 500;
   background-color: rgb(1, 1, 65);
   color: white;
@@ -43,13 +48,14 @@
   color: rgb(1, 1, 65);
 }
 
-.signupFormContainer label{
+.signupFormContainer label {
   color: red;
   font-size: x-small;
 }
-.successMsg{
-    width: 100%;
-    text-align: center;
-    margin: 40px 0;
-    color: green;
+
+.successMsg {
+  width: 100%;
+  text-align: center;
+  margin: 40px 0;
+  color: green;
 }
