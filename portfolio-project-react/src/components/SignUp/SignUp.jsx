@@ -1,5 +1,5 @@
 import styles from "../SignUp/SignUp.module.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   ALERT_EMAIL,
   ALERT_NAME,
@@ -43,17 +43,19 @@ const SignUp = () => {
     if (password.trim(" ").length < 8) setIsPasswordInvalid(true);
     else setIsPasswordInvalid(false);
 
-    setIsFormValidated(true);
-  };
-
-  useEffect(() => {
-    if (!isNameInvalid && !isEmailInvalid && !isPasswordInvalid) {
+    if (
+      name.trim(" ").length > 0 &&
+      REGEX_EMAIL.test(email) &&
+      password.trim(" ").length > 7
+    ) {
       setIsSignupCompleted(true);
-      if (isFormValidated) submitUserInformation();
+      submitUserInformation();
     } else {
       setIsSignupCompleted(false);
     }
-  }, [isFormValidated]);
+
+    setIsFormValidated(true);
+  };
 
   const submitUserInformation = async () => {
     try {
