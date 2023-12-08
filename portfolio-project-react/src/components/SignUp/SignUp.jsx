@@ -1,5 +1,5 @@
 import styles from "../SignUp/SignUp.module.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   ALERT_EMAIL,
   ALERT_NAME,
@@ -43,19 +43,20 @@ const SignUp = () => {
     if (password.trim(" ").length < 8) setIsPasswordInvalid(true);
     else setIsPasswordInvalid(false);
 
+    if (
+      name.trim(" ").length > 0 &&
+      REGEX_EMAIL.test(email) &&
+      password.trim(" ").length > 7
+    ) {
+      setIsSignupCompleted(true);
+      submitUserInformation();
+    } else {
+      setIsSignupCompleted(false);
+    }
+
     setIsFormValidated(true);
   };
 
-   useEffect(() => {
-     if (!isNameInvalid && !isEmailInvalid && !isPasswordInvalid) {
-       setIsSignupCompleted(true);
-       if (isFormValidated) submitUserInformation();
-     } else {
-       setIsSignupCompleted(false);
-     }
-   }, [isFormValidated]);
-
-   
   const submitUserInformation = async () => {
     try {
       const response = await fetch(`https://dummyjson.com/users/add`, {
@@ -92,7 +93,6 @@ const SignUp = () => {
     setIsApiRequestSuccessfull(false);
   };
 
- 
   return (
     <div>
       <div>

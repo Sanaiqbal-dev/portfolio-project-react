@@ -32,9 +32,11 @@ const Picture = ({ url, size }) => {
   useEffect(() => {
     localStorage.setItem("username", name);
   }, [name]);
+
   useEffect(() => {
     localStorage.setItem("designation", designation);
   }, [designation]);
+
   return (
     <div className={styles.pictureSection}>
       <div className={styles.imageContainer}>
