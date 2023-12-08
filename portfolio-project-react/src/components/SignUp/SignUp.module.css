@@ -52,13 +52,14 @@
   color: rgb(1, 1, 65);
 }
 
-.signupFormContainer label{
+.signupFormContainer label {
   color: red;
   font-size: x-small;
 }
-.successMsg{
-    width: 100%;
-    text-align: center;
-    margin: 40px 0;
-    color: green;
+
+.successMsg {
+  width: 100%;
+  text-align: center;
+  margin: 40px 0;
+  color: green;
 }
