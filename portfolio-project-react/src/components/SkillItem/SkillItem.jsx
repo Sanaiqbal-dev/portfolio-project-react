@@ -10,9 +10,11 @@ const SkillItem = ({
   isAddNewSkillInput,
   onAddSkill,
   onDeleteSkill,
+  onUpdateSkill,
 }) => {
   const isEditModeEnabled = useContext(IsEditModeEnabled);
-  const [skill, setSkill] = useState(data);
+  const [skillId, setSkillId] = useState("");
+  const [skill, setSkill] = useState("");
   const [newSkill, setNewSkill] = useState("");
 
   const getItemWidth = () => {
@@ -28,12 +30,16 @@ const SkillItem = ({
     }
   };
 
-  const onUpdateSkill = (e) => {
-    setSkill(e.target.value);
-    setWidth(skill.length + 1);
-  };
+  // const onUpdateSkill = (e) => {
+  //   setSkill(e.target.value);
+  //   setWidth(skill.length + 1);
+  // };
   useEffect(() => {
-    setSkill(data);
+    if (data) {
+      setSkill(data.skill);
+      setSkillId(data._id);
+    }
+
     setNewSkill("");
   }, [data]);
 
@@ -61,7 +67,7 @@ const SkillItem = ({
             style={{ width: width }}
             disabled={!isEditModeEnabled}
             onChange={(e) => {
-              onUpdateSkill(e);
+              onUpdateSkill(e.target.value);
             }}
           />
           {isEditModeEnabled && (

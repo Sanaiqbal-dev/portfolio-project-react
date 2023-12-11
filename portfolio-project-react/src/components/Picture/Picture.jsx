@@ -2,76 +2,70 @@ import { useState, useContext, useEffect } from "react";
 import { IsEditModeEnabled } from "../../EditModeContext";
 import Skills from "../Skills/Skills";
 import {
-  JOB_TITLE_CONTENT,
-  NAME_CONTENT,
   JOB_DESCRIPTION_PLACEHOLDER,
   NAME_PLACEHOLDER,
 } from "./constants";
 import styles from "./Picture.module.css";
+import profile_placeholder from "./assets/account.png";
 
-const Picture = ({ url, size }) => {
+const Picture = ({ size }) => {
   const isEditModeEnabled = useContext(IsEditModeEnabled);
+  const [id, setId] = useState("");
   const [imageUrl, setImageUrl] = useState("");
-  const [imageBufferArray, setImageBufferArray] = useState([]);
-  const [name, setName] = useState(
-    localStorage.getItem("username")
-      ? localStorage.getItem("username")
-      : NAME_CONTENT
-  );
-  const [designation, setDesignation] = useState(
-    localStorage.getItem("designation")
-      ? localStorage.getItem("designation")
-      : JOB_TITLE_CONTENT
-  );
+  const [updatedImage, setUpdatedImage] = useState([]);
+  const [name, setName] = useState("");
+  const [designation, setDesignation] = useState("");
   const onImageChange = (e) => {
     if (e.target.files[0]) {
       setImageUrl(URL.createObjectURL(e.target.files[0]));
 
-      /////////////////////////////////////////////
-
-      const reader = new FileReader();
-
-      reader.onload = (event) => {
-        console.log("Image data is : ", event.target.result);
-
-        uploadToDB({
-          name: name,
-          designation: designation,
-          image: event.target.result,
-        });
-      };
-
-      // reader.readAsBinaryString(e.target.files[0]);
-      reader.readAsArrayBuffer(e.target.files[0]);
-
-      ///////////////////////////////////////////////
+      setUpdatedImage(e.target.files[0]);
+  
     }
   };
 
-  const uploadToDB = async (personalInformation) => {
-    // await fetch(
-    //   `http://localhost:3000/api/portfolio/experience/postPersonalInformation`,
-    //   {
-    //     method: "POST",
-    //     body: JSON.stringify(personalInformation),
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //   }
-    // )
-    //   .then((res) => {
-    //     res.json();
-    //   })
-    //   .then((jsonData) => {
-    //     console.log(jsonData);
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
+  const uploadPersonalInformation = async(formData) => {
+    await fetch(`http://localhost:3000/api/portfolio/experience/addPersonalInfo`,
+      {
+        method: "POST",
+        body: formData,
+      }
+    )
+      .then((res) => {
+        res.json();
+      })
+      .then((jsonData) => {
+        alert("Sucessfully added new user information.");
+      })
+      .catch((error) => {
+        alert("Failed to add new user information.");
+      });
   };
 
-  const fetchPersonalInfo = async () => {
-    await fetch( 
+  
+  const updatePersonalInformation = async (formData) => {
+     try {
+       const response = await fetch(
+         `http://localhost:3000/api/portfolio/experience/updatePersonalInfo/${id}`,
+         {
+           method: "PATCH",
+           body: formData,
+         }
+       );
+
+       if (!response.ok) {
+         throw new Error(`HTTP error! Status: ${response.status}`);
+       }
+
+       const data = await response.json();
+       alert("Personal information updated");
+     } catch (error) {
+       alert("Failed to update personal information");
+     }
+  };
+
+  const fetchPersonalInformation = async () => {
+    await fetch(
       `http://localhost:3000/api/portfolio/experience/getPersonalInfo`,
       {
         method: "GET",
@@ -82,38 +76,61 @@ const Picture = ({ url, size }) => {
     )
       .then((res) => res.json())
       .then((jsonData) => {
-        console.log(jsonData);
-        setImageBufferArray(jsonData);
+        setId(jsonData[0]._id);
+        setName(jsonData[0].name);
+        setDesignation(jsonData[0].designation);
+        setUpdatedImage(jsonData[0].image);
 
-        jsonData.map((jsonData) => {
-          const base64String = btoa(String.fromCharCode(...new Uint8Array(jsonData[0].image.data.data)));
-          setImageUrl(`data:image/png;base64,${base64String}`)
-        })
+        var base64Flag = "data:image/jpeg;base64,";
+        var imagebase64 = arrayBufferToBase64(jsonData[0].image.data.data);
 
-
-
+        setImageUrl(base64Flag + imagebase64);
       })
       .catch((error) => {
-        console.log(error);
+       alert("Failed to fetch user's personal information");
       });
   };
+
+  const arrayBufferToBase64 = (buffer) => {
+    var binary = "";
+    var bytes = [].slice.call(new Uint8Array(buffer));
+    bytes.forEach((b) => (binary += String.fromCharCode(b)));
+    return window.btoa(binary);
+  };
+
+
   useEffect(() => {
-    fetchPersonalInfo();
+    fetchPersonalInformation();
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("username", name);
-  }, [name]);
-  useEffect(() => {
-    localStorage.setItem("designation", designation);
-  }, [designation]);
+    if(!isEditModeEnabled && id && name && designation && updatedImage )
+    {
+       const formData = new FormData();
+       formData.append("name", name);
+       formData.append("designation", designation);
+       formData.append("testImage", updatedImage);
+
+       updatePersonalInformation(formData);
+    }
+  },[isEditModeEnabled])
+
+
   return (
     <div className={styles.pictureSection}>
       <div className={styles.imageContainer}>
-        <img
-          src={imageUrl}
-          style={{ width: size.width, height: size.height }}
-        />
+        {imageUrl.length > 0 ? (
+          <img
+            src={imageUrl}
+            alt="No Profile Picture available"
+            style={{ width: size.width, height: size.height }}
+          />
+        ) : (
+          <img
+            src={profile_placeholder}
+            style={{ width: size.width, height: size.height }}
+          />
+        )}
       </div>
       {isEditModeEnabled && (
         <input
