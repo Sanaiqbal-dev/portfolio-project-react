@@ -1,7 +1,6 @@
 import Details from "../Details/Details";
 import Picture from "../Picture/Picture";
 import styles from "./Content.module.css";
-// import logo from "../Picture/assets/ic-profile.png";
 
 const Content = () => {
   const size = { width: "250px", height: "250px" };

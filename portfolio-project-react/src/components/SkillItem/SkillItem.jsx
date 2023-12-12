@@ -6,7 +6,6 @@ import styles from "./SkillItem.module.css";
 
 const SkillItem = ({
   data,
-  index,
   isAddNewSkillInput,
   onAddSkill,
   onDeleteSkill,
@@ -30,10 +29,11 @@ const SkillItem = ({
     }
   };
 
-  // const onUpdateSkill = (e) => {
-  //   setSkill(e.target.value);
-  //   setWidth(skill.length + 1);
-  // };
+  const onUpdateSkillContent = (updatedSkill) => {
+    setSkill(updatedSkill);
+    setWidth(skill.length + 1);
+    onUpdateSkill(skillId, { skill: updatedSkill });
+  };
   useEffect(() => {
     if (data) {
       setSkill(data.skill);
@@ -67,13 +67,13 @@ const SkillItem = ({
             style={{ width: width }}
             disabled={!isEditModeEnabled}
             onChange={(e) => {
-              onUpdateSkill(e.target.value);
+              onUpdateSkillContent(e.target.value);
             }}
           />
           {isEditModeEnabled && (
             <label
               className={styles.deleteIcon}
-              onClick={(e) => onDeleteSkill(index)}
+              onClick={(e) => onDeleteSkill(skillId)}
             >
               {CLOSE_DELETE_TEXT}
             </label>

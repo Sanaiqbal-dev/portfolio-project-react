@@ -37,6 +37,10 @@
   border: none;
   border-radius: 3px;
 }
+.signupFormContainer label{
+  color: red;
+  font-size: small;
+}
 
 .signupFormContainer button:hover {
   background-color: rgb(163, 163, 194);

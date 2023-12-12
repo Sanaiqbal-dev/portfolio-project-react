@@ -7,31 +7,21 @@ const Skills = () => {
   const [skillsList, setSkillsList] = useState([]);
   const isEditModeEnabled = useContext(IsEditModeEnabled);
 
-  // const addNewSkill = (newSkill) => {
-  //   setSkillsList([...skillsList, newSkill]);
-  // };
-
-  // const deleteSkill = (recievedIndex) => {
-  //   const updatedList = skillsList.filter(
-  //     (item, index) => recievedIndex !== index
-  //   );
-  //   setSkillsList(updatedList);
-  // };
   const updateSkill = async (id, updatedSkill) => {
-    const formData = new FormData();
-    formData.append("skill", updatedSkill);
-
     await fetch(
-      `http://localhost:3000/api/portfolio/experience/updateSkillItems/${id}`,
+      `http://localhost:3000/api/portfolio/experience/updateSkillItem/${id}`,
       {
         method: "PATCH",
-        body: formData,
+        body: JSON.stringify(updatedSkill),
+        headers: {
+          "Content-Type": "application/json",
+        },
       }
     )
       .then((res) => res.json())
-      .then((jsonData) => console.log(jsonData))
+      .then((jsonData) => {})
       .catch((error) => {
-        console.log(error);
+        alert("Failed to update skill data.");
       });
   };
   const deleteSkill = async (id) => {
@@ -42,29 +32,30 @@ const Skills = () => {
       }
     )
       .then((res) => res.json())
-      .then((jsonData) => console.log(jsonData))
+      .then((jsonData) => {
+        console.log(jsonData);
+
+        const updatedList = skillsList.filter((item) => item._id !== id);
+        setSkillsList(updatedList);
+      })
       .catch((error) => {
         console.log(error);
       });
   };
   const addNewSkill = async (skillTitle) => {
-
     await fetch(`http://localhost:3000/api/portfolio/experience/AddSkillItem`, {
       method: "POST",
-      body: JSON.stringify({"skill":skillTitle}),
-      headers:{
-        "Content-Type":"application/json",
-      }
+      body: JSON.stringify({ skill: skillTitle }),
+      headers: {
+        "Content-Type": "application/json",
+      },
     })
-      .then((res) => {
-        res.json();
-      })
+      .then((res) => res.json())
       .then((jsonData) => {
-        console.log(jsonData);
-        setSkillsList([...skillsList, jsonData]);
+        setSkillsList([...skillsList, jsonData.data]);
       })
       .catch((error) => {
-        console.log(error);
+        alert("Failed to add new skill data.");
       });
   };
 
@@ -77,13 +68,10 @@ const Skills = () => {
     )
       .then((res) => res.json())
       .then((jsonData) => {
-        console.log("Skills list is ", jsonData);
         setSkillsList(jsonData);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => alert("Failed to fetch skills data."));
   };
-  useEffect(() => {}, [skillsList]);
-
   useEffect(() => {
     fetchSkillsList();
   }, []);
@@ -94,7 +82,6 @@ const Skills = () => {
           <SkillItem
             key={index}
             data={item}
-            index={index}
             isAddNewSkillInput={false}
             onAddSkill={addNewSkill}
             onDeleteSkill={deleteSkill}

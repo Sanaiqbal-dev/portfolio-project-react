@@ -1,11 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import { IsEditModeEnabled } from "../../EditModeContext";
 import {
-  ABOUT_DATA,
   ABOUT_HEADING,
-  CONTACT_DATA,
   CONTACT_HEADING,
-  EMAIL_DATA,
   EMAIL_HEADING,
   CONTACT_PLACEHOLDER,
   EMAIL_PLACEHOLDER,
@@ -23,6 +20,8 @@ const About = ({ totalWorkExperience }) => {
 
   const [email, setEmail] = useState("");
 
+  const [isContentUpdated, setIsContentUpdated] = useState(false);
+
   const validateInput = (e) => {
     const key = e.key;
 
@@ -35,18 +34,6 @@ const About = ({ totalWorkExperience }) => {
     }
   };
 
-  useEffect(() => {
-    localStorage.setItem("about", aboutContent);
-  }, [aboutContent]);
-
-  useEffect(() => {
-    localStorage.setItem("phone", phone);
-  }, [phone]);
-
-  useEffect(() => {
-    localStorage.setItem("email", email);
-  }, [email]);
-
   const updateAboutContent = async (id, aboutSectionData) => {
     await fetch(
       `http://localhost:3000/api/portfolio/experience/updateAboutContent/${id}`,
@@ -58,14 +45,12 @@ const About = ({ totalWorkExperience }) => {
         },
       }
     )
-      .then((res) => {
-        res.json();
-      })
+      .then((res) => res.json())
       .then((jsonData) => {
-        console.log(jsonData);
+        setIsContentUpdated(false);
       })
       .catch((error) => {
-        console.log(error);
+        alert(`Failed to updated about section data : ${error.message}`);
       });
   };
 
@@ -75,24 +60,25 @@ const About = ({ totalWorkExperience }) => {
     )
       .then((res) => res.json())
       .then((jsonData) => {
-        console.log(jsonData);
         setId(jsonData[0]._id);
         setAboutContent(jsonData[0].about);
         setPhone(jsonData[0].contact);
         setEmail(jsonData[0].email);
       })
       .catch((error) => {
-        console.log(error);
+        alert(`Failed to fetch about section data : ${error.message}`);
       });
   };
 
   useEffect(() => {
-    if (!isEditModeEnabled && aboutContent && phone && email) {
-      updateAboutContent(id, {
-        about: aboutContent,
-        contact: phone,
-        email: email,
-      });
+    if (!isEditModeEnabled && isContentUpdated) {
+      if (aboutContent && phone && email) {
+        updateAboutContent(id, {
+          about: aboutContent,
+          contact: phone,
+          email: email,
+        });
+      }
     }
   }, [isEditModeEnabled]);
 
@@ -116,6 +102,7 @@ const About = ({ totalWorkExperience }) => {
           value={aboutContent}
           onChange={(e) => {
             setAboutContent(e.target.value);
+            setIsContentUpdated(true);
           }}
         />
       ) : (
@@ -132,7 +119,10 @@ const About = ({ totalWorkExperience }) => {
           onKeyDown={(e) => {
             validateInput(e);
           }}
-          onChange={(e) => setPhone(e.target.value)}
+          onChange={(e) => {
+            setPhone(e.target.value);
+            setIsContentUpdated(true);
+          }}
         />
       ) : (
         <p className={styles.inlineDiv}>{phone}</p>
@@ -145,7 +135,10 @@ const About = ({ totalWorkExperience }) => {
           placeholder={EMAIL_PLACEHOLDER}
           value={email}
           type="email"
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => {
+            setEmail(e.target.value);
+            setIsContentUpdated(true);
+          }}
         />
       ) : (
         <p className={styles.inlineDiv}>{email}</p>
