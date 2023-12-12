@@ -10,6 +10,7 @@ import {
   COMPANY_NAME_PLACEHOLDER,
   JOB_DESCRIPTION_PLACEHOLDER,
   WORK_EXPERIENCE_NOT_FOUND,
+  PLACEHOLDER_SEARCH,
 } from "./constants";
 import {
   CURRENT_EMPLOYER_LABEL,
@@ -88,7 +89,7 @@ const WorkExperience = ({
         {isEditModeEnabled && (
           <input
             className={styles.searchText}
-            placeholder="Search Here..."
+            placeholder={PLACEHOLDER_SEARCH}
             onInput={(e) => {
               onSearchWorkExperience(e.target.value);
             }}

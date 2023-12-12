@@ -1,5 +1,5 @@
 import styles from "../SignUp/SignUp.module.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   ALERT_EMAIL,
   ALERT_NAME,
@@ -11,22 +11,21 @@ import {
   SIGNUP_TITLE,
   SUBMITTING_CONTENT,
   SUBMIT_CONTENT,
-  COLOR_RED,
-  COLOR_TRANSPARENT,
   REGISTRATION_SUCCESSFULL,
   PLACEHOLDER_EMAIL,
 } from "./constants";
+import clsx from "clsx";
 const SignUp = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const [nameError, setNameError] = useState(true);
-  const [emailError, setEmailError] = useState(true);
-  const [passwordError, setPasswordError] = useState(true);
+  const [isNameInvalid, setIsNameInvalid] = useState(true);
+  const [isEmailInvalid, setIsEmailInvalid] = useState(true);
+  const [isPasswordInvalid, setIsPasswordInvalid] = useState(true);
 
   const [isSignUpCompleted, setIsSignupCompleted] = useState(false);
-  const [isValidated, setIsValidated] = useState(false);
+  const [isFormValidated, setIsFormValidated] = useState(false);
 
   const [isApiRequestSuccessfull, setIsApiRequestSuccessfull] = useState(false);
 
@@ -34,47 +33,29 @@ const SignUp = () => {
     e.preventDefault();
 
     setIsApiRequestSuccessfull(false);
-    setIsSignupCompleted(false);
 
-    if (name.trim(" ").length < 1) {
-      setNameError(true);
-    } else {
-      setNameError(false);
-    }
-    if (!REGEX_EMAIL.test(email)) setEmailError(true);
-    else setEmailError(false);
-    if (password.length < 8) setPasswordError(true);
-    else setPasswordError(false);
+    if (name.trim(" ").length < 1) setIsNameInvalid(true);
+    else setIsNameInvalid(false);
 
-    setIsValidated(true);
-  };
+    if (!REGEX_EMAIL.test(email)) setIsEmailInvalid(true);
+    else setIsEmailInvalid(false);
 
-  const resetForm = () => {
-    setName("");
-    setEmail("");
-    setPassword("");
-  };
+    if (password.trim(" ").length < 8) setIsPasswordInvalid(true);
+    else setIsPasswordInvalid(false);
 
-  useEffect(() => {
-    setIsValidated(false);
-  }, [name, email, password]);
-  useEffect(() => {
     if (
-      nameError === false &&
-      emailError === false &&
-      passwordError === false
+      name.trim(" ").length > 0 &&
+      REGEX_EMAIL.test(email) &&
+      password.trim(" ").length > 7
     ) {
       setIsSignupCompleted(true);
+      submitUserInformation();
     } else {
       setIsSignupCompleted(false);
     }
-  }, [isValidated]);
 
-  useEffect(() => {
-    if (isValidated && isSignUpCompleted) {
-      submitUserInformation();
-    }
-  }, [isSignUpCompleted]);
+    setIsFormValidated(true);
+  };
 
   const submitUserInformation = async () => {
     try {
@@ -97,8 +78,21 @@ const SignUp = () => {
     } catch (e) {
       alert(FAILURE_MSG);
     }
-    setIsValidated(false);
+    setIsFormValidated(false);
   };
+
+  const resetForm = () => {
+    setName("");
+    setEmail("");
+    setPassword("");
+  };
+
+  const dataChangedHandler = () => {
+    setIsFormValidated(false);
+    setIsSignupCompleted(false);
+    setIsApiRequestSuccessfull(false);
+  };
+
   return (
     <div>
       <div>
@@ -110,46 +104,44 @@ const SignUp = () => {
           <input
             value={name}
             placeholder={PLACEHOLDER_NAME}
-            style={{
-              borderColor:
-                nameError && isValidated
-                  ?  COLOR_RED 
-                  :  COLOR_TRANSPARENT ,
-            }}
+            className={clsx(styles.inputField, {
+              [styles.inputError]: isNameInvalid && isFormValidated,
+            })}
             onChange={(e) => {
               setName(e.target.value);
+              dataChangedHandler();
             }}
           />
-          {isValidated && nameError && <label>{ALERT_NAME}</label>}
+          {isFormValidated && isNameInvalid && <label>{ALERT_NAME}</label>}
           <input
             value={email}
             placeholder={PLACEHOLDER_EMAIL}
-            style={{
-              borderColor:
-                emailError && isValidated ? COLOR_RED : COLOR_TRANSPARENT,
-            }}
+            className={clsx(styles.inputField, {
+              [styles.inputError]: isEmailInvalid && isFormValidated,
+            })}
             onChange={(e) => {
               setEmail(e.target.value);
+              dataChangedHandler();
             }}
           />
-          {isValidated && emailError && <label>{ALERT_EMAIL}</label>}
+          {isFormValidated && isEmailInvalid && <label>{ALERT_EMAIL}</label>}
 
           <input
             value={password}
             placeholder={PLACEHOLDER_PASSWORD}
-            style={{
-              borderColor:
-                passwordError && isValidated
-                  ? COLOR_RED 
-                  :  COLOR_TRANSPARENT,
-            }}
+            className={clsx(styles.inputField, {
+              [styles.inputError]: isPasswordInvalid && isFormValidated,
+            })}
             onChange={(e) => {
               setPassword(e.target.value);
+              dataChangedHandler();
             }}
           />
-          {isValidated && passwordError && <label>{ALERT_PASSWORD}</label>}
+          {isFormValidated && isPasswordInvalid && (
+            <label>{ALERT_PASSWORD}</label>
+          )}
 
-          {isValidated && isSignUpCompleted ? (
+          {isFormValidated && isSignUpCompleted ? (
             <button>{SUBMITTING_CONTENT}</button>
           ) : (
             <button type="submit">{SUBMIT_CONTENT}</button>

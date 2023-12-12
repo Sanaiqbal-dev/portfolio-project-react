@@ -34,6 +34,7 @@ const SkillItem = ({
     setWidth(skill.length + 1);
     onUpdateSkill(skillId, { skill: updatedSkill });
   };
+
   useEffect(() => {
     if (data) {
       setSkill(data.skill);

@@ -22,6 +22,18 @@ const About = ({ totalWorkExperience }) => {
 
   const [isContentUpdated, setIsContentUpdated] = useState(false);
 
+  const totalExperienceContent =
+    totalWorkExperience.years === 0 && totalWorkExperience.months === 0
+      ? "NO PAST EXPERIENCE"
+      : totalWorkExperience.years === 0
+      ? `Total Experience: ` + totalWorkExperience.months + ` months`
+      : totalWorkExperience.months === 0
+      ? `Total Experience: ` + totalWorkExperience.years + ` years`
+      : `Total Experience: ` +
+        totalWorkExperience.years +
+        ` years ` +
+        totalWorkExperience.months +
+        ` months`;
   const validateInput = (e) => {
     const key = e.key;
 
@@ -90,11 +102,7 @@ const About = ({ totalWorkExperience }) => {
     <div>
       <div className={styles.aboutHeader}>
         <h1 className={styles.titleAbout}>{ABOUT_HEADING}</h1>
-        <label>
-          Total Experience: {totalWorkExperience.years} years{" "}
-          {totalWorkExperience.months > 0 ? totalWorkExperience.months : 0}{" "}
-          months
-        </label>
+        <label className={styles.totalExperienceContent}>{totalExperienceContent}</label>
       </div>
       {isEditModeEnabled ? (
         <textarea
