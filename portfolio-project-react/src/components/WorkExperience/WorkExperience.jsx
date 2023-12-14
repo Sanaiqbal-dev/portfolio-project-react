@@ -32,26 +32,33 @@ const WorkExperience = ({
 }) => {
   const isEditModeEnabled = useContext(IsEditModeEnabled);
   const [isExperienceFormVisible, setIsExperienceFormVisible] = useState(false);
-  const [companyName, setCompanyName] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [isCurrentEmployer, setIsCurrentEmployer] = useState(false);
-  const [jobDescription, setJobDescription] = useState("");
+
+  const [WorkExperienceNewItem, setWorkExperienceNewItem] = useState({
+    companyName: "",
+    startDate: "",
+    endDate: "",
+    isCurrentEmployer: false,
+    description: "",
+  });
 
   const maxDateLimit = moment(new Date()).toISOString().split("T")[0];
 
   const submitWorkExperienceForm = (e) => {
     e.preventDefault();
-    if (!isCurrentEmployer && startDate > endDate) {
+    if (
+      !WorkExperienceNewItem.isCurrentEmployer &&
+      WorkExperienceNewItem.startDate > WorkExperienceNewItem.endDate
+    ) {
       alert(INCORRECT_DATE_ALERT);
     } else {
-      const newWorkExperience = {
-        companyName: companyName,
-        startDate: startDate,
-        endDate: isCurrentEmployer ? "Present" : endDate,
-        description: jobDescription,
-      };
-      onAddNewWorkExperience(newWorkExperience);
+      onAddNewWorkExperience({
+        companyName: WorkExperienceNewItem.companyName,
+        startDate: WorkExperienceNewItem.startDate,
+        endDate: WorkExperienceNewItem.isCurrentEmployer
+          ? "Present"
+          : WorkExperienceNewItem.endDate,
+        description: WorkExperienceNewItem.description,
+      });
       setIsExperienceFormVisible(false);
     }
   };
@@ -60,22 +67,17 @@ const WorkExperience = ({
     onDeleteWorkExperience(workExperienceItemId);
   };
 
-  const updateExperienceItem = (updatedTask) => {
-    const {
-      id,
-      updatedCompanyName,
-      updatedStartDate,
-      updatedEndDate,
-      updatedDescription,
-    } = updatedTask;
-    
-    const updatedWorkExperienceItem = {
-      companyName: updatedCompanyName,
-      startDate: updatedStartDate,
-      endDate: updatedEndDate,
-      description: updatedDescription,
+  const updateExperienceItem = (updatedWorkExperienceItem) => {
+    const updatedData = {
+      companyName: updatedWorkExperienceItem.companyName,
+      startDate: updatedWorkExperienceItem.startDate,
+      endDate:
+        updatedWorkExperienceItem.endDate === ""
+          ? "Present"
+          : updatedWorkExperienceItem.endDate,
+      description: updatedWorkExperienceItem.description,
     };
-    onUpdateWorkExperience(id, updatedWorkExperienceItem);
+    onUpdateWorkExperience(updatedWorkExperienceItem._id, updatedData);
   };
 
   useEffect(() => {
@@ -147,7 +149,12 @@ const WorkExperience = ({
                 pattern=".*\S+.*"
                 className={styles.companyName}
                 required
-                onChange={(e) => setCompanyName(e.target.value)}
+                onChange={(e) =>
+                  setWorkExperienceNewItem({
+                    ...WorkExperienceNewItem,
+                    companyName: e.target.value,
+                  })
+                }
                 placeholder={COMPANY_NAME_PLACEHOLDER}
               />
               <div className={styles.dateSection}>
@@ -161,22 +168,35 @@ const WorkExperience = ({
                     type="date"
                     required
                     max={maxDateLimit}
-                    onChange={(e) => setStartDate(e.target.value)}
+                    onChange={(e) =>
+                      setWorkExperienceNewItem({
+                        ...WorkExperienceNewItem,
+                        startDate: e.target.value,
+                      })
+                    }
                   />
                   <input
                     type="date"
                     required
-                    disabled={isCurrentEmployer}
+                    disabled={WorkExperienceNewItem.isCurrentEmployer}
                     max={maxDateLimit}
-                    onChange={(e) => setEndDate(e.target.value)}
+                    onChange={(e) =>
+                      setWorkExperienceNewItem({
+                        ...WorkExperienceNewItem,
+                        endDate: e.target.value,
+                      })
+                    }
                   />
                   <div className={styles.checkboxSection}>
                     <input
                       type="checkbox"
                       className={styles.checkbox}
                       onChange={(e) => {
-                        setIsCurrentEmployer(e.target.checked);
-                        setEndDate("");
+                        setWorkExperienceNewItem({
+                          ...WorkExperienceNewItem,
+                          endDate: "",
+                          isCurrentEmployer: e.target.checked,
+                        });
                       }}
                     />
                     <label className={styles.labelEmployer}>
@@ -188,9 +208,14 @@ const WorkExperience = ({
               <textarea
                 className={styles.description}
                 required
-                value={jobDescription}
+                value={WorkExperienceNewItem.description}
                 placeholder={JOB_DESCRIPTION_PLACEHOLDER}
-                onChange={(e) => setJobDescription(e.target.value)}
+                onChange={(e) =>
+                  setWorkExperienceNewItem({
+                    ...WorkExperienceNewItem,
+                    description: e.target.value,
+                  })
+                }
               ></textarea>
               <p className={styles.alertText}>{JOB_DESCRIPTION_ERROR}</p>
               <button className={styles.saveBtn} type="submit">

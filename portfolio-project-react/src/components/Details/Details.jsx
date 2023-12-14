@@ -1,24 +1,55 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import About from "../About/About";
 import WorkExperience from "../WorkExperience/WorkExperience";
 import styles from "./Details.module.css";
 import { WORK_EXPERIENCE_ITEM_ADDED } from "./constants";
 
 const Details = () => {
-  const [totalWorkExperience, setTotalWorkExperience] = useState({
-    years: 0,
-    months: 0,
-  });
-
   const [originalWorkExperienceList, setOriginalWorkExperienceList] = useState(
     []
   );
+  const calculateTotalExp = () => {
+    const arrayNoOfDays = originalWorkExperienceList.map((item) => {
+      return calculateNoOfdays(item.startDate, item.endDate);
+    });
 
-  const [filteredWorkExperienceList, setfilteredWorkExperienceList] = useState(
-    originalWorkExperienceList
-  );
+    const totalExperienceInDays = arrayNoOfDays.reduce(
+      (previousValue, currentValue, index) => previousValue + currentValue,
+      0
+    );
+
+    const years = Math.floor(totalExperienceInDays / 365);
+
+    const remainingDays = totalExperienceInDays % 365;
+
+    const months = Math.floor(remainingDays / 30);
+
+    return { years: years, months: months };
+  };
+
+  const calculateNoOfdays = (startDate, endDate) => {
+    if (endDate === "" || endDate === "Present") {
+      endDate = new Date().getTime();
+    }
+    return (
+      (new Date(endDate).getTime() - new Date(startDate).getTime()) /
+      (1000 * 3600 * 24)
+    );
+  };
 
   const [searchText, setSearchText] = useState("");
+
+  const filteredWorkExperienceList = useMemo(
+    () =>
+      originalWorkExperienceList.filter((item) =>
+        item.companyName.toLowerCase().includes(searchText.toLowerCase())
+      ),
+    [searchText, originalWorkExperienceList]
+  );
+
+  const totalWorkExperience = useMemo(() =>
+    calculateTotalExp(originalWorkExperienceList, [originalWorkExperienceList])
+  );
 
   const fetchDataFromDB = async () => {
     await fetch(`http://localhost:3000/api/portfolio/experience/getAll`)
@@ -27,14 +58,9 @@ const Details = () => {
         setOriginalWorkExperienceList(jsonData);
       })
       .catch((error) => {
-        alert("Failed to fetch work experience data from database.")
+        alert("Failed to fetch work experience data from database.");
       });
   };
-
-  useEffect(() => {
-    fetchDataFromDB();
-  }, []);
-
   const addNewWorkExperienceHandler = async (newWorkExperience) => {
     await fetch(`http://localhost:3000/api/portfolio/experience/post`, {
       method: "POST",
@@ -45,7 +71,6 @@ const Details = () => {
     })
       .then((res) => res.json())
       .then((jsonData) => {
-        console.log(jsonData);
         alert(WORK_EXPERIENCE_ITEM_ADDED);
         setOriginalWorkExperienceList([
           ...originalWorkExperienceList,
@@ -53,7 +78,7 @@ const Details = () => {
         ]);
       })
       .catch((error) => {
-        alert("Failed to add new work Experience item.")
+        alert("Failed to add new work Experience item.");
       });
   };
   const updateWorkExperienceHandler = async (id, updatedWorkExperienceItem) => {
@@ -66,7 +91,6 @@ const Details = () => {
     })
       .then((res) => res.json())
       .then((jsonData) => {
-        console.log(jsonData);
         const updatedList = originalWorkExperienceList.map((item) => {
           if (item._id === id) {
             item.companyName = updatedWorkExperienceItem.companyName;
@@ -92,61 +116,19 @@ const Details = () => {
     )
       .then((res) => res.json())
       .then((jsonData) => {
-        console.log(jsonData);
         const filteredList = originalWorkExperienceList.filter(
           (item) => item._id !== workExperienceItemId
         );
         setOriginalWorkExperienceList(filteredList);
       })
       .catch((error) => {
-        alert("Failed to delete requested data in database.")
+        alert("Failed to delete requested data in database.");
       });
-  };
-  const searchHandler = (searchText) => {
-    setSearchText(searchText);
-    const SearchedList = originalWorkExperienceList.filter((item) =>
-      item.companyName.toLowerCase().includes(searchText.toLowerCase())
-    );
-    setfilteredWorkExperienceList(SearchedList);
   };
 
   useEffect(() => {
-    const calculateTotalExp = () => {
-      const arrayNoOfDays = originalWorkExperienceList.map((item) => {
-        return calculateNoOfdays(item.startDate, item.endDate);
-      });
-
-      const totalExperienceInDays = arrayNoOfDays.reduce(
-        (previousValue, currentValue, index) => previousValue + currentValue,
-        0
-      );
-
-      const years = Math.floor(totalExperienceInDays / 365);
-
-      const remainingDays = totalExperienceInDays % 365;
-
-      const months = Math.floor(remainingDays / 30);
-
-      setTotalWorkExperience({ years: years, months: months });
-    };
-
-    const calculateNoOfdays = (startDate, endDate) => {
-      if (endDate === "" || endDate === "Present") {
-        endDate = new Date().getTime();
-      }
-      return (
-        (new Date(endDate).getTime() - new Date(startDate).getTime()) /
-        (1000 * 3600 * 24)
-      );
-    };
-
-    calculateTotalExp();
-  }, [originalWorkExperienceList]);
-
-  useEffect(() => {
-    if (searchText.length === 0)
-      setfilteredWorkExperienceList(originalWorkExperienceList);
-  });
+    fetchDataFromDB();
+  }, []);
 
   return (
     <div className={styles.detailsSection}>
@@ -156,7 +138,7 @@ const Details = () => {
         onAddNewWorkExperience={addNewWorkExperienceHandler}
         onUpdateWorkExperience={updateWorkExperienceHandler}
         onDeleteWorkExperience={deleteWorkExperienceHandler}
-        onSearchWorkExperience={searchHandler}
+        onSearchWorkExperience={setSearchText}
       />
     </div>
   );

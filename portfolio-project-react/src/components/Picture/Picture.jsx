@@ -7,40 +7,46 @@ import profile_placeholder from "./assets/account.png";
 
 const Picture = ({ size }) => {
   const isEditModeEnabled = useContext(IsEditModeEnabled);
-  const [id, setId] = useState("");
   const [imageUrl, setImageUrl] = useState("");
-  const [updatedImage, setUpdatedImage] = useState([]);
-  const [name, setName] = useState("");
-  const [designation, setDesignation] = useState("");
+  const [profileSectionData, setProfileSectionData] = useState({
+    id: "",
+    name: "",
+    designation: "",
+    updatedImage: "",
+  });
   const [isContentUpdated, setIsContentUpdated] = useState(false);
 
   const onImageChange = (e) => {
     if (e.target.files[0]) {
-      setImageUrl(URL.createObjectURL(e.target.files[0]));
-
-      setUpdatedImage(e.target.files[0]);
+      setProfileSectionData({
+        ...profileSectionData,
+        updatedImage: e.target.files[0],
+      });
     }
   };
 
   const updatePersonalInformation = async (formData) => {
-    try {
-      const response = await fetch(
-        `http://localhost:3000/api/portfolio/experience/updatePersonalInfo/${id}`,
-        {
-          method: "PATCH",
-          body: formData,
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+    const response = await fetch(
+      `http://localhost:3000/api/portfolio/experience/updatePersonalInfo/${profileSectionData.id}`,
+      {
+        method: "PATCH",
+        body: formData,
       }
-
-      const data = await response.json();
-      alert("Personal information updated");
-    } catch (error) {
-      alert("Failed to update Profile information.");
-    }
+    )
+      .then((res) => {
+        return res.json();
+      })
+      .then((resJson) => {
+        if (resJson.message.code === "LIMIT_FILE_SIZE") {
+          alert("Please choose profile picture with file size less than 16mb.");
+        } else {
+          setImageUrl(URL.createObjectURL(profileSectionData.updatedImage));
+          alert("Personal information updated", resJson);
+        }
+      })
+      .catch((error) => {
+        alert("Failed to update Profile information.", error);
+      });
   };
 
   const fetchPersonalInformation = async () => {
@@ -55,10 +61,12 @@ const Picture = ({ size }) => {
     )
       .then((res) => res.json())
       .then((jsonData) => {
-        setId(jsonData[0]._id);
-        setName(jsonData[0].name);
-        setDesignation(jsonData[0].designation);
-        setUpdatedImage(jsonData[0].image);
+        setProfileSectionData({
+          id: jsonData[0]._id,
+          name: jsonData[0].name,
+          designation: jsonData[0].designation,
+          updatedImage: jsonData[0].image,
+        });
 
         var base64Flag = "data:image/jpeg;base64,";
         var imagebase64 = arrayBufferToBase64(jsonData[0].image.data.data);
@@ -83,13 +91,28 @@ const Picture = ({ size }) => {
 
   useEffect(() => {
     if (!isEditModeEnabled && isContentUpdated) {
-      if (id && name && designation && updatedImage) {
+      if (
+        profileSectionData.id &&
+        profileSectionData.name &&
+        profileSectionData.designation &&
+        profileSectionData.updatedImage
+      ) {
         const formData = new FormData();
-        formData.append("name", name);
-        formData.append("designation", designation);
-        formData.append("testImage", updatedImage);
+        formData.append("name", profileSectionData.name);
+        formData.append("designation", profileSectionData.designation);
+        formData.append("testImage", profileSectionData.updatedImage);
 
         updatePersonalInformation(formData);
+      } else {
+        setProfileSectionData({
+          id: "",
+          name: "",
+          designation: "",
+          updatedImage: "",
+        });
+        setImageUrl("");
+        fetchPersonalInformation();
+        alert("Cannot update profile data with empty fields.");
       }
     }
   }, [isEditModeEnabled]);
@@ -125,27 +148,33 @@ const Picture = ({ size }) => {
         <input
           className={styles.changeName}
           placeholder={NAME_PLACEHOLDER}
-          value={name}
+          value={profileSectionData.name}
           onChange={(e) => {
-            setName(e.target.value);
+            setProfileSectionData({
+              ...profileSectionData,
+              name: e.target.value,
+            });
             setIsContentUpdated(true);
           }}
         />
       ) : (
-        <h2>{name}</h2>
+        <h2>{profileSectionData.name}</h2>
       )}
       {isEditModeEnabled ? (
         <input
           className={styles.changeDesignation}
           placeholder={JOB_DESCRIPTION_PLACEHOLDER}
-          value={designation}
+          value={profileSectionData.designation}
           onChange={(e) => {
-            setDesignation(e.target.value);
+            setProfileSectionData({
+              ...profileSectionData,
+              designation: e.target.value,
+            });
             setIsContentUpdated(true);
           }}
         />
       ) : (
-        <h3>{designation}</h3>
+        <h3>{profileSectionData.designation}</h3>
       )}
 
       <Skills />

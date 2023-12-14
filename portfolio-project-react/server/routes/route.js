@@ -19,7 +19,8 @@ var storage = multer.diskStorage({
   },
 });
 
-var upload = multer({ storage: storage });
+var maxFilseSize = 16 * 1024 * 1024;
+var upload = multer({ storage: storage, limits: { fileSize: maxFilseSize } });
 
 router.get("/getPersonalInfo", (req, res) => {
   PersonalInformationModel.find({}).then((data, error) => {
@@ -31,62 +32,68 @@ router.get("/getPersonalInfo", (req, res) => {
   });
 });
 
-router.post(
-  "/addPersonalInfo",
-  upload.single("testImage"),
-  (req, res, next) => {
-    var obj = {
-      name: req.body.name,
-      designation: req.body.designation,
-      image: {
-        data: fs.readFileSync("uploads/" + req.file.filename),
-        contentType: "image/png",
-      },
-    };
-    PersonalInformationModel.create(obj).then((error, savedData) => {
-      if (error) {
-        res.status(500).json({ message: error.message });
-      } else {
-        res.send("Image is saved", savedData);
-      }
-    });
-  }
-);
+const profilePictureUpload = upload.single("testImage");
 
-router.patch(
-  "/updatePersonalInfo/:userId",
-  upload.single("testImage"),
-  (req, res, next) => {
-    const userId = req.params.userId;
-    const updatedFields = {
-      name: req.body.name,
-      designation: req.body.designation,
-    };
-
-    if (req.file) {
-      updatedFields.image = {
-        data: fs.readFileSync("uploads/" + req.file.filename),
-        contentType: "image/png",
+router.post("/addPersonalInfo", (req, res, next) => {
+  profilePictureUpload(req, res, (err) => {
+    if (err) {
+      return res.status(413).json({ message: err });
+    } else {
+      var obj = {
+        name: req.body.name,
+        designation: req.body.designation,
+        image: {
+          data: fs.readFileSync("uploads/" + req.file.filename),
+          contentType: "image/png",
+        },
       };
-    }
-    const options = { new: true };
-
-    PersonalInformationModel.findByIdAndUpdate(userId, updatedFields, options)
-      .then((updatedItem) => {
-        if (!updatedItem) {
-          return res.status(404).json("User not found");
+      PersonalInformationModel.create(obj).then((error, savedData) => {
+        if (error) {
+          res.status(500).json({ message: error.message });
         } else {
-          res.status(200).json({
-            message: "Personal information updated",
-            data: updatedItem,
-          });
+          res.send("Image is saved", savedData);
         }
-      })
-      .catch((error) => {
-        res.status(500).json({ message: error.message });
       });
-  }
-);
+    }
+  });
+});
+
+router.patch("/updatePersonalInfo/:userId", (req, res, next) => {
+  profilePictureUpload(req, res, (err) => {
+    if (err) {
+      return res.status(413).json({ message: err });
+    } else {
+      const userId = req.params.userId;
+      const updatedFields = {
+        name: req.body.name,
+        designation: req.body.designation,
+      };
+
+      if (req.file) {
+        updatedFields.image = {
+          data: fs.readFileSync("uploads/" + req.file.filename),
+          contentType: "image/png",
+        };
+      }
+      const options = { new: true };
+
+      PersonalInformationModel.findByIdAndUpdate(userId, updatedFields, options)
+        .then((updatedItem) => {
+          if (!updatedItem) {
+            return res.status(404).json("User not found");
+          } else {
+            res.status(200).json({
+              message: "Personal information updated",
+              data: updatedItem,
+            });
+          }
+        })
+        .catch((error) => {
+          res.status(500).json({ message: error.message });
+        });
+    }
+  });
+});
 
 router.post("/post", async (req, res) => {
   const workExperiencedata = new Model({
@@ -135,7 +142,7 @@ router.delete("/delete/:id", async (req, res) => {
   }
 });
 
-router.get("/getAboutContent", async (req, res) => {
+router.get("/AboutContent", async (req, res) => {
   try {
     const aboutData = await AboutModel.find();
     res.json(aboutData);
@@ -144,12 +151,12 @@ router.get("/getAboutContent", async (req, res) => {
   }
 });
 
-router.patch("/updateAboutContent/:id", async (req, res) => {
+router.patch("/AboutContent/:id", async (req, res) => {
   try {
     const id = req.params.id;
-    const updatedDate = req.body;
+    const updatedData = req.body;
     const options = { new: true };
-    const result = await AboutModel.findByIdAndUpdate(id, updatedDate, options);
+    const result = await AboutModel.findByIdAndUpdate(id, updatedData, options);
     res.send(result);
   } catch (error) {
     res.status(500).json(error);
@@ -171,7 +178,7 @@ router.post("/AddSkillItem", async (req, res) => {
   });
   try {
     const dataToSave = await data.save();
-    res.status(200).json({ message: "Data Added", data:dataToSave});
+    res.status(200).json({ message: "Data Added", data: dataToSave });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

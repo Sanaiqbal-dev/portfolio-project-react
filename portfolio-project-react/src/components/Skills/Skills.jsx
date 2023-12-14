@@ -7,7 +7,7 @@ const Skills = () => {
   const [skillsList, setSkillsList] = useState([]);
   const isEditModeEnabled = useContext(IsEditModeEnabled);
 
-  const updateSkill = async (id, updatedSkill) => {
+  const updateSkillHandler = async (id, updatedSkill) => {
     await fetch(
       `http://localhost:3000/api/portfolio/experience/updateSkillItem/${id}`,
       {
@@ -24,7 +24,7 @@ const Skills = () => {
         alert("Failed to update skill data.");
       });
   };
-  const deleteSkill = async (id) => {
+  const deleteSkillHandler = async (id) => {
     await fetch(
       `http://localhost:3000/api/portfolio/experience/deleteSkillItem/${id}`,
       {
@@ -33,16 +33,12 @@ const Skills = () => {
     )
       .then((res) => res.json())
       .then((jsonData) => {
-        console.log(jsonData);
-
         const updatedList = skillsList.filter((item) => item._id !== id);
         setSkillsList(updatedList);
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => {});
   };
-  const addNewSkill = async (skillTitle) => {
+  const addNewSkillHandler = async (skillTitle) => {
     await fetch(`http://localhost:3000/api/portfolio/experience/AddSkillItem`, {
       method: "POST",
       body: JSON.stringify({ skill: skillTitle }),
@@ -83,14 +79,14 @@ const Skills = () => {
             key={index}
             data={item}
             isAddNewSkillInput={false}
-            onAddSkill={addNewSkill}
-            onDeleteSkill={deleteSkill}
-            onUpdateSkill={updateSkill}
+            onAddSkill={addNewSkillHandler}
+            onDeleteSkill={deleteSkillHandler}
+            onUpdateSkill={updateSkillHandler}
           />
         ))}
 
       {isEditModeEnabled && (
-        <SkillItem isAddNewSkillInput={true} onAddSkill={addNewSkill} />
+        <SkillItem isAddNewSkillInput={true} onAddSkill={addNewSkillHandler} />
       )}
     </div>
   );
