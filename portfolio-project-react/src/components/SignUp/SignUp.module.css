@@ -41,6 +41,10 @@
   border: none;
   border-radius: 3px;
 }
+.signupFormContainer label{
+  color: red;
+  font-size: small;
+}
 
 .signupFormContainer label {
   color: red;

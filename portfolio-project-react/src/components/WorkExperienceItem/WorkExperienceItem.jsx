@@ -16,54 +16,49 @@ import editIcon from "./assets/ic_edit.png";
 const WorkExperienceItem = ({
   data,
   index,
-  onDeleteWorkExperience,
-  onUpdateWorkExperience,
+  onDeleteWorkExperienceItem,
+  onUpdateWorkExperienceItem,
 }) => {
   const isEditModeEnabled = useContext(IsEditModeEnabled);
   const [isItemEditModeEnabled, setIsItemEditModeEnabled] = useState(false);
-  const [companyNameInput, setCompanyNameInput] = useState(data.companyName);
-  let companyNameValue = index + 1 + ". " + companyNameInput;
-  const [startDateInput, setStartDateInput] = useState(data.startDate);
-  const [endDateInput, setEndDateInput] = useState(data.endDate);
-  const [isCurrentEmployerInput, setIsCurrentEmployerInput] = useState(
-    data.isCurrentEmployer
-  );
-  const [jobDescriptionInput, setJobDescriptionInput] = useState(
-    data.jobDescription
-  );
+
+  const [WorkExperienceCurrentItem, setWorkExperienceCurrentItem] = useState({
+    _id: data._id,
+    companyName: data.companyName,
+    startDate: data.startDate,
+    endDate: data.endDate,
+    isCurrentEmployer: data.endDate === "Present" ? true : false,
+    description: data.description,
+  });
+  let companyNameValue =
+    index + 1 + ". " + WorkExperienceCurrentItem.companyName;
+
   let jobDuration =
-    startDateInput +
+    WorkExperienceCurrentItem.startDate +
     DASH_TEXT +
-    (isCurrentEmployerInput ? PRESENT_TEXT : endDateInput);
-  const [maxDateLimit, setMaxDateLimit] = useState(
-    moment(new Date()).toISOString().split("T")[0]
-  );
+    (WorkExperienceCurrentItem.isCurrentEmployer
+      ? PRESENT_TEXT
+      : WorkExperienceCurrentItem.endDate);
+
+  const maxDateLimit = moment(new Date()).toISOString().split("T")[0];
 
   const updateExperienceItem = () => {
-    if (!isCurrentEmployerInput && endDateInput < startDateInput) {
+    if (
+      !WorkExperienceCurrentItem.isCurrentEmployer &&
+      WorkExperienceCurrentItem.endDate < WorkExperienceCurrentItem.startDate
+    ) {
       alert(INCORRECT_DATE_ALERT);
     } else {
       setIsItemEditModeEnabled(false);
 
-      onUpdateWorkExperience(
-        index,
-        companyNameInput,
-        startDateInput,
-        endDateInput,
-        isCurrentEmployerInput,
-        jobDescriptionInput
-      );
+      onUpdateWorkExperienceItem(WorkExperienceCurrentItem);
     }
   };
 
   useEffect(() => {
     setIsItemEditModeEnabled(false);
-    setCompanyNameInput(data.companyName);
-    setStartDateInput(data.startDate);
-    setEndDateInput(data.endDate);
-    setIsCurrentEmployerInput(data.isCurrentEmployer);
-    setJobDescriptionInput(data.jobDescription);
-  }, [isEditModeEnabled,data]);
+    setWorkExperienceCurrentItem(data);
+  }, [isEditModeEnabled, data]);
 
   return (
     <div className={styles.expItemContainer}>
@@ -75,9 +70,12 @@ const WorkExperienceItem = ({
             </label>
             <input
               className={styles.compNameInput}
-              value={companyNameInput}
+              value={WorkExperienceCurrentItem.companyName}
               onChange={(e) => {
-                setCompanyNameInput(e.target.value);
+                setWorkExperienceCurrentItem({
+                  ...WorkExperienceCurrentItem,
+                  companyName: e.target.value,
+                });
               }}
             />
           </div>
@@ -90,7 +88,7 @@ const WorkExperienceItem = ({
             <button
               className={styles.deleteBtn}
               onClick={(e) => {
-                onDeleteWorkExperience(index);
+                onDeleteWorkExperienceItem(data._id);
               }}
             >
               <img src={deleteIcon} />
@@ -119,25 +117,38 @@ const WorkExperienceItem = ({
               type="date"
               required
               max={maxDateLimit}
-              value={startDateInput}
-              onChange={(e) => setStartDateInput(e.target.value)}
+              value={WorkExperienceCurrentItem.startDate}
+              onChange={(e) =>
+                setWorkExperienceCurrentItem({
+                  ...WorkExperienceCurrentItem,
+                  startDate: e.target.value,
+                })
+              }
             />
             <input
               type="date"
               required
               max={maxDateLimit}
-              value={endDateInput}
-              disabled={isCurrentEmployerInput}
-              onChange={(e) => setEndDateInput(e.target.value)}
+              value={WorkExperienceCurrentItem.endDate}
+              disabled={WorkExperienceCurrentItem.isCurrentEmployer}
+              onChange={(e) =>
+                setWorkExperienceCurrentItem({
+                  ...WorkExperienceCurrentItem,
+                  endDate: e.target.value,
+                })
+              }
             />
             <div className={styles.checkboxSection}>
               <input
                 type="checkbox"
                 className={styles.checkbox}
-                checked={isCurrentEmployerInput}
+                checked={WorkExperienceCurrentItem.isCurrentEmployer}
                 onChange={(e) => {
-                  setIsCurrentEmployerInput(e.target.checked);
-                  setEndDateInput("");
+                  setWorkExperienceCurrentItem({
+                    ...WorkExperienceCurrentItem,
+                    endDate: "",
+                    isCurrentEmployer: e.target.checked,
+                  });
                 }}
               />
               <label className={styles.labelEmployer}>
@@ -152,13 +163,18 @@ const WorkExperienceItem = ({
       {isItemEditModeEnabled ? (
         <textarea
           className={styles.description}
-          value={jobDescriptionInput}
+          value={WorkExperienceCurrentItem.description}
           onChange={(e) => {
-            setJobDescriptionInput(e.target.value);
+            setWorkExperienceCurrentItem({
+              ...WorkExperienceCurrentItem,
+              description: e.target.value,
+            });
           }}
         />
       ) : (
-        <p className={styles.jobDescription}>{data.jobDescription}</p>
+        <p className={styles.jobDescription}>
+          {WorkExperienceCurrentItem.description}
+        </p>
       )}
       {isItemEditModeEnabled && (
         <button

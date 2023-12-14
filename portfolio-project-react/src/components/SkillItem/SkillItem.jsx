@@ -6,20 +6,19 @@ import styles from "./SkillItem.module.css";
 
 const SkillItem = ({
   data,
-  index,
   isAddNewSkillInput,
   onAddSkill,
   onDeleteSkill,
+  onUpdateSkill,
 }) => {
   const isEditModeEnabled = useContext(IsEditModeEnabled);
-  const [skill, setSkill] = useState(data);
+  const [skill, setSkill] = useState({ id: "", skillName: "", width: "" ,isSkillUpdated:false});
   const [newSkill, setNewSkill] = useState("");
-
   const getItemWidth = () => {
-    return skill ? skill.length + 1 + CHAR_UNIT : 1 + CHAR_UNIT;
+    return skill.skillName
+      ? skill.skillName.length + 1 + CHAR_UNIT
+      : 1 + CHAR_UNIT;
   };
-
-  const [width, setWidth] = useState(getItemWidth);
 
   const onEnterKeyPressHandler = (e) => {
     if (e.code === "Enter" && newSkill.length > 0) {
@@ -28,19 +27,29 @@ const SkillItem = ({
     }
   };
 
-  const onUpdateSkill = (e) => {
-    setSkill(e.target.value);
-    setWidth(skill.length + 1);
+  const onUpdateSkillContent = (updatedSkill) => {
+    setSkill({
+      ...skill,
+      skillName: updatedSkill,
+      width: getItemWidth(),
+      isSkillUpdated:true,
+    });
   };
 
   useEffect(() => {
-    setSkill(data);
+    if (data) {
+      let width_ = data.skill.length + 1 + CHAR_UNIT;
+      setSkill({ id: data._id, skillName: data.skill, width: width_ });
+    }
     setNewSkill("");
   }, [data]);
 
   useEffect(() => {
-    setWidth(getItemWidth);
-  }, [skill]);
+    if (!isEditModeEnabled && skill.isSkillUpdated) {
+      if (skill.skillName.length === 0) onDeleteSkill(skill.id);
+      else onUpdateSkill(skill.id, { skill: skill.skillName });
+    }
+  }, [isEditModeEnabled]);
 
   return (
     <>
@@ -58,17 +67,17 @@ const SkillItem = ({
         <div className={styles.skillItem}>
           <input
             className={styles.addNewItem}
-            value={skill}
-            style={{ width: width }}
+            value={skill.skillName}
+            style={{ width: skill.width }}
             disabled={!isEditModeEnabled}
             onChange={(e) => {
-              onUpdateSkill(e);
+              onUpdateSkillContent(e.target.value);
             }}
           />
           {isEditModeEnabled && (
             <label
               className={styles.deleteIcon}
-              onClick={(e) => onDeleteSkill(index)}
+              onClick={(e) => onDeleteSkill(skill.id)}
             >
               {CLOSE_DELETE_TEXT}
             </label>
