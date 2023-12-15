@@ -1,12 +1,12 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 
-import { IsEditModeEnabled } from "../../EditModeContext";
-import Header from "../Header/Header";
-import Content from "../Content/Content";
-import Footer from "../Footer/Footer";
-import SignUp from "../SignUp/SignUp";
-import DataViewPage from "../DataViewPage/DataViewPage";
+import { IsEditModeEnabled } from "../../EditModeContext.tsx";
+import Header from "../Header/Header.tsx";
+import Content from "../Content/Content.tsx";
+import Footer from "../Footer/Footer.tsx";
+import SignUp from "../SignUp/SignUp.tsx";
+import DataViewPage from "../DataViewPage/DataViewPage.tsx";
 
 const Portfolio = () => {
   const [isEditModeEnabled, setIsEditModeEnabled] = useState(false);

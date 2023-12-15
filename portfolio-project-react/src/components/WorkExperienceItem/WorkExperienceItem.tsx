@@ -1,14 +1,14 @@
 import { useEffect, useState, useContext } from "react";
 import moment from "moment";
-import { IsEditModeEnabled } from "../../EditModeContext";
-import { COMPANY_NAME_LABEL, PRESENT_TEXT, DASH_TEXT } from "./constants";
+import { IsEditModeEnabled } from "../../EditModeContext.tsx";
+import { COMPANY_NAME_LABEL, PRESENT_TEXT, DASH_TEXT } from "./constants.tsx";
 import {
   CURRENT_EMPLOYER_LABEL,
   END_DATE_LABEL,
   START_DATE_LABEL,
   SAVE_TEXT,
   INCORRECT_DATE_ALERT,
-} from "../../constants";
+} from "../../constants.tsx";
 import styles from "./WorkExperienceItem.module.css";
 import deleteIcon from "./assets/ic_delete.png";
 import editIcon from "./assets/ic_edit.png";

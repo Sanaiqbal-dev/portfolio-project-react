@@ -1,4 +1,4 @@
-import { ID, IMG, URL, TITLE, NO_DATA_FOUND } from "../TabularData/constants";
+import { ID, IMG, URL, TITLE, NO_DATA_FOUND } from "../TabularData/constants.tsx";
 import styles from "./TabularData.module.css";
 const TabularData = ({tableDataset}) => {
   return (

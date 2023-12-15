@@ -1,3 +1,4 @@
+import React from "react";
 import Details from "../Details/Details";
 import Picture from "../Picture/Picture";
 import styles from "./Content.module.css";

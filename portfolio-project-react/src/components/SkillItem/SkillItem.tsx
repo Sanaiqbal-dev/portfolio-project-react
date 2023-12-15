@@ -1,7 +1,7 @@
-import { useEffect, useState, useContext } from "react";
-import { IsEditModeEnabled } from "../../EditModeContext";
-import { CHAR_UNIT, ADD_PLACEHOLDER } from "./constants";
-import { CLOSE_DELETE_TEXT } from "../../constants";
+import React, { useEffect, useState, useContext } from "react";
+import { IsEditModeEnabled } from "../../EditModeContext.tsx";
+import { CHAR_UNIT, ADD_PLACEHOLDER } from "./constants.tsx";
+import { CLOSE_DELETE_TEXT } from "../../constants.tsx";
 import styles from "./SkillItem.module.css";
 
 const SkillItem = ({

@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import moment from "moment";
-import WorkExperienceItem from "../WorkExperienceItem/WorkExperienceItem";
-import { IsEditModeEnabled } from "../../EditModeContext";
+import WorkExperienceItem from "../WorkExperienceItem/WorkExperienceItem.tsx";
+import { IsEditModeEnabled } from "../../EditModeContext.tsx";
 import {
   JOB_DESCRIPTION_ERROR,
   WORK_EXPERIENCE_HEADING,
@@ -11,7 +11,7 @@ import {
   JOB_DESCRIPTION_PLACEHOLDER,
   WORK_EXPERIENCE_NOT_FOUND,
   PLACEHOLDER_SEARCH,
-} from "./constants";
+} from "./constants.tsx";
 import {
   CURRENT_EMPLOYER_LABEL,
   START_DATE_LABEL,
@@ -19,7 +19,7 @@ import {
   SAVE_TEXT,
   CLOSE_DELETE_TEXT,
   INCORRECT_DATE_ALERT,
-} from "../../constants";
+} from "../../constants.tsx";
 
 import styles from "./WorkExperience.module.css";
 

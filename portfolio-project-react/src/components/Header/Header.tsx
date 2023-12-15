@@ -1,12 +1,12 @@
-import { useContext, useState } from "react";
-import { IsEditModeEnabled } from "../../EditModeContext";
+import React, { useContext, useState } from "react";
+import { IsEditModeEnabled } from "../../EditModeContext.tsx";
 import {
   EDIT_TEXT,
   SIGNUP_TEXT,
   SAVE_TEXT,
   PORTFOLIO,
   DATAVIEWPAGE,
-} from "./constants";
+} from "./constants.tsx";
 import styles from "./Header.module.css";
 import { Link } from "react-router-dom";
 const Header = ({

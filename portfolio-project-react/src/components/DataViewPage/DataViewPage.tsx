@@ -1,4 +1,4 @@
-import { useState, useEffect, Suspense } from "react";
+import React, { useState, useEffect } from "react";
 import TabularData from "../TabularData/TabularData";
 import { LOADING_TXT, REQUEST_FAILED, URL_PHOTOS_DATA } from "./constants";
 import styles from "./DataViewPage.module.css";

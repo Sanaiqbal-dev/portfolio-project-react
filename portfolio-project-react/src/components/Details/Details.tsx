@@ -1,15 +1,19 @@
-import { useState, useEffect, useMemo } from "react";
+import React,{ useState, useEffect, useMemo } from "react";
 import About from "../About/About";
 import WorkExperience from "../WorkExperience/WorkExperience";
 import styles from "./Details.module.css";
 import { WORK_EXPERIENCE_ITEM_ADDED } from "./constants";
 
+interface WorkExperienceProps{
+  companyName:string,
+  startDate:any,
+  endDate:any,
+  description:string
+}
 const Details = () => {
-  const [originalWorkExperienceList, setOriginalWorkExperienceList] = useState(
-    []
-  );
+  const [originalWorkExperienceList, setOriginalWorkExperienceList] = useState<WorkExperienceProps[]>([]);
   const calculateTotalExp = () => {
-    const arrayNoOfDays = originalWorkExperienceList.map((item) => {
+    const arrayNoOfDays = originalWorkExperienceList.map((item:any) => {
       return calculateNoOfdays(item.startDate, item.endDate);
     });
 
@@ -27,7 +31,7 @@ const Details = () => {
     return { years: years, months: months };
   };
 
-  const calculateNoOfdays = (startDate, endDate) => {
+  const calculateNoOfdays = (startDate:any, endDate:any) => {
     if (endDate === "" || endDate === "Present") {
       endDate = new Date().getTime();
     }
@@ -41,15 +45,14 @@ const Details = () => {
 
   const filteredWorkExperienceList = useMemo(
     () =>
-      originalWorkExperienceList.filter((item) =>
+      originalWorkExperienceList.filter((item:any) =>
         item.companyName.toLowerCase().includes(searchText.toLowerCase())
       ),
     [searchText, originalWorkExperienceList]
   );
 
   const totalWorkExperience = useMemo(() =>
-    calculateTotalExp(originalWorkExperienceList, [originalWorkExperienceList])
-  );
+    calculateTotalExp(), [originalWorkExperienceList]);
 
   const fetchDataFromDB = async () => {
     await fetch(`http://localhost:3000/api/portfolio/experience/getAll`)
@@ -91,7 +94,7 @@ const Details = () => {
     })
       .then((res) => res.json())
       .then((jsonData) => {
-        const updatedList = originalWorkExperienceList.map((item) => {
+        const updatedList = originalWorkExperienceList.map((item:any) => {
           if (item._id === id) {
             item.companyName = updatedWorkExperienceItem.companyName;
             item.startDate = updatedWorkExperienceItem.startDate;
@@ -117,7 +120,7 @@ const Details = () => {
       .then((res) => res.json())
       .then((jsonData) => {
         const filteredList = originalWorkExperienceList.filter(
-          (item) => item._id !== workExperienceItemId
+          (item:any) => item._id !== workExperienceItemId
         );
         setOriginalWorkExperienceList(filteredList);
       })

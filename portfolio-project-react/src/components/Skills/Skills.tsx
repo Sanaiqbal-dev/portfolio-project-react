@@ -1,6 +1,6 @@
 import { useState, useContext, useEffect } from "react";
-import SkillItem from "../SkillItem/SkillItem";
-import { IsEditModeEnabled } from "../../EditModeContext";
+import SkillItem from "../SkillItem/SkillItem.tsx";
+import { IsEditModeEnabled } from "../../EditModeContext.tsx";
 import styles from "./Skills.module.css";
 
 const Skills = () => {

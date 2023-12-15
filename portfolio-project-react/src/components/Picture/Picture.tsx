@@ -1,19 +1,26 @@
-import { useState, useContext, useEffect } from "react";
-import { IsEditModeEnabled } from "../../EditModeContext";
-import Skills from "../Skills/Skills";
-import { JOB_DESCRIPTION_PLACEHOLDER, NAME_PLACEHOLDER } from "./constants";
+import React, { useState, useContext, useEffect } from "react";
+import { IsEditModeEnabled } from "../../EditModeContext.tsx";
+import Skills from "../Skills/Skills.tsx";
+import { JOB_DESCRIPTION_PLACEHOLDER, NAME_PLACEHOLDER } from "./constants.tsx";
 import styles from "./Picture.module.css";
 import profile_placeholder from "./assets/account.png";
 
+interface ProfileSectionProps {
+  id: string;
+  name: string;
+  designation: string;
+  updatedImage: string;
+}
 const Picture = ({ size }) => {
   const isEditModeEnabled = useContext(IsEditModeEnabled);
   const [imageUrl, setImageUrl] = useState("");
-  const [profileSectionData, setProfileSectionData] = useState({
-    id: "",
-    name: "",
-    designation: "",
-    updatedImage: "",
-  });
+  const [profileSectionData, setProfileSectionData] =
+    useState<ProfileSectionProps>({
+      id: "",
+      name: "",
+      designation: "",
+      updatedImage: "",
+    });
   const [isContentUpdated, setIsContentUpdated] = useState(false);
 
   const onImageChange = (e) => {
@@ -40,14 +47,29 @@ const Picture = ({ size }) => {
         if (resJson.message.code === "LIMIT_FILE_SIZE") {
           alert("Please choose profile picture with file size less than 16mb.");
         } else {
-          setImageUrl(URL.createObjectURL(profileSectionData.updatedImage));
-          alert("Personal information updated", resJson);
+          imageUrlToBlob(profileSectionData.updatedImage).then((blob) => {
+            if (blob) {
+              setImageUrl(URL.createObjectURL(blob));
+              alert("Personal information updated" + resJson);
+            }
+          });
         }
       })
       .catch((error) => {
-        alert("Failed to update Profile information.", error);
+        alert("Failed to update Profile information." + error);
       });
   };
+
+  async function imageUrlToBlob(imageUrl: string): Promise<Blob | null> {
+    try {
+      const response = await fetch(imageUrl);
+      const blob = await response.blob();
+      return blob;
+    } catch (error) {
+      console.error("Error converting image URL to Blob:", error);
+      return null;
+    }
+  }
 
   const fetchPersonalInformation = async () => {
     await fetch(

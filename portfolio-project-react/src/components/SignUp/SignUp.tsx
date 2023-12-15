@@ -1,5 +1,5 @@
 import styles from "../SignUp/SignUp.module.css";
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   ALERT_EMAIL,
   ALERT_NAME,
@@ -13,40 +13,41 @@ import {
   SUBMIT_CONTENT,
   REGISTRATION_SUCCESSFULL,
   PLACEHOLDER_EMAIL,
-} from "./constants";
+} from "./constants.tsx";
 import clsx from "clsx";
 const SignUp = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [name, setName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
 
-  const [isNameInvalid, setIsNameInvalid] = useState(true);
-  const [isEmailInvalid, setIsEmailInvalid] = useState(true);
-  const [isPasswordInvalid, setIsPasswordInvalid] = useState(true);
+  const [isNameInvalid, setIsNameInvalid] = useState<Boolean>(true);
+  const [isEmailInvalid, setIsEmailInvalid] = useState<Boolean>(true);
+  const [isPasswordInvalid, setIsPasswordInvalid] = useState<Boolean>(true);
 
-  const [isSignUpCompleted, setIsSignupCompleted] = useState(false);
-  const [isFormValidated, setIsFormValidated] = useState(false);
+  const [isSignUpCompleted, setIsSignupCompleted] = useState<Boolean>(false);
+  const [isFormValidated, setIsFormValidated] = useState<Boolean>(false);
 
-  const [isApiRequestSuccessfull, setIsApiRequestSuccessfull] = useState(false);
+  const [isApiRequestSuccessfull, setIsApiRequestSuccessfull] =
+    useState<Boolean>(false);
 
   const validateForm = (e) => {
     e.preventDefault();
 
     setIsApiRequestSuccessfull(false);
 
-    if (name.trim(" ").length < 1) setIsNameInvalid(true);
+    if (name.trim().length < 1) setIsNameInvalid(true);
     else setIsNameInvalid(false);
 
     if (!REGEX_EMAIL.test(email)) setIsEmailInvalid(true);
     else setIsEmailInvalid(false);
 
-    if (password.trim(" ").length < 8) setIsPasswordInvalid(true);
+    if (password.trim().length < 8) setIsPasswordInvalid(true);
     else setIsPasswordInvalid(false);
 
     if (
-      name.trim(" ").length > 0 &&
+      name.trim().length > 0 &&
       REGEX_EMAIL.test(email) &&
-      password.trim(" ").length > 7
+      password.trim().length > 7
     ) {
       setIsSignupCompleted(true);
       submitUserInformation();
