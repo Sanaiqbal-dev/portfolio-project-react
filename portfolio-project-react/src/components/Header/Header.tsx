@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, FC } from "react";
 import { IsEditModeEnabled } from "../../EditModeContext.tsx";
 import {
   EDIT_TEXT,
@@ -9,22 +9,28 @@ import {
 } from "./constants.tsx";
 import styles from "./Header.module.css";
 import { Link } from "react-router-dom";
-const Header = ({
+
+interface HeaderProps {
+  changeEditMode: (values: boolean) => void;
+  isPortfolioRouteEnabled: boolean;
+  isDataViewPageRouteEnabled: boolean;
+}
+const Header: FC<HeaderProps> = ({
   changeEditMode,
   isPortfolioRouteEnabled,
   isDataViewPageRouteEnabled,
 }) => {
   const isEditModeEnabled = useContext(IsEditModeEnabled);
-  const [isPortfolioEnabled, setIsPortfolioEnabled] = useState(
+  const [isPortfolioEnabled, setIsPortfolioEnabled] = useState<boolean>(
     isPortfolioRouteEnabled
   );
-  const [isDataViewPageEnabled, setIsDataViewPageEnabled] = useState(
+  const [isDataViewPageEnabled, setIsDataViewPageEnabled] = useState<boolean>(
     isDataViewPageRouteEnabled
   );
 
   return (
     <header>
-      {(isPortfolioEnabled || isDataViewPageEnabled)&& (
+      {(isPortfolioEnabled || isDataViewPageEnabled) && (
         <Link
           to={isPortfolioEnabled ? "/dataviewpage" : "/"}
           className={styles.signupLink}

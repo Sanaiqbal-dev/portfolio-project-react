@@ -4,7 +4,7 @@ import styles from "./Footer.module.css";
 
 const Footer = () => {
   return (
-    <footer>
+    <footer className={styles.footer}>
       <a>{LINKEDIN_TEXT}</a>
     </footer>
   );

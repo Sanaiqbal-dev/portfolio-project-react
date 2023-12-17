@@ -8,6 +8,7 @@
       "dom.iterable",
       "esnext"
     ],
+    // "plugins": [{ "name": "typescript-plugin-css-modules" }],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -22,9 +23,13 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
+  // "include": [
+  //   "src"
+  // ]
   "include": [
-    "src"
-  ]
+    "src/**/*.ts",  // Adjust the path according to your project structure
+    "src/**/*.tsx"
+  ],
     /* Projects */
     // "incremental": true,                              /* Save .tsbuildinfo files to allow for incremental compilation of projects. */
     // "composite": true,                                /* Enable constraints that allow a TypeScript project to be used with project references. */

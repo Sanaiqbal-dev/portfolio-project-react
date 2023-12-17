@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState, FC } from "react";
-import { IsEditModeEnabled } from "../../EditModeContext";
+import { IsEditModeEnabled } from "../../EditModeContext.tsx";
 import {
   ABOUT_HEADING,
   CONTACT_HEADING,

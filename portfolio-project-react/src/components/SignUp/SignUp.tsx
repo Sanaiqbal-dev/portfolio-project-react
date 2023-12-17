@@ -30,7 +30,7 @@ const SignUp = () => {
   const [isApiRequestSuccessfull, setIsApiRequestSuccessfull] =
     useState<Boolean>(false);
 
-  const validateForm = (e) => {
+  const validateForm = (e:any) => {
     e.preventDefault();
 
     setIsApiRequestSuccessfull(false);

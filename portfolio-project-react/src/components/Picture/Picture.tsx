@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, FC } from "react";
 import { IsEditModeEnabled } from "../../EditModeContext.tsx";
 import Skills from "../Skills/Skills.tsx";
 import { JOB_DESCRIPTION_PLACEHOLDER, NAME_PLACEHOLDER } from "./constants.tsx";
@@ -11,9 +11,15 @@ interface ProfileSectionProps {
   designation: string;
   updatedImage: string;
 }
-const Picture = ({ size }) => {
+interface PictureComponentProps{
+  size :{
+  width:string;
+  height:string;
+  }
+}
+const Picture: FC<PictureComponentProps> = ({ size }) => {
   const isEditModeEnabled = useContext(IsEditModeEnabled);
-  const [imageUrl, setImageUrl] = useState("");
+  const [imageUrl, setImageUrl] = useState<string>("");
   const [profileSectionData, setProfileSectionData] =
     useState<ProfileSectionProps>({
       id: "",
@@ -21,9 +27,9 @@ const Picture = ({ size }) => {
       designation: "",
       updatedImage: "",
     });
-  const [isContentUpdated, setIsContentUpdated] = useState(false);
+  const [isContentUpdated, setIsContentUpdated] = useState<boolean>(false);
 
-  const onImageChange = (e) => {
+  const onImageChange = (e:any) => {
     if (e.target.files[0]) {
       setProfileSectionData({
         ...profileSectionData,
@@ -32,7 +38,7 @@ const Picture = ({ size }) => {
     }
   };
 
-  const updatePersonalInformation = async (formData) => {
+  const updatePersonalInformation = async (formData:FormData) => {
     const response = await fetch(
       `http://localhost:3000/api/portfolio/experience/updatePersonalInfo/${profileSectionData.id}`,
       {
@@ -100,10 +106,10 @@ const Picture = ({ size }) => {
       });
   };
 
-  const arrayBufferToBase64 = (buffer) => {
-    var binary = "";
-    var bytes = [].slice.call(new Uint8Array(buffer));
-    bytes.forEach((b) => (binary += String.fromCharCode(b)));
+  const arrayBufferToBase64 = (buffer:Buffer) => {
+    var binary : string = "";
+    var bytes : any = [].slice.call(new Uint8Array(buffer));
+    bytes.forEach((b:any) => (binary += String.fromCharCode(b)));
     return window.btoa(binary);
   };
 

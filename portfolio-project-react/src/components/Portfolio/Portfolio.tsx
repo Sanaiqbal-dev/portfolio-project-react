@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 
 import { IsEditModeEnabled } from "../../EditModeContext.tsx";
@@ -9,11 +9,17 @@ import SignUp from "../SignUp/SignUp.tsx";
 import DataViewPage from "../DataViewPage/DataViewPage.tsx";
 
 const Portfolio = () => {
-  const [isEditModeEnabled, setIsEditModeEnabled] = useState(false);
+  const [isEditModeEnabled, setIsEditModeEnabled] = useState<boolean>(false);
   const location = useLocation();
-  const [isPortfolioRouteEnabled, setIsPortfolioRouteEnabled] = useState(location.pathname === "/");
+  const isPortfolioRouteEnabled: boolean = useMemo(
+    () => location.pathname === "/",
+    [location]
+  );
 
-  const [isDataViewPageRouteEnabled, setIsDataViewPageRouteEnabled] = useState(location.pathname === "dataviewpage");
+  const isDataViewPageRouteEnabled: boolean = useMemo(
+    () => location.pathname === "dataviewpage",
+    [location]
+  );
 
   return (
     <IsEditModeEnabled.Provider value={isEditModeEnabled}>

@@ -1,37 +1,46 @@
-import React,{ useState, useEffect, useMemo } from "react";
-import About from "../About/About";
-import WorkExperience from "../WorkExperience/WorkExperience";
+import React, { useState, useEffect, useMemo } from "react";
+import About from "../About/About.tsx";
+import WorkExperience from "../WorkExperience/WorkExperience.tsx";
 import styles from "./Details.module.css";
-import { WORK_EXPERIENCE_ITEM_ADDED } from "./constants";
+import { WORK_EXPERIENCE_ITEM_ADDED } from "./constants.tsx";
 
-interface WorkExperienceProps{
-  companyName:string,
-  startDate:any,
-  endDate:any,
-  description:string
+interface WorkExperienceProps {
+  _id:string;
+  companyName: string;
+  startDate: any;
+  endDate: any;
+  description: string;
+}
+interface NoOfDays {
+  years: number;
+  months: number;
 }
 const Details = () => {
-  const [originalWorkExperienceList, setOriginalWorkExperienceList] = useState<WorkExperienceProps[]>([]);
+  const [originalWorkExperienceList, setOriginalWorkExperienceList] = useState<
+    WorkExperienceProps[]
+  >([]);
   const calculateTotalExp = () => {
-    const arrayNoOfDays = originalWorkExperienceList.map((item:any) => {
-      return calculateNoOfdays(item.startDate, item.endDate);
-    });
+    const arrayNoOfDays = originalWorkExperienceList.map(
+      (item: WorkExperienceProps) => {
+        return calculateNoOfdays(item.startDate, item.endDate);
+      }
+    );
 
-    const totalExperienceInDays = arrayNoOfDays.reduce(
+    const totalExperienceInDays: number = arrayNoOfDays.reduce(
       (previousValue, currentValue, index) => previousValue + currentValue,
       0
     );
 
-    const years = Math.floor(totalExperienceInDays / 365);
+    const years: number = Math.floor(totalExperienceInDays / 365);
 
-    const remainingDays = totalExperienceInDays % 365;
+    const remainingDays: number = totalExperienceInDays % 365;
 
-    const months = Math.floor(remainingDays / 30);
+    const months: number = Math.floor(remainingDays / 30);
 
     return { years: years, months: months };
   };
 
-  const calculateNoOfdays = (startDate:any, endDate:any) => {
+  const calculateNoOfdays = (startDate: any, endDate: any) => {
     if (endDate === "" || endDate === "Present") {
       endDate = new Date().getTime();
     }
@@ -41,18 +50,20 @@ const Details = () => {
     );
   };
 
-  const [searchText, setSearchText] = useState("");
+  const [searchText, setSearchText] = useState<string>("");
 
-  const filteredWorkExperienceList = useMemo(
+  const filteredWorkExperienceList: WorkExperienceProps[] = useMemo(
     () =>
-      originalWorkExperienceList.filter((item:any) =>
+      originalWorkExperienceList.filter((item: any) =>
         item.companyName.toLowerCase().includes(searchText.toLowerCase())
       ),
     [searchText, originalWorkExperienceList]
   );
 
-  const totalWorkExperience = useMemo(() =>
-    calculateTotalExp(), [originalWorkExperienceList]);
+  const totalWorkExperience: NoOfDays = useMemo(
+    () => calculateTotalExp(),
+    [originalWorkExperienceList]
+  );
 
   const fetchDataFromDB = async () => {
     await fetch(`http://localhost:3000/api/portfolio/experience/getAll`)
@@ -64,7 +75,9 @@ const Details = () => {
         alert("Failed to fetch work experience data from database.");
       });
   };
-  const addNewWorkExperienceHandler = async (newWorkExperience) => {
+  const addNewWorkExperienceHandler = async (
+    newWorkExperience: WorkExperienceProps
+  ) => {
     await fetch(`http://localhost:3000/api/portfolio/experience/post`, {
       method: "POST",
       body: JSON.stringify(newWorkExperience),
@@ -84,7 +97,10 @@ const Details = () => {
         alert("Failed to add new work Experience item.");
       });
   };
-  const updateWorkExperienceHandler = async (id, updatedWorkExperienceItem) => {
+  const updateWorkExperienceHandler = async (
+    id: string,
+    updatedWorkExperienceItem: WorkExperienceProps
+  ) => {
     await fetch(`http://localhost:3000/api/portfolio/experience/update/${id}`, {
       method: "PATCH",
       body: JSON.stringify(updatedWorkExperienceItem),
@@ -94,7 +110,7 @@ const Details = () => {
     })
       .then((res) => res.json())
       .then((jsonData) => {
-        const updatedList = originalWorkExperienceList.map((item:any) => {
+        const updatedList = originalWorkExperienceList.map((item: any) => {
           if (item._id === id) {
             item.companyName = updatedWorkExperienceItem.companyName;
             item.startDate = updatedWorkExperienceItem.startDate;
@@ -110,7 +126,7 @@ const Details = () => {
       })
       .catch((error) => alert("Failed to updated requested data in database."));
   };
-  const deleteWorkExperienceHandler = async (workExperienceItemId) => {
+  const deleteWorkExperienceHandler = async (workExperienceItemId : string) => {
     await fetch(
       `http://localhost:3000/api/portfolio/experience/delete/${workExperienceItemId}`,
       {
@@ -120,7 +136,7 @@ const Details = () => {
       .then((res) => res.json())
       .then((jsonData) => {
         const filteredList = originalWorkExperienceList.filter(
-          (item:any) => item._id !== workExperienceItemId
+          (item: WorkExperienceProps) => item._id !== workExperienceItemId
         );
         setOriginalWorkExperienceList(filteredList);
       })

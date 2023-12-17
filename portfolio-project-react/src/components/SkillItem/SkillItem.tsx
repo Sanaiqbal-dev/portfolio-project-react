@@ -1,10 +1,27 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, FC } from "react";
 import { IsEditModeEnabled } from "../../EditModeContext.tsx";
 import { CHAR_UNIT, ADD_PLACEHOLDER } from "./constants.tsx";
 import { CLOSE_DELETE_TEXT } from "../../constants.tsx";
 import styles from "./SkillItem.module.css";
 
-const SkillItem = ({
+interface SkillData {
+  _id: string;
+  skill: string;
+}
+interface SkillItemProps {
+  data?: SkillData;
+  isAddNewSkillInput: boolean;
+  onAddSkill: (values: string) => void;
+  onDeleteSkill?: (values: string) => void;
+  onUpdateSkill?: (id: string, updatedSkill: string) => void;
+}
+interface SkillItem {
+  id: string;
+  skillName: string;
+  width: string;
+  isSkillUpdated: boolean;
+}
+const SkillItem: FC<SkillItemProps> = ({
   data,
   isAddNewSkillInput,
   onAddSkill,
@@ -12,34 +29,44 @@ const SkillItem = ({
   onUpdateSkill,
 }) => {
   const isEditModeEnabled = useContext(IsEditModeEnabled);
-  const [skill, setSkill] = useState({ id: "", skillName: "", width: "" ,isSkillUpdated:false});
-  const [newSkill, setNewSkill] = useState("");
+  const [skill, setSkill] = useState<SkillItem>({
+    id: "",
+    skillName: "",
+    width: "",
+    isSkillUpdated: false,
+  });
+  const [newSkill, setNewSkill] = useState<string>("");
   const getItemWidth = () => {
     return skill.skillName
       ? skill.skillName.length + 1 + CHAR_UNIT
       : 1 + CHAR_UNIT;
   };
 
-  const onEnterKeyPressHandler = (e) => {
+  const onEnterKeyPressHandler = (e: any) => {
     if (e.code === "Enter" && newSkill.length > 0) {
       onAddSkill(newSkill);
       setNewSkill("");
     }
   };
 
-  const onUpdateSkillContent = (updatedSkill) => {
+  const onUpdateSkillContent = (updatedSkill: string) => {
     setSkill({
       ...skill,
       skillName: updatedSkill,
       width: getItemWidth(),
-      isSkillUpdated:true,
+      isSkillUpdated: true,
     });
   };
 
   useEffect(() => {
     if (data) {
-      let width_ = data.skill.length + 1 + CHAR_UNIT;
-      setSkill({ id: data._id, skillName: data.skill, width: width_ });
+      let width_: string = data.skill.length + 1 + CHAR_UNIT;
+      setSkill({
+        id: data._id,
+        skillName: data.skill,
+        width: width_,
+        isSkillUpdated: false,
+      });
     }
     setNewSkill("");
   }, [data]);
@@ -47,7 +74,7 @@ const SkillItem = ({
   useEffect(() => {
     if (!isEditModeEnabled && skill.isSkillUpdated) {
       if (skill.skillName.length === 0) onDeleteSkill(skill.id);
-      else onUpdateSkill(skill.id, { skill: skill.skillName });
+      else onUpdateSkill(skill.id, skill.skillName );
     }
   }, [isEditModeEnabled]);
 
