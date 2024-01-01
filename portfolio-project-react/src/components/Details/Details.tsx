@@ -2,13 +2,13 @@ import React, { useState, useEffect, useMemo } from "react";
 import About from "../About/About.tsx";
 import WorkExperience from "../WorkExperience/WorkExperience.tsx";
 import styles from "./Details.module.css";
-import { WORK_EXPERIENCE_ITEM_ADDED } from "./constants.tsx";
+import { WORK_EXPERIENCE_ITEM_ADDED, NO_OF_DAYS } from "./constants.tsx";
 
 interface WorkExperienceProps {
   _id:string;
   companyName: string;
-  startDate: any;
-  endDate: any;
+  startDate: string;
+  endDate: string;
   description: string;
 }
 interface NoOfDays {
@@ -31,18 +31,22 @@ const Details = () => {
       0
     );
 
-    const years: number = Math.floor(totalExperienceInDays / 365);
+    const years: number = Math.floor(totalExperienceInDays / NO_OF_DAYS);
 
-    const remainingDays: number = totalExperienceInDays % 365;
+    const remainingDays: number = totalExperienceInDays % NO_OF_DAYS;
 
     const months: number = Math.floor(remainingDays / 30);
 
     return { years: years, months: months };
   };
 
-  const calculateNoOfdays = (startDate: any, endDate: any) => {
+  const calculateNoOfdays = (startDate: string, endDate: string) => {
     if (endDate === "" || endDate === "Present") {
-      endDate = new Date().getTime();
+      // endDate = new Date().getTime();
+      return (
+        (new Date().getTime() - new Date(startDate).getTime()) /
+        (1000 * 3600 * 24)
+      );
     }
     return (
       (new Date(endDate).getTime() - new Date(startDate).getTime()) /
