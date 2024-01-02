@@ -1,22 +1,35 @@
-import { useState, useContext, useEffect } from "react";
-import { IsEditModeEnabled } from "../../EditModeContext";
-import Skills from "../Skills/Skills";
-import { JOB_DESCRIPTION_PLACEHOLDER, NAME_PLACEHOLDER } from "./constants";
+import React, { useState, useContext, useEffect, FC } from "react";
+import { IsEditModeEnabled } from "../../EditModeContext.tsx";
+import Skills from "../Skills/Skills.tsx";
+import { JOB_DESCRIPTION_PLACEHOLDER, NAME_PLACEHOLDER } from "./constants.tsx";
 import styles from "./Picture.module.css";
 import profile_placeholder from "./assets/account.png";
 
-const Picture = ({ size }) => {
+interface ProfileSectionProps {
+  id: string;
+  name: string;
+  designation: string;
+  updatedImage: string;
+}
+interface PictureComponentProps{
+  size :{
+  width:string;
+  height:string;
+  }
+}
+const Picture: FC<PictureComponentProps> = ({ size }) => {
   const isEditModeEnabled = useContext(IsEditModeEnabled);
-  const [imageUrl, setImageUrl] = useState("");
-  const [profileSectionData, setProfileSectionData] = useState({
-    id: "",
-    name: "",
-    designation: "",
-    updatedImage: "",
-  });
-  const [isContentUpdated, setIsContentUpdated] = useState(false);
+  const [imageUrl, setImageUrl] = useState<string>("");
+  const [profileSectionData, setProfileSectionData] =
+    useState<ProfileSectionProps>({
+      id: "",
+      name: "",
+      designation: "",
+      updatedImage: "",
+    });
+  const [isContentUpdated, setIsContentUpdated] = useState<boolean>(false);
 
-  const onImageChange = (e) => {
+  const onImageChange = (e:any) => {
     if (e.target.files[0]) {
       setProfileSectionData({
         ...profileSectionData,
@@ -25,7 +38,7 @@ const Picture = ({ size }) => {
     }
   };
 
-  const updatePersonalInformation = async (formData) => {
+  const updatePersonalInformation = async (formData:FormData) => {
     const response = await fetch(
       `http://localhost:3000/api/portfolio/experience/updatePersonalInfo/${profileSectionData.id}`,
       {
@@ -40,14 +53,29 @@ const Picture = ({ size }) => {
         if (resJson.message.code === "LIMIT_FILE_SIZE") {
           alert("Please choose profile picture with file size less than 16mb.");
         } else {
-          setImageUrl(URL.createObjectURL(profileSectionData.updatedImage));
-          alert("Personal information updated", resJson);
+          imageUrlToBlob(profileSectionData.updatedImage).then((blob) => {
+            if (blob) {
+              setImageUrl(URL.createObjectURL(blob));
+              alert("Personal information updated" + resJson);
+            }
+          });
         }
       })
       .catch((error) => {
-        alert("Failed to update Profile information.", error);
+        alert("Failed to update Profile information." + error);
       });
   };
+
+  async function imageUrlToBlob(imageUrl: string): Promise<Blob | null> {
+    try {
+      const response = await fetch(imageUrl);
+      const blob = await response.blob();
+      return blob;
+    } catch (error) {
+      console.error("Error converting image URL to Blob:", error);
+      return null;
+    }
+  }
 
   const fetchPersonalInformation = async () => {
     await fetch(
@@ -78,10 +106,10 @@ const Picture = ({ size }) => {
       });
   };
 
-  const arrayBufferToBase64 = (buffer) => {
-    var binary = "";
-    var bytes = [].slice.call(new Uint8Array(buffer));
-    bytes.forEach((b) => (binary += String.fromCharCode(b)));
+  const arrayBufferToBase64 = (buffer:Buffer) => {
+    var binary : string = "";
+    var bytes : any = [].slice.call(new Uint8Array(buffer));
+    bytes.forEach((b:any) => (binary += String.fromCharCode(b)));
     return window.btoa(binary);
   };
 

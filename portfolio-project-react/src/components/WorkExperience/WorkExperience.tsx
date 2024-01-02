@@ -1,7 +1,7 @@
-import { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, FC } from "react";
 import moment from "moment";
-import WorkExperienceItem from "../WorkExperienceItem/WorkExperienceItem";
-import { IsEditModeEnabled } from "../../EditModeContext";
+import WorkExperienceItem from "../WorkExperienceItem/WorkExperienceItem.tsx";
+import { IsEditModeEnabled } from "../../EditModeContext.tsx";
 import {
   JOB_DESCRIPTION_ERROR,
   WORK_EXPERIENCE_HEADING,
@@ -11,7 +11,7 @@ import {
   JOB_DESCRIPTION_PLACEHOLDER,
   WORK_EXPERIENCE_NOT_FOUND,
   PLACEHOLDER_SEARCH,
-} from "./constants";
+} from "./constants.tsx";
 import {
   CURRENT_EMPLOYER_LABEL,
   START_DATE_LABEL,
@@ -19,11 +19,28 @@ import {
   SAVE_TEXT,
   CLOSE_DELETE_TEXT,
   INCORRECT_DATE_ALERT,
-} from "../../constants";
+} from "../../constants.tsx";
 
 import styles from "./WorkExperience.module.css";
+import {WorkExperienceItemProps} from "../../interface.tsx";
 
-const WorkExperience = ({
+// interface WorkExperienceItemProps {
+//   _id?: string;
+//   companyName: string;
+//   startDate: any;
+//   endDate: any;
+//   isCurrentEmployer?:boolean;
+//   description: string;
+// }
+
+interface WorkExperienceProps {
+  filteredWorkExperienceList: WorkExperienceItemProps[];
+  onAddNewWorkExperience: (values:WorkExperienceItemProps) => void;
+  onUpdateWorkExperience: (id:string,updatedData:WorkExperienceItemProps) => void;
+  onDeleteWorkExperience: (id:string) => void;
+  onSearchWorkExperience: (searchText:string) => void;
+}
+const WorkExperience : FC<WorkExperienceProps> = ({
   filteredWorkExperienceList,
   onAddNewWorkExperience,
   onUpdateWorkExperience,
@@ -31,9 +48,9 @@ const WorkExperience = ({
   onSearchWorkExperience,
 }) => {
   const isEditModeEnabled = useContext(IsEditModeEnabled);
-  const [isExperienceFormVisible, setIsExperienceFormVisible] = useState(false);
+  const [isExperienceFormVisible, setIsExperienceFormVisible] = useState<boolean>(false);
 
-  const [WorkExperienceNewItem, setWorkExperienceNewItem] = useState({
+  const [WorkExperienceNewItem, setWorkExperienceNewItem] = useState<WorkExperienceItemProps>({
     companyName: "",
     startDate: "",
     endDate: "",
@@ -41,9 +58,9 @@ const WorkExperience = ({
     description: "",
   });
 
-  const maxDateLimit = moment(new Date()).toISOString().split("T")[0];
+  const maxDateLimit:string = moment(new Date()).toISOString().split("T")[0];
 
-  const submitWorkExperienceForm = (e) => {
+  const submitWorkExperienceForm = (e:any) => {
     e.preventDefault();
     if (
       !WorkExperienceNewItem.isCurrentEmployer &&
@@ -63,11 +80,11 @@ const WorkExperience = ({
     }
   };
 
-  const deleteExperienceItem = (workExperienceItemId) => {
+  const deleteExperienceItem = (workExperienceItemId:string) => {
     onDeleteWorkExperience(workExperienceItemId);
   };
 
-  const updateExperienceItem = (updatedWorkExperienceItem) => {
+  const updateExperienceItem = (updatedWorkExperienceItem:any) => {
     const updatedData = {
       companyName: updatedWorkExperienceItem.companyName,
       startDate: updatedWorkExperienceItem.startDate,

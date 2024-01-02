@@ -1,6 +1,25 @@
-import { ID, IMG, URL, TITLE, NO_DATA_FOUND } from "../TabularData/constants";
+import React, { FC } from "react";
+import {
+  ID,
+  IMG,
+  URL,
+  TITLE,
+  NO_DATA_FOUND,
+} from "../TabularData/constants.tsx";
 import styles from "./TabularData.module.css";
-const TabularData = ({tableDataset}) => {
+
+interface Dataset {
+  albumId: number;
+  id: number;
+  thumbnailUrl: string;
+  title: string;
+  url: string;
+}
+
+interface TableDataset {
+  tableDataset: Dataset[]
+}
+const TabularData: FC<TableDataset> = ({ tableDataset }) => {
   return (
     <>
       {tableDataset.length > 0 ? (

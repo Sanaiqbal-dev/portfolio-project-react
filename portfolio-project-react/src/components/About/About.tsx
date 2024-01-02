@@ -1,27 +1,39 @@
-import { useContext, useEffect, useState } from "react";
-import { IsEditModeEnabled } from "../../EditModeContext";
+import React, { useContext, useEffect, useState, FC } from "react";
+import { IsEditModeEnabled } from "../../EditModeContext.tsx";
 import {
   ABOUT_HEADING,
   CONTACT_HEADING,
   EMAIL_HEADING,
   CONTACT_PLACEHOLDER,
   EMAIL_PLACEHOLDER,
-} from "./constants";
+} from "./constants.tsx";
 import styles from "./About.module.css";
+import {totalWorkExperience} from "../../interface.tsx";
 
-const About = ({ totalWorkExperience }) => {
+
+
+interface AboutComponentProps {
+  totalWorkExperience: totalWorkExperience;
+}
+interface AboutData{
+  id:string,
+  about:string,
+  contact:string,
+  email:string
+}
+const About: FC<AboutComponentProps> = ({ totalWorkExperience }) => {
   const isEditModeEnabled = useContext(IsEditModeEnabled);
 
-  const [aboutSectionData, setAboutSectionData] = useState({
+  const [aboutSectionData, setAboutSectionData] = useState<AboutData>({
     id: "",
     about: "",
     contact: "",
     email: "",
   });
 
-  const [isContentUpdated, setIsContentUpdated] = useState(false);
+  const [isContentUpdated, setIsContentUpdated] = useState<Boolean>(false);
 
-  const totalExperienceContent =
+  const totalExperienceContent:String =
     totalWorkExperience.years === 0 && totalWorkExperience.months === 0
       ? "NO PAST EXPERIENCE"
       : totalWorkExperience.years === 0
@@ -33,10 +45,10 @@ const About = ({ totalWorkExperience }) => {
         ` years ` +
         totalWorkExperience.months +
         ` months`;
-  const validateInput = (e) => {
+  const validateInput = (e:KeyboardEvent) => {
     const key = e.key;
 
-    const isValidInput = /[\d\s]|Backspace|ArrowLeft|ArrowRight|Delete/i.test(
+    const isValidInput:Boolean = /[\d\s]|Backspace|ArrowLeft|ArrowRight|Delete/i.test(
       key
     );
 
@@ -95,8 +107,7 @@ const About = ({ totalWorkExperience }) => {
         aboutSectionData.email
       ) {
         updateAboutContent();
-      }
-      else{
+      } else {
         setAboutSectionData({
           id: "",
           about: "",

@@ -1,4 +1,5 @@
-import Portfolio from "./components/Portfolio/Portfolio"
+import React from "react";
+import Portfolio from "./components/Portfolio/Portfolio.tsx"
 import "./index.css";
 const App = () => {
   return (

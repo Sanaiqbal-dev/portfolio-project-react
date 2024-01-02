@@ -1,46 +1,65 @@
-import { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, FC } from "react";
 import moment from "moment";
-import { IsEditModeEnabled } from "../../EditModeContext";
-import { COMPANY_NAME_LABEL, PRESENT_TEXT, DASH_TEXT } from "./constants";
+import { IsEditModeEnabled } from "../../EditModeContext.tsx";
+import { COMPANY_NAME_LABEL, PRESENT_TEXT, DASH_TEXT } from "./constants.tsx";
 import {
   CURRENT_EMPLOYER_LABEL,
   END_DATE_LABEL,
   START_DATE_LABEL,
   SAVE_TEXT,
   INCORRECT_DATE_ALERT,
-} from "../../constants";
+} from "../../constants.tsx";
 import styles from "./WorkExperienceItem.module.css";
 import deleteIcon from "./assets/ic_delete.png";
 import editIcon from "./assets/ic_edit.png";
 
-const WorkExperienceItem = ({
+interface ItemProps {
+  _id: string;
+  companyName: string;
+  startDate: any;
+  endDate: any;
+  isCurrentEmployer: boolean;
+  description: string;
+}
+
+interface WorkExperienceItemProps {
+  data: ItemProps;
+  index: number;
+  onDeleteWorkExperienceItem: (id: string) => void;
+  onUpdateWorkExperienceItem: (WorkExperienceCurrentItem: ItemProps) => void;
+}
+
+const WorkExperienceItem: FC<WorkExperienceItemProps> = ({
   data,
   index,
   onDeleteWorkExperienceItem,
   onUpdateWorkExperienceItem,
 }) => {
   const isEditModeEnabled = useContext(IsEditModeEnabled);
-  const [isItemEditModeEnabled, setIsItemEditModeEnabled] = useState(false);
+  const [isItemEditModeEnabled, setIsItemEditModeEnabled] =
+    useState<boolean>(false);
 
-  const [WorkExperienceCurrentItem, setWorkExperienceCurrentItem] = useState({
-    _id: data._id,
-    companyName: data.companyName,
-    startDate: data.startDate,
-    endDate: data.endDate,
-    isCurrentEmployer: data.endDate === "Present" ? true : false,
-    description: data.description,
-  });
-  let companyNameValue =
+  const [WorkExperienceCurrentItem, setWorkExperienceCurrentItem] =
+    useState<ItemProps>({
+      _id: data._id,
+      companyName: data.companyName,
+      startDate: data.startDate,
+      endDate: data.endDate,
+      isCurrentEmployer: data.endDate === "Present" ? true : false,
+      description: data.description,
+    });
+
+  let companyNameValue: string =
     index + 1 + ". " + WorkExperienceCurrentItem.companyName;
 
-  let jobDuration =
+  let jobDuration: string =
     WorkExperienceCurrentItem.startDate +
     DASH_TEXT +
     (WorkExperienceCurrentItem.isCurrentEmployer
       ? PRESENT_TEXT
       : WorkExperienceCurrentItem.endDate);
 
-  const maxDateLimit = moment(new Date()).toISOString().split("T")[0];
+  const maxDateLimit: string = moment(new Date()).toISOString().split("T")[0];
 
   const updateExperienceItem = () => {
     if (
