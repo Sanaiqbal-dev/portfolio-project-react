@@ -8,14 +8,12 @@ import {
   EMAIL_PLACEHOLDER,
 } from "./constants.tsx";
 import styles from "./About.module.css";
+import {totalWorkExperience} from "../../interface.tsx";
 
 
 
 interface AboutComponentProps {
-  totalWorkExperience: {
-    years: number;
-    months: number;
-  };
+  totalWorkExperience: totalWorkExperience;
 }
 interface AboutData{
   id:string,
@@ -47,7 +45,7 @@ const About: FC<AboutComponentProps> = ({ totalWorkExperience }) => {
         ` years ` +
         totalWorkExperience.months +
         ` months`;
-  const validateInput = (e:any) => {
+  const validateInput = (e:KeyboardEvent) => {
     const key = e.key;
 
     const isValidInput:Boolean = /[\d\s]|Backspace|ArrowLeft|ArrowRight|Delete/i.test(

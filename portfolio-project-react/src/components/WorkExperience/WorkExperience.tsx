@@ -22,16 +22,16 @@ import {
 } from "../../constants.tsx";
 
 import styles from "./WorkExperience.module.css";
+import {WorkExperienceItemProps} from "../../interface.tsx";
 
-
-interface WorkExperienceItemProps {
-  _id?: string;
-  companyName: string;
-  startDate: any;
-  endDate: any;
-  isCurrentEmployer?:boolean;
-  description: string;
-}
+// interface WorkExperienceItemProps {
+//   _id?: string;
+//   companyName: string;
+//   startDate: any;
+//   endDate: any;
+//   isCurrentEmployer?:boolean;
+//   description: string;
+// }
 
 interface WorkExperienceProps {
   filteredWorkExperienceList: WorkExperienceItemProps[];

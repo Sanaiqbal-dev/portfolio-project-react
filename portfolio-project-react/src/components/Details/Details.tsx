@@ -3,25 +3,22 @@ import About from "../About/About.tsx";
 import WorkExperience from "../WorkExperience/WorkExperience.tsx";
 import styles from "./Details.module.css";
 import { WORK_EXPERIENCE_ITEM_ADDED, NO_OF_DAYS } from "./constants.tsx";
+import {totalWorkExperience, WorkExperienceItemProps} from "../../interface.tsx";
 
-interface WorkExperienceProps {
-  _id:string;
-  companyName: string;
-  startDate: string;
-  endDate: string;
-  description: string;
-}
-interface NoOfDays {
-  years: number;
-  months: number;
-}
+// interface WorkExperienceProps {
+//   _id:string;
+//   companyName: string;
+//   startDate: string;
+//   endDate: string;
+//   description: string;
+// }
 const Details = () => {
   const [originalWorkExperienceList, setOriginalWorkExperienceList] = useState<
-    WorkExperienceProps[]
+    WorkExperienceItemProps[]
   >([]);
   const calculateTotalExp = () => {
     const arrayNoOfDays = originalWorkExperienceList.map(
-      (item: WorkExperienceProps) => {
+      (item: WorkExperienceItemProps) => {
         return calculateNoOfdays(item.startDate, item.endDate);
       }
     );
@@ -42,7 +39,6 @@ const Details = () => {
 
   const calculateNoOfdays = (startDate: string, endDate: string) => {
     if (endDate === "" || endDate === "Present") {
-      // endDate = new Date().getTime();
       return (
         (new Date().getTime() - new Date(startDate).getTime()) /
         (1000 * 3600 * 24)
@@ -56,15 +52,15 @@ const Details = () => {
 
   const [searchText, setSearchText] = useState<string>("");
 
-  const filteredWorkExperienceList: WorkExperienceProps[] = useMemo(
+  const filteredWorkExperienceList: WorkExperienceItemProps[] = useMemo(
     () =>
-      originalWorkExperienceList.filter((item: any) =>
+      originalWorkExperienceList.filter((item: WorkExperienceItemProps) =>
         item.companyName.toLowerCase().includes(searchText.toLowerCase())
       ),
     [searchText, originalWorkExperienceList]
   );
 
-  const totalWorkExperience: NoOfDays = useMemo(
+  const totalWorkExperience: totalWorkExperience = useMemo(
     () => calculateTotalExp(),
     [originalWorkExperienceList]
   );
@@ -80,7 +76,7 @@ const Details = () => {
       });
   };
   const addNewWorkExperienceHandler = async (
-    newWorkExperience: WorkExperienceProps
+    newWorkExperience: WorkExperienceItemProps
   ) => {
     await fetch(`http://localhost:3000/api/portfolio/experience/post`, {
       method: "POST",
@@ -103,7 +99,7 @@ const Details = () => {
   };
   const updateWorkExperienceHandler = async (
     id: string,
-    updatedWorkExperienceItem: WorkExperienceProps
+    updatedWorkExperienceItem: WorkExperienceItemProps
   ) => {
     await fetch(`http://localhost:3000/api/portfolio/experience/update/${id}`, {
       method: "PATCH",
@@ -114,17 +110,18 @@ const Details = () => {
     })
       .then((res) => res.json())
       .then((jsonData) => {
-        const updatedList = originalWorkExperienceList.map((item: any) => {
-          if (item._id === id) {
-            item.companyName = updatedWorkExperienceItem.companyName;
-            item.startDate = updatedWorkExperienceItem.startDate;
-            item.endDate = updatedWorkExperienceItem.endDate;
-            item.isCurrentEmployer =
-              updatedWorkExperienceItem.endDate === "Present" ? true : false;
-            item.description = updatedWorkExperienceItem.description;
-          }
-          return item;
-        });
+        const updatedList: WorkExperienceItemProps[] =
+          originalWorkExperienceList.map((item: WorkExperienceItemProps) => {
+            if (item._id === id) {
+              item.companyName = updatedWorkExperienceItem.companyName;
+              item.startDate = updatedWorkExperienceItem.startDate;
+              item.endDate = updatedWorkExperienceItem.endDate;
+              item.isCurrentEmployer =
+                updatedWorkExperienceItem.endDate === "Present" ? true : false;
+              item.description = updatedWorkExperienceItem.description;
+            }
+            return item;
+          });
 
         setOriginalWorkExperienceList(updatedList);
       })
@@ -140,7 +137,7 @@ const Details = () => {
       .then((res) => res.json())
       .then((jsonData) => {
         const filteredList = originalWorkExperienceList.filter(
-          (item: WorkExperienceProps) => item._id !== workExperienceItemId
+          (item: WorkExperienceItemProps) => item._id !== workExperienceItemId
         );
         setOriginalWorkExperienceList(filteredList);
       })
