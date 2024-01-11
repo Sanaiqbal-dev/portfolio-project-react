@@ -12,7 +12,7 @@ interface TableDataset{
 }
 const DataViewPage = () => {
   const [tableDataset, setTableDataset] = useState<TableDataset[]>();
-  const [isApiRequestSuccessfull, setisApiRequestSuccessfull] = useState<boolean>(true);
+  const [isApiRequestSuccessfull, setisApiRequestSuccessfull] = useState(true);
 
   const fetchExternalData = () => {
     fetch(URL_PHOTOS_DATA)
@@ -22,7 +22,7 @@ const DataViewPage = () => {
           setTableDataset(json);
         }, 1000);
       })
-      .catch((error) => {
+      .catch(() => {
         setisApiRequestSuccessfull(false);
       });
   };

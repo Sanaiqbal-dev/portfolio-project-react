@@ -2,13 +2,10 @@ import React from "react";
 import Details from "../Details/Details.tsx";
 import Picture from "../Picture/Picture.tsx";
 import styles from "./Content.module.css";
+import { PictureSize } from "../../interface.tsx";
 
-interface SizeProp {
-  width: string;
-  height: string;
-}
 const Content = () => {
-  const size: SizeProp = { width: "250px", height: "250px" };
+  const size: PictureSize = { width: "250px", height: "250px" };
 
   return (
     <main className={styles.main}>

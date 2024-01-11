@@ -12,3 +12,4 @@ export const SUBMITTING_CONTENT="SUBMITTING...";
 export const REGISTRATION_SUCCESSFULL ="Registration successful 🙂";
 export const COLOR_RED = "red";
 export const COLOR_TRANSPARENT = "transparent";
+export const DUMMY_DATA_URL = `https://dummyjson.com/users/add`;

@@ -13,24 +13,26 @@ import {
   SUBMIT_CONTENT,
   REGISTRATION_SUCCESSFULL,
   PLACEHOLDER_EMAIL,
+  DUMMY_DATA_URL,
 } from "./constants.tsx";
 import clsx from "clsx";
+import { EMPTY_STRING } from "../../constants.tsx";
 const SignUp = () => {
-  const [name, setName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  const [name, setName] = useState(EMPTY_STRING);
+  const [email, setEmail] = useState(EMPTY_STRING);
+  const [password, setPassword] = useState(EMPTY_STRING);
 
-  const [isNameInvalid, setIsNameInvalid] = useState<Boolean>(true);
-  const [isEmailInvalid, setIsEmailInvalid] = useState<Boolean>(true);
-  const [isPasswordInvalid, setIsPasswordInvalid] = useState<Boolean>(true);
+  const [isNameInvalid, setIsNameInvalid] = useState(true);
+  const [isEmailInvalid, setIsEmailInvalid] = useState(true);
+  const [isPasswordInvalid, setIsPasswordInvalid] = useState(true);
 
-  const [isSignUpCompleted, setIsSignupCompleted] = useState<Boolean>(false);
-  const [isFormValidated, setIsFormValidated] = useState<Boolean>(false);
+  const [isSignUpCompleted, setIsSignupCompleted] = useState(false);
+  const [isFormValidated, setIsFormValidated] = useState(false);
 
   const [isApiRequestSuccessfull, setIsApiRequestSuccessfull] =
-    useState<Boolean>(false);
+    useState(false);
 
-  const validateForm = (e:any) => {
+  const validateForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     setIsApiRequestSuccessfull(false);
@@ -60,7 +62,7 @@ const SignUp = () => {
 
   const submitUserInformation = async () => {
     try {
-      const response = await fetch(`https://dummyjson.com/users/add`, {
+      const response = await fetch(DUMMY_DATA_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -83,9 +85,9 @@ const SignUp = () => {
   };
 
   const resetForm = () => {
-    setName("");
-    setEmail("");
-    setPassword("");
+    setName(EMPTY_STRING);
+    setEmail(EMPTY_STRING);
+    setPassword(EMPTY_STRING);
   };
 
   const dataChangedHandler = () => {

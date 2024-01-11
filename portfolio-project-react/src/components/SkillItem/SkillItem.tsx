@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext, FC } from "react";
 import { IsEditModeEnabled } from "../../EditModeContext.tsx";
-import { CHAR_UNIT, ADD_PLACEHOLDER } from "./constants.tsx";
-import { CLOSE_DELETE_TEXT } from "../../constants.tsx";
+import { CHAR_UNIT, ADD_PLACEHOLDER, ENTER_KEY } from "./constants.tsx";
+import { CLOSE_DELETE_TEXT, EMPTY_STRING } from "../../constants.tsx";
 import styles from "./SkillItem.module.css";
 
 interface SkillData {
@@ -30,22 +30,22 @@ const SkillItem: FC<SkillItemProps> = ({
 }) => {
   const isEditModeEnabled = useContext(IsEditModeEnabled);
   const [skill, setSkill] = useState<SkillItem>({
-    id: "",
-    skillName: "",
-    width: "",
+    id: EMPTY_STRING,
+    skillName: EMPTY_STRING,
+    width: EMPTY_STRING,
     isSkillUpdated: false,
   });
-  const [newSkill, setNewSkill] = useState<string>("");
+  const [newSkill, setNewSkill] = useState(EMPTY_STRING);
   const getItemWidth = () => {
     return skill.skillName
       ? skill.skillName.length + 1 + CHAR_UNIT
       : 1 + CHAR_UNIT;
   };
 
-  const onEnterKeyPressHandler = (e: any) => {
-    if (e.code === "Enter" && newSkill.length > 0) {
+  const onEnterKeyPressHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.code === ENTER_KEY && newSkill.length > 0) {
       onAddSkill(newSkill);
-      setNewSkill("");
+      setNewSkill(EMPTY_STRING);
     }
   };
 
@@ -68,7 +68,7 @@ const SkillItem: FC<SkillItemProps> = ({
         isSkillUpdated: false,
       });
     }
-    setNewSkill("");
+    setNewSkill(EMPTY_STRING);
   }, [data]);
 
   useEffect(() => {

@@ -21,10 +21,10 @@ const Header: FC<HeaderProps> = ({
   isDataViewPageRouteEnabled,
 }) => {
   const isEditModeEnabled = useContext(IsEditModeEnabled);
-  const [isPortfolioEnabled, setIsPortfolioEnabled] = useState<boolean>(
+  const [isPortfolioEnabled, setIsPortfolioEnabled] = useState(
     isPortfolioRouteEnabled
   );
-  const [isDataViewPageEnabled, setIsDataViewPageEnabled] = useState<boolean>(
+  const [isDataViewPageEnabled, setIsDataViewPageEnabled] = useState(
     isDataViewPageRouteEnabled
   );
 

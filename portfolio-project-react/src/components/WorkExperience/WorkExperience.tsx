@@ -19,19 +19,12 @@ import {
   SAVE_TEXT,
   CLOSE_DELETE_TEXT,
   INCORRECT_DATE_ALERT,
+  EMPTY_STRING,
+  PRESENT_TEXT,
 } from "../../constants.tsx";
 
 import styles from "./WorkExperience.module.css";
 import {WorkExperienceItemProps} from "../../interface.tsx";
-
-// interface WorkExperienceItemProps {
-//   _id?: string;
-//   companyName: string;
-//   startDate: any;
-//   endDate: any;
-//   isCurrentEmployer?:boolean;
-//   description: string;
-// }
 
 interface WorkExperienceProps {
   filteredWorkExperienceList: WorkExperienceItemProps[];
@@ -48,19 +41,19 @@ const WorkExperience : FC<WorkExperienceProps> = ({
   onSearchWorkExperience,
 }) => {
   const isEditModeEnabled = useContext(IsEditModeEnabled);
-  const [isExperienceFormVisible, setIsExperienceFormVisible] = useState<boolean>(false);
+  const [isExperienceFormVisible, setIsExperienceFormVisible] = useState(false);
 
   const [WorkExperienceNewItem, setWorkExperienceNewItem] = useState<WorkExperienceItemProps>({
-    companyName: "",
-    startDate: "",
-    endDate: "",
+    companyName: EMPTY_STRING,
+    startDate: EMPTY_STRING,
+    endDate: EMPTY_STRING,
     isCurrentEmployer: false,
-    description: "",
+    description: EMPTY_STRING,
   });
 
-  const maxDateLimit:string = moment(new Date()).toISOString().split("T")[0];
+  const maxDateLimit = moment(new Date()).toISOString().split("T")[0];
 
-  const submitWorkExperienceForm = (e:any) => {
+  const submitWorkExperienceForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (
       !WorkExperienceNewItem.isCurrentEmployer &&
@@ -79,24 +72,23 @@ const WorkExperience : FC<WorkExperienceProps> = ({
       setIsExperienceFormVisible(false);
     }
   };
-
   const deleteExperienceItem = (workExperienceItemId:string) => {
     onDeleteWorkExperience(workExperienceItemId);
   };
-
-  const updateExperienceItem = (updatedWorkExperienceItem:any) => {
+  const updateExperienceItem = (
+    updatedWorkExperienceItem: WorkExperienceItemProps
+  ) => {
     const updatedData = {
       companyName: updatedWorkExperienceItem.companyName,
       startDate: updatedWorkExperienceItem.startDate,
       endDate:
-        updatedWorkExperienceItem.endDate === ""
-          ? "Present"
+        updatedWorkExperienceItem.endDate === EMPTY_STRING
+          ? PRESENT_TEXT
           : updatedWorkExperienceItem.endDate,
       description: updatedWorkExperienceItem.description,
     };
-    onUpdateWorkExperience(updatedWorkExperienceItem._id, updatedData);
+    updatedWorkExperienceItem._id && onUpdateWorkExperience(updatedWorkExperienceItem._id, updatedData);
   };
-
   useEffect(() => {
     setIsExperienceFormVisible(false);
   }, [isEditModeEnabled]);
@@ -110,7 +102,7 @@ const WorkExperience : FC<WorkExperienceProps> = ({
             className={styles.searchText}
             placeholder={PLACEHOLDER_SEARCH}
             onInput={(e) => {
-              onSearchWorkExperience(e.target.value);
+              onSearchWorkExperience(e.currentTarget.value);
             }}
           />
         )}
@@ -211,7 +203,7 @@ const WorkExperience : FC<WorkExperienceProps> = ({
                       onChange={(e) => {
                         setWorkExperienceNewItem({
                           ...WorkExperienceNewItem,
-                          endDate: "",
+                          endDate: EMPTY_STRING,
                           isCurrentEmployer: e.target.checked,
                         });
                       }}

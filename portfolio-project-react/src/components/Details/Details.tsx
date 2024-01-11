@@ -2,16 +2,21 @@ import React, { useState, useEffect, useMemo } from "react";
 import About from "../About/About.tsx";
 import WorkExperience from "../WorkExperience/WorkExperience.tsx";
 import styles from "./Details.module.css";
-import { WORK_EXPERIENCE_ITEM_ADDED, NO_OF_DAYS } from "./constants.tsx";
-import {totalWorkExperience, WorkExperienceItemProps} from "../../interface.tsx";
+import {
+  WORK_EXPERIENCE_ITEM_ADDED,
+  NO_OF_DAYS,
+  FETCH_FAILED,
+  ADD_FAILED,
+  UPDATE_FAILED,
+  DELETE_FAILED,
+  DAYS_PER_MONTH,
+} from "./constants.tsx";
+import {
+  totalWorkExperience,
+  WorkExperienceItemProps,
+} from "../../interface.tsx";
+import { BASE_URL, EMPTY_STRING, PRESENT_TEXT } from "../../constants.tsx";
 
-// interface WorkExperienceProps {
-//   _id:string;
-//   companyName: string;
-//   startDate: string;
-//   endDate: string;
-//   description: string;
-// }
 const Details = () => {
   const [originalWorkExperienceList, setOriginalWorkExperienceList] = useState<
     WorkExperienceItemProps[]
@@ -32,13 +37,13 @@ const Details = () => {
 
     const remainingDays: number = totalExperienceInDays % NO_OF_DAYS;
 
-    const months: number = Math.floor(remainingDays / 30);
+    const months: number = Math.floor(remainingDays / DAYS_PER_MONTH);
 
     return { years: years, months: months };
   };
 
   const calculateNoOfdays = (startDate: string, endDate: string) => {
-    if (endDate === "" || endDate === "Present") {
+    if (endDate === EMPTY_STRING || endDate === PRESENT_TEXT) {
       return (
         (new Date().getTime() - new Date(startDate).getTime()) /
         (1000 * 3600 * 24)
@@ -50,7 +55,7 @@ const Details = () => {
     );
   };
 
-  const [searchText, setSearchText] = useState<string>("");
+  const [searchText, setSearchText] = useState(EMPTY_STRING);
 
   const filteredWorkExperienceList: WorkExperienceItemProps[] = useMemo(
     () =>
@@ -66,19 +71,19 @@ const Details = () => {
   );
 
   const fetchDataFromDB = async () => {
-    await fetch(`http://localhost:3000/api/portfolio/experience/getAll`)
+    await fetch(`${BASE_URL}getAll`)
       .then((res) => res.json())
       .then((jsonData) => {
         setOriginalWorkExperienceList(jsonData);
       })
       .catch((error) => {
-        alert("Failed to fetch work experience data from database.");
+        alert(FETCH_FAILED);
       });
   };
   const addNewWorkExperienceHandler = async (
     newWorkExperience: WorkExperienceItemProps
   ) => {
-    await fetch(`http://localhost:3000/api/portfolio/experience/post`, {
+    await fetch(`${BASE_URL}post`, {
       method: "POST",
       body: JSON.stringify(newWorkExperience),
       headers: {
@@ -94,14 +99,14 @@ const Details = () => {
         ]);
       })
       .catch((error) => {
-        alert("Failed to add new work Experience item.");
+        alert(ADD_FAILED);
       });
   };
   const updateWorkExperienceHandler = async (
     id: string,
     updatedWorkExperienceItem: WorkExperienceItemProps
   ) => {
-    await fetch(`http://localhost:3000/api/portfolio/experience/update/${id}`, {
+    await fetch(`${BASE_URL}update/${id}`, {
       method: "PATCH",
       body: JSON.stringify(updatedWorkExperienceItem),
       headers: {
@@ -117,7 +122,9 @@ const Details = () => {
               item.startDate = updatedWorkExperienceItem.startDate;
               item.endDate = updatedWorkExperienceItem.endDate;
               item.isCurrentEmployer =
-                updatedWorkExperienceItem.endDate === "Present" ? true : false;
+                updatedWorkExperienceItem.endDate === PRESENT_TEXT
+                  ? true
+                  : false;
               item.description = updatedWorkExperienceItem.description;
             }
             return item;
@@ -125,11 +132,11 @@ const Details = () => {
 
         setOriginalWorkExperienceList(updatedList);
       })
-      .catch((error) => alert("Failed to updated requested data in database."));
+      .catch((error) => alert(UPDATE_FAILED));
   };
-  const deleteWorkExperienceHandler = async (workExperienceItemId : string) => {
+  const deleteWorkExperienceHandler = async (workExperienceItemId: string) => {
     await fetch(
-      `http://localhost:3000/api/portfolio/experience/delete/${workExperienceItemId}`,
+      `${BASE_URL}delete/${workExperienceItemId}`,
       {
         method: "DELETE",
       }
@@ -142,7 +149,7 @@ const Details = () => {
         setOriginalWorkExperienceList(filteredList);
       })
       .catch((error) => {
-        alert("Failed to delete requested data in database.");
+        alert(DELETE_FAILED);
       });
   };
 

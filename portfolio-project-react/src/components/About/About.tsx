@@ -6,9 +6,18 @@ import {
   EMAIL_HEADING,
   CONTACT_PLACEHOLDER,
   EMAIL_PLACEHOLDER,
+  NO_PAST_EXPERIENCE,
+  TOTAL_EXPERIENCE,
+  MONTH,
+  YEAR,
+  FETCH_FAILED,
+  UPDATE_FAILED,
+  ERROR_EMPTY_FIELDS,
+  EXTRA_SPACE,
 } from "./constants.tsx";
 import styles from "./About.module.css";
 import {totalWorkExperience} from "../../interface.tsx";
+import { BASE_URL, EMPTY_STRING } from "../../constants.tsx";
 
 
 
@@ -25,26 +34,26 @@ const About: FC<AboutComponentProps> = ({ totalWorkExperience }) => {
   const isEditModeEnabled = useContext(IsEditModeEnabled);
 
   const [aboutSectionData, setAboutSectionData] = useState<AboutData>({
-    id: "",
-    about: "",
-    contact: "",
-    email: "",
+    id: EMPTY_STRING,
+    about: EMPTY_STRING,
+    contact: EMPTY_STRING,
+    email: EMPTY_STRING,
   });
 
   const [isContentUpdated, setIsContentUpdated] = useState<Boolean>(false);
 
   const totalExperienceContent:String =
     totalWorkExperience.years === 0 && totalWorkExperience.months === 0
-      ? "NO PAST EXPERIENCE"
+      ? NO_PAST_EXPERIENCE
       : totalWorkExperience.years === 0
-      ? `Total Experience: ` + totalWorkExperience.months + ` months`
+      ? TOTAL_EXPERIENCE + totalWorkExperience.months + EXTRA_SPACE+MONTH
       : totalWorkExperience.months === 0
-      ? `Total Experience: ` + totalWorkExperience.years + ` years`
-      : `Total Experience: ` +
+      ? TOTAL_EXPERIENCE + totalWorkExperience.years + EXTRA_SPACE+YEAR
+      : TOTAL_EXPERIENCE +
         totalWorkExperience.years +
-        ` years ` +
+        EXTRA_SPACE + YEAR + EXTRA_SPACE +
         totalWorkExperience.months +
-        ` months`;
+        EXTRA_SPACE + MONTH;
   const validateInput = (e:KeyboardEvent) => {
     const key = e.key;
 
@@ -59,7 +68,7 @@ const About: FC<AboutComponentProps> = ({ totalWorkExperience }) => {
 
   const updateAboutContent = async () => {
     await fetch(
-      `http://localhost:3000/api/portfolio/experience/AboutContent/${aboutSectionData.id}`,
+      `${BASE_URL}AboutContent/${aboutSectionData.id}`,
       {
         method: "PATCH",
         body: JSON.stringify({
@@ -77,12 +86,12 @@ const About: FC<AboutComponentProps> = ({ totalWorkExperience }) => {
         setIsContentUpdated(false);
       })
       .catch((error) => {
-        alert(`Failed to updated about section data : ${error.message}`);
+        alert(UPDATE_FAILED+ error.message);
       });
   };
 
   const fetchAboutContent = async () => {
-    await fetch(`http://localhost:3000/api/portfolio/experience/AboutContent`, {
+    await fetch(`${BASE_URL}AboutContent`, {
       method: "GET",
     })
       .then((res) => res.json())
@@ -95,7 +104,7 @@ const About: FC<AboutComponentProps> = ({ totalWorkExperience }) => {
         });
       })
       .catch((error) => {
-        alert(`Failed to fetch about section data : ${error.message}`);
+        alert(FETCH_FAILED + error.message);
       });
   };
 
@@ -109,13 +118,13 @@ const About: FC<AboutComponentProps> = ({ totalWorkExperience }) => {
         updateAboutContent();
       } else {
         setAboutSectionData({
-          id: "",
-          about: "",
-          contact: "",
-          email: "",
+          id: EMPTY_STRING,
+          about: EMPTY_STRING,
+          contact: EMPTY_STRING,
+          email: EMPTY_STRING,
         });
         fetchAboutContent();
-        alert("Cannot update About section data with empty fields.");
+        alert(ERROR_EMPTY_FIELDS);
       }
     }
   }, [isEditModeEnabled]);

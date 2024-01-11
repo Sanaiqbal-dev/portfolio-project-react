@@ -9,14 +9,14 @@ import SignUp from "../SignUp/SignUp.tsx";
 import DataViewPage from "../DataViewPage/DataViewPage.tsx";
 
 const Portfolio = () => {
-  const [isEditModeEnabled, setIsEditModeEnabled] = useState<boolean>(false);
+  const [isEditModeEnabled, setIsEditModeEnabled] = useState(false);
   const location = useLocation();
-  const isPortfolioRouteEnabled: boolean = useMemo(
+  const isPortfolioRouteEnabled = useMemo(
     () => location.pathname === "/",
     [location]
   );
 
-  const isDataViewPageRouteEnabled: boolean = useMemo(
+  const isDataViewPageRouteEnabled = useMemo(
     () => location.pathname === "dataviewpage",
     [location]
   );
