@@ -1,5 +1,5 @@
 import styles from "../SignUp/SignUp.module.css";
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   ALERT_EMAIL,
   ALERT_NAME,
@@ -13,12 +13,14 @@ import {
   SUBMIT_CONTENT,
   REGISTRATION_SUCCESSFULL,
   PLACEHOLDER_EMAIL,
-} from "./constants";
+  DUMMY_DATA_URL,
+} from "./constants.tsx";
 import clsx from "clsx";
+import { EMPTY_STRING } from "../../constants.tsx";
 const SignUp = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [name, setName] = useState(EMPTY_STRING);
+  const [email, setEmail] = useState(EMPTY_STRING);
+  const [password, setPassword] = useState(EMPTY_STRING);
 
   const [isNameInvalid, setIsNameInvalid] = useState(true);
   const [isEmailInvalid, setIsEmailInvalid] = useState(true);
@@ -27,26 +29,27 @@ const SignUp = () => {
   const [isSignUpCompleted, setIsSignupCompleted] = useState(false);
   const [isFormValidated, setIsFormValidated] = useState(false);
 
-  const [isApiRequestSuccessfull, setIsApiRequestSuccessfull] = useState(false);
+  const [isApiRequestSuccessfull, setIsApiRequestSuccessfull] =
+    useState(false);
 
-  const validateForm = (e) => {
+  const validateForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     setIsApiRequestSuccessfull(false);
 
-    if (name.trim(" ").length < 1) setIsNameInvalid(true);
+    if (name.trim().length < 1) setIsNameInvalid(true);
     else setIsNameInvalid(false);
 
     if (!REGEX_EMAIL.test(email)) setIsEmailInvalid(true);
     else setIsEmailInvalid(false);
 
-    if (password.trim(" ").length < 8) setIsPasswordInvalid(true);
+    if (password.trim().length < 8) setIsPasswordInvalid(true);
     else setIsPasswordInvalid(false);
 
     if (
-      name.trim(" ").length > 0 &&
+      name.trim().length > 0 &&
       REGEX_EMAIL.test(email) &&
-      password.trim(" ").length > 7
+      password.trim().length > 7
     ) {
       setIsSignupCompleted(true);
       submitUserInformation();
@@ -59,7 +62,7 @@ const SignUp = () => {
 
   const submitUserInformation = async () => {
     try {
-      const response = await fetch(`https://dummyjson.com/users/add`, {
+      const response = await fetch(DUMMY_DATA_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -82,9 +85,9 @@ const SignUp = () => {
   };
 
   const resetForm = () => {
-    setName("");
-    setEmail("");
-    setPassword("");
+    setName(EMPTY_STRING);
+    setEmail(EMPTY_STRING);
+    setPassword(EMPTY_STRING);
   };
 
   const dataChangedHandler = () => {

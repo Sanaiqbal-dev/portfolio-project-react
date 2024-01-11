@@ -1,7 +1,7 @@
-import { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, FC } from "react";
 import moment from "moment";
-import WorkExperienceItem from "../WorkExperienceItem/WorkExperienceItem";
-import { IsEditModeEnabled } from "../../EditModeContext";
+import WorkExperienceItem from "../WorkExperienceItem/WorkExperienceItem.tsx";
+import { IsEditModeEnabled } from "../../EditModeContext.tsx";
 import {
   JOB_DESCRIPTION_ERROR,
   WORK_EXPERIENCE_HEADING,
@@ -11,7 +11,7 @@ import {
   JOB_DESCRIPTION_PLACEHOLDER,
   WORK_EXPERIENCE_NOT_FOUND,
   PLACEHOLDER_SEARCH,
-} from "./constants";
+} from "./constants.tsx";
 import {
   CURRENT_EMPLOYER_LABEL,
   START_DATE_LABEL,
@@ -19,11 +19,21 @@ import {
   SAVE_TEXT,
   CLOSE_DELETE_TEXT,
   INCORRECT_DATE_ALERT,
-} from "../../constants";
+  EMPTY_STRING,
+  PRESENT_TEXT,
+} from "../../constants.tsx";
 
 import styles from "./WorkExperience.module.css";
+import {WorkExperienceItemProps} from "../../interface.tsx";
 
-const WorkExperience = ({
+interface WorkExperienceProps {
+  filteredWorkExperienceList: WorkExperienceItemProps[];
+  onAddNewWorkExperience: (values:WorkExperienceItemProps) => void;
+  onUpdateWorkExperience: (id:string,updatedData:WorkExperienceItemProps) => void;
+  onDeleteWorkExperience: (id:string) => void;
+  onSearchWorkExperience: (searchText:string) => void;
+}
+const WorkExperience : FC<WorkExperienceProps> = ({
   filteredWorkExperienceList,
   onAddNewWorkExperience,
   onUpdateWorkExperience,
@@ -33,17 +43,17 @@ const WorkExperience = ({
   const isEditModeEnabled = useContext(IsEditModeEnabled);
   const [isExperienceFormVisible, setIsExperienceFormVisible] = useState(false);
 
-  const [WorkExperienceNewItem, setWorkExperienceNewItem] = useState({
-    companyName: "",
-    startDate: "",
-    endDate: "",
+  const [WorkExperienceNewItem, setWorkExperienceNewItem] = useState<WorkExperienceItemProps>({
+    companyName: EMPTY_STRING,
+    startDate: EMPTY_STRING,
+    endDate: EMPTY_STRING,
     isCurrentEmployer: false,
-    description: "",
+    description: EMPTY_STRING,
   });
 
   const maxDateLimit = moment(new Date()).toISOString().split("T")[0];
 
-  const submitWorkExperienceForm = (e) => {
+  const submitWorkExperienceForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (
       !WorkExperienceNewItem.isCurrentEmployer &&
@@ -62,24 +72,23 @@ const WorkExperience = ({
       setIsExperienceFormVisible(false);
     }
   };
-
-  const deleteExperienceItem = (workExperienceItemId) => {
+  const deleteExperienceItem = (workExperienceItemId:string) => {
     onDeleteWorkExperience(workExperienceItemId);
   };
-
-  const updateExperienceItem = (updatedWorkExperienceItem) => {
+  const updateExperienceItem = (
+    updatedWorkExperienceItem: WorkExperienceItemProps
+  ) => {
     const updatedData = {
       companyName: updatedWorkExperienceItem.companyName,
       startDate: updatedWorkExperienceItem.startDate,
       endDate:
-        updatedWorkExperienceItem.endDate === ""
-          ? "Present"
+        updatedWorkExperienceItem.endDate === EMPTY_STRING
+          ? PRESENT_TEXT
           : updatedWorkExperienceItem.endDate,
       description: updatedWorkExperienceItem.description,
     };
-    onUpdateWorkExperience(updatedWorkExperienceItem._id, updatedData);
+    updatedWorkExperienceItem._id && onUpdateWorkExperience(updatedWorkExperienceItem._id, updatedData);
   };
-
   useEffect(() => {
     setIsExperienceFormVisible(false);
   }, [isEditModeEnabled]);
@@ -93,7 +102,7 @@ const WorkExperience = ({
             className={styles.searchText}
             placeholder={PLACEHOLDER_SEARCH}
             onInput={(e) => {
-              onSearchWorkExperience(e.target.value);
+              onSearchWorkExperience(e.currentTarget.value);
             }}
           />
         )}
@@ -194,7 +203,7 @@ const WorkExperience = ({
                       onChange={(e) => {
                         setWorkExperienceNewItem({
                           ...WorkExperienceNewItem,
-                          endDate: "",
+                          endDate: EMPTY_STRING,
                           isCurrentEmployer: e.target.checked,
                         });
                       }}

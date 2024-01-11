@@ -1,19 +1,40 @@
-import { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, FC } from "react";
 import moment from "moment";
-import { IsEditModeEnabled } from "../../EditModeContext";
-import { COMPANY_NAME_LABEL, PRESENT_TEXT, DASH_TEXT } from "./constants";
+import { IsEditModeEnabled } from "../../EditModeContext.tsx";
+import { COMPANY_NAME_LABEL, PRESENT_TEXT, DASH_TEXT } from "./constants.tsx";
 import {
   CURRENT_EMPLOYER_LABEL,
   END_DATE_LABEL,
   START_DATE_LABEL,
   SAVE_TEXT,
   INCORRECT_DATE_ALERT,
-} from "../../constants";
+  EMPTY_STRING,
+} from "../../constants.tsx";
 import styles from "./WorkExperienceItem.module.css";
 import deleteIcon from "./assets/ic_delete.png";
 import editIcon from "./assets/ic_edit.png";
+import { WorkExperienceItemProps } from "../../interface.tsx";
 
-const WorkExperienceItem = ({
+interface ItemProps {
+  _id?: string;
+  companyName: string;
+  startDate: string | Date;
+  endDate: string | Date;
+  isCurrentEmployer: boolean;
+  description: string;
+}
+
+interface WorkExperienceItemsProps {
+  isEditModeEnabled?: boolean;
+  data: WorkExperienceItemProps;
+  index: number;
+  onDeleteWorkExperienceItem: (id: string) => void;
+  onUpdateWorkExperienceItem: (
+    WorkExperienceCurrentItem: WorkExperienceItemProps
+  ) => void;
+}
+
+const WorkExperienceItem: FC<WorkExperienceItemsProps> = ({
   data,
   index,
   onDeleteWorkExperienceItem,
@@ -22,25 +43,27 @@ const WorkExperienceItem = ({
   const isEditModeEnabled = useContext(IsEditModeEnabled);
   const [isItemEditModeEnabled, setIsItemEditModeEnabled] = useState(false);
 
-  const [WorkExperienceCurrentItem, setWorkExperienceCurrentItem] = useState({
-    _id: data._id,
-    companyName: data.companyName,
-    startDate: data.startDate,
-    endDate: data.endDate,
-    isCurrentEmployer: data.endDate === "Present" ? true : false,
-    description: data.description,
-  });
-  let companyNameValue =
+  const [WorkExperienceCurrentItem, setWorkExperienceCurrentItem] =
+    useState<ItemProps>({
+      _id: data._id,
+      companyName: data.companyName,
+      startDate: data.startDate,
+      endDate: data.endDate,
+      isCurrentEmployer: data.endDate === PRESENT_TEXT ? true : false,
+      description: data.description,
+    });
+
+  let companyNameValue: string =
     index + 1 + ". " + WorkExperienceCurrentItem.companyName;
 
-  let jobDuration =
+  let jobDuration: string =
     WorkExperienceCurrentItem.startDate +
     DASH_TEXT +
     (WorkExperienceCurrentItem.isCurrentEmployer
       ? PRESENT_TEXT
       : WorkExperienceCurrentItem.endDate);
 
-  const maxDateLimit = moment(new Date()).toISOString().split("T")[0];
+  const maxDateLimit: string = moment(new Date()).toISOString().split("T")[0];
 
   const updateExperienceItem = () => {
     if (
@@ -57,7 +80,16 @@ const WorkExperienceItem = ({
 
   useEffect(() => {
     setIsItemEditModeEnabled(false);
-    setWorkExperienceCurrentItem(data);
+    setWorkExperienceCurrentItem({
+      _id: data._id,
+      companyName: data.companyName,
+      startDate: data.startDate,
+      endDate: data.endDate,
+      isCurrentEmployer: data.isCurrentEmployer
+        ? data.isCurrentEmployer
+        : false,
+      description: data.description,
+    });
   }, [isEditModeEnabled, data]);
 
   return (
@@ -88,7 +120,7 @@ const WorkExperienceItem = ({
             <button
               className={styles.deleteBtn}
               onClick={(e) => {
-                onDeleteWorkExperienceItem(data._id);
+                data._id && onDeleteWorkExperienceItem(data._id);
               }}
             >
               <img src={deleteIcon} />
@@ -117,7 +149,7 @@ const WorkExperienceItem = ({
               type="date"
               required
               max={maxDateLimit}
-              value={WorkExperienceCurrentItem.startDate}
+              value={WorkExperienceCurrentItem.startDate.toString()}
               onChange={(e) =>
                 setWorkExperienceCurrentItem({
                   ...WorkExperienceCurrentItem,
@@ -129,7 +161,7 @@ const WorkExperienceItem = ({
               type="date"
               required
               max={maxDateLimit}
-              value={WorkExperienceCurrentItem.endDate}
+              value={WorkExperienceCurrentItem.endDate.toString()}
               disabled={WorkExperienceCurrentItem.isCurrentEmployer}
               onChange={(e) =>
                 setWorkExperienceCurrentItem({
@@ -146,7 +178,7 @@ const WorkExperienceItem = ({
                 onChange={(e) => {
                   setWorkExperienceCurrentItem({
                     ...WorkExperienceCurrentItem,
-                    endDate: "",
+                    endDate: EMPTY_STRING,
                     isCurrentEmployer: e.target.checked,
                   });
                 }}
